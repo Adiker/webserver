@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>adiker.eu — Homepage</title>
+<meta content="Adiker • Jellyfin" name="description"/>
+<meta content="#0b0f14" name="theme-color"/>
+<meta content="adiker.eu" property="og:title"/>
+<meta content="Jellyfin access and utilities" property="og:description"/>
+<meta content="website" property="og:type"/>
+<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0f14'/%3E%3Ccircle cx='22' cy='22' r='8' fill='%230ea5e9'/%3E%3Cpath d='M38 18l16 14-16 14z' fill='%237cc4ff'/%3E%3C/svg%3E" rel="icon"/>
+</head>
+<body>
+<div class="topbar">
+<div class="topbar-inner">
+<div class="brand">
+<div aria-hidden="true" class="logo"></div>
+<div>
+<h1 id="title">adiker.eu</h1>
+<div class="tag" id="subtitle" style="display:block;">My Playground</div>
+</div>
+</div>
+<nav aria-label="Sections (placeholder)" class="tabs">
+<button aria-selected="true" class="tab" id="tab-jellyfin" type="button">Jellyfin</button>
+<button aria-selected="false" class="tab" id="tab-more" type="button">More services (soon)</button>
+</nav>
+<div class="controls">
+<button aria-pressed="false" class="chip" id="theme-toggle" title="Toggle theme">🌙 Theme</button>
+<div aria-label="Language" class="chip" role="group">
+<button aria-pressed="true" class="chip" id="lang-en">EN</button>
+<button aria-pressed="false" class="chip" id="lang-pl">PL</button>
+</div>
+</div>
+</div>
+</div>
+<div class="wrap">
+<main>
+<section class="card">
+<div class="j-wrap">
+<div class="j-left">
+<div aria-hidden="true" class="j-icon">
+<svg fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 5h14v14H5z" fill="#0ea5e9" opacity="0.18"></path>
+<path d="M9 7h2v10H9zM13 7l6 5-6 5V7z" fill="#7cc4ff"></path>
+</svg>
+</div>
+<div>
+<h2 id="jf-title" style="margin:0 0 6px">🎬 Jellyfin</h2>
+<p class="tag" id="jf-sub" style="margin:0">Your media server</p>
+<div id="status-wrap" style="margin-top:8px">
+<span class="pill" id="ping-pill"><span class="dot" id="ping-dot" style="background:var(--bad)"></span><span id="ping-text">Offline</span></span>
+</div>
+</div>
+</div>
+<div>
+<a aria-label="Open Jellyfin" class="btn" href="https://jellyfin.adiker.eu" id="jf-btn" rel="noopener" target="_blank">
+<svg aria-hidden="true" fill="none" height="18" viewbox="0 0 24 24" width="18">
+<path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span id="jf-btn-text">Open Jellyfin</span>
+</a>
+</div>
+</div>
+</section>
+</main>
+<footer>© <span id="year"></span> adiker.eu • <span id="served">Served by Caddy</span></footer>
+</div>
+<div aria-atomic="true" aria-live="polite" class="toast" id="toast"></div>
+<link href="css/styles.css" rel="stylesheet"/><script src="js/app.js"></script>
+</body>
+</html>
