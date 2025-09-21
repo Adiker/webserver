@@ -7,6 +7,8 @@
         const STR = {
             en: {
                 nav: { jellyfin: 'Jellyfin', more: 'More services (soon)' },
+                subtitle: "My Playground",
+                availability: "Usually available: 9:00 AM – 1:00 AM CEST",
                 ui: { theme: 'Theme', themeTitle: 'Toggle theme', language: 'Language', sections: 'Sections (placeholder)' },
                 jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin' },
                 status: { online: 'Online', offline: 'Offline' },
@@ -14,6 +16,8 @@
             },
             pl: {
                 nav: { jellyfin: 'Jellyfin', more: 'Więcej usług (wkrótce)' },
+                subtitle: "Mój plac zabaw",
+                availability: "Zwykle dostępny: 09:00 – 01:00 CEST",
                 ui: { theme: 'Motyw', themeTitle: 'Przełącz motyw', language: 'Język', sections: 'Sekcje (wkrótce)' },
                 jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin' },
                 status: { online: 'Online', offline: 'Offline' },
@@ -27,6 +31,8 @@
             document.getElementById('jf-title').textContent = '🎬 ' + L.jf.title;
             document.getElementById('jf-sub').textContent = L.jf.sub;
             document.getElementById('jf-btn-text').textContent = L.jf.open;
+            document.getElementById('subtitle').textContent = L.subtitle;
+            document.getElementById("availability").textContent = L.availability;
             const jfBtn = document.getElementById('jf-btn');
             jfBtn && jfBtn.setAttribute('aria-label', L.jf.open);
             const tj = document.getElementById('tab-jellyfin');
