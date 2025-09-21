@@ -9,14 +9,14 @@
                 ui: { theme: 'Theme', themeTitle: 'Toggle theme', language: 'Language', sections: 'Sections (placeholder)' },
                 jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin' },
                 status: { online: 'Online', offline: 'Offline' },
-                footer: { served: 'Served by Caddy' }
+                footer: { served: 'Served by GitHub/Caddy' }
             },
             pl: {
                 nav: { jellyfin: 'Jellyfin', more: 'Więcej usług (wkrótce)' },
                 ui: { theme: 'Motyw', themeTitle: 'Przełącz motyw', language: 'Język', sections: 'Sekcje (wkrótce)' },
                 jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin' },
                 status: { online: 'Online', offline: 'Offline' },
-                footer: { served: 'Hostowane przez Caddy' }
+                footer: { served: 'Hostowane przez GitHub/Caddy' }
             }
         };
 
