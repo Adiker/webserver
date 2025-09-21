@@ -1,6 +1,7 @@
 
         const JF_URL = 'https://jellyfin.adiker.eu';
-        const THEME_KEY = 'adiker.theme';
+        const THEME_KEY = 'adiker.theme'
+        let __animTheme = false;
         const LANG_KEY = 'adiker.lang';
 
         const STR = {
@@ -53,8 +54,13 @@
             const L = STR[lang] || STR.en;
             const isLight = (localStorage.getItem(THEME_KEY) === 'light');
             themeBtn.setAttribute('aria-pressed', String(isLight));
-            themeBtn.textContent = (isLight ? '☀️ ' : '🌙 ') + L.ui.theme;
+            themeBtn.innerHTML = `<span class="emoji">${isLight ? '☀️' : '🌙'}</span> ${L.ui.theme}`;
             themeBtn.title = L.ui.themeTitle;
+            if (__animTheme) {
+                const e = themeBtn.querySelector('.emoji');
+                if (e) { e.classList.add('flip'); setTimeout(()=>e.classList.remove('flip'), 320); }
+                __animTheme = false;
+            }
         }
 
         const currentTheme = localStorage.getItem(THEME_KEY) || 'dark';
@@ -62,6 +68,7 @@
         updateThemeUI(localStorage.getItem(LANG_KEY) || 'en');
 
         themeBtn.addEventListener('click', () => {
+            __animTheme = true;
             const newMode = (localStorage.getItem(THEME_KEY) === 'light') ? 'dark' : 'light';
             setTheme(newMode);
             updateThemeUI(localStorage.getItem(LANG_KEY) || 'en');
