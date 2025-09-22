@@ -243,19 +243,16 @@ a:hover {
 }
 
 .j-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    background: radial-gradient(70% 70% at 30% 30%, #0ea5e9, #1f2937);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 0 1px var(--line) inset;
 }
 
-.j-icon svg {
-    width: 30px;
-    height: 30px
+.j-icon svg,
+.j-icon img {
+    display: block;
+    width: 70px;
+    height: 70px;
 }
 
 .pill {
