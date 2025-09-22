@@ -393,3 +393,38 @@ html.theme-light #theme-toggle {
     outline: none !important;
     box-shadow: none !important;
 }
+
+/* ---- Language switcher ---- */
+.lang-switch {
+    position: relative;
+    display: inline-flex;
+    gap: 8px;
+}
+
+#lang-en,
+#lang-pl {
+    position: relative;
+    z-index: 1;
+}
+
+.lang-switch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: calc(50% - 4px);
+    border-radius: 999px;
+    border: 2px solid var(--acc);
+    pointer-events: none;
+    transition: left 0.3s cubic-bezier(.4, 0, .2, 1);
+    box-sizing: border-box;
+}
+
+.lang-switch:has(#lang-pl[aria-pressed="true"])::before {
+    left: calc(50% + 4px);
+}
+
+.lang-switch:has(#lang-en[aria-pressed="true"])::before {
+    left: 0;
+}
