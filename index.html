@@ -29,14 +29,15 @@
             </div>
             <nav aria-label="Sections (placeholder)" class="tabs">
                 <button aria-selected="true" class="tab" id="tab-jellyfin" type="button">Jellyfin</button>
-                <button aria-selected="false" class="tab" id="tab-more" type="button">More services (soon)</button>
+                <button aria-selected="false" class="tab" id="tab-filebrowser" type="button">Filebrowser</button><button
+                    aria-selected="false" class="tab" id="tab-more" type="button">More services (soon)</button>
             </nav>
             <div class="controls">
                 <button aria-pressed="false" class="chip" id="theme-toggle" title="Toggle theme">🌙 Theme</button>
                 <div aria-label="Language" class="chip" role="group">
                     <div class="lang-switch">
-                        <button id="lang-en" aria-pressed="true" class="chip">EN</button>
-                        <button id="lang-pl" aria-pressed="false" class="chip">PL</button>
+                        <button aria-pressed="true" class="chip" id="lang-en">EN</button>
+                        <button aria-pressed="false" class="chip" id="lang-pl">PL</button>
                     </div>
                 </div>
             </div>
@@ -48,7 +49,8 @@
                 <div class="j-wrap">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Jellyfin_-_icon-transparent.svg" alt="Jellyfin logo" />
+                            <img alt="Jellyfin logo"
+                                src="https://upload.wikimedia.org/wikipedia/commons/4/41/Jellyfin_-_icon-transparent.svg" />
                         </div>
                         <div>
                             <h2 id="jf-title" style="margin:0 0 6px">🎬 Jellyfin</h2>
@@ -67,6 +69,34 @@
                                     stroke-linejoin="round" stroke-width="2"></path>
                             </svg>
                             <span id="jf-btn-text">Open Jellyfin</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <section class="card">
+                <div class="j-wrap">
+                    <div class="j-left">
+                        <div aria-hidden="true" class="j-icon">
+                            <img alt="Filebrowser logo"
+                                src="https://raw.githubusercontent.com/filebrowser/logo/master/icon.svg" />
+                        </div>
+                        <div>
+                            <h2 id="fb-title" style="margin:0 0 6px">📁 Filebrowser</h2>
+                            <p class="tag" id="fb-sub" style="margin:0">Your file manager</p>
+                            <div id="status-wrap" style="margin-top:8px">
+                                <span class="pill" id="fb-pill"><span class="dot" id="fb-dot"
+                                        style="background:var(--bad)"></span><span id="fb-text">Offline</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <a aria-label="Open Jellyfin" class="btn" href="https://files.adiker.eu" id="fb-btn"
+                            rel="noopener" target="_blank">
+                            <svg aria-hidden="true" fill="none" height="18" viewbox="0 0 24 24" width="18">
+                                <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                            <span id="fb-btn-text">Open Filebrowser</span>
                         </a>
                     </div>
                 </div>

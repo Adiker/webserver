@@ -425,3 +425,9 @@ html.theme-light #theme-toggle {
 .lang-switch:has(#lang-en[aria-pressed="true"])::before {
     left: 0;
 }
+
+.card.active-card {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 1rem
+}
