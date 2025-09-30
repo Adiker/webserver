@@ -274,9 +274,12 @@ a:hover {
 
 footer {
     margin: 26px 0;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
     color: var(--mut);
-    font-size: .92rem
+    font-size: .92rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -430,4 +433,17 @@ html.theme-light #theme-toggle {
     outline: 3px solid var(--accent);
     outline-offset: 4px;
     border-radius: 1rem
+}
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--acc);
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.github-link:hover {
+    text-decoration: underline;
 }
