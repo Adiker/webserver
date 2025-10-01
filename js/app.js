@@ -12,6 +12,7 @@ const STR = {
         ui: { theme: 'Theme', themeTitle: 'Toggle theme', language: 'Language', sections: 'Sections (placeholder)' },
         jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin' },
         fb: { title: 'Filebrowser', sub: 'Your file manager', open: 'Open Filebrowser' },
+        ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr' },
         status: { online: 'Online', offline: 'Offline' },
         footer: { served: 'Served by GitHub/Caddy' }
     },
@@ -22,6 +23,7 @@ const STR = {
         ui: { theme: 'Motyw', themeTitle: 'Przełącz motyw', language: 'Język', sections: 'Sekcje (wkrótce)' },
         jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin' },
         fb: { title: 'Filebrowser', sub: 'Twój menedżer plików', open: 'Otwórz Filebrowsera' },
+        ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr' },
         status: { online: 'Online', offline: 'Offline' },
         footer: { served: 'Hostowane przez GitHub/Caddy' }
     }
@@ -37,6 +39,10 @@ function applyLang(lang) {
     document.getElementById('fb-sub').textContent = L.fb.sub;
     document.getElementById('fb-btn').setAttribute('aria-label', L.fb.open);
     document.getElementById('fb-btn-text').textContent = L.fb.open;
+    document.getElementById('ab-title').textContent = L.ab.title;
+    document.getElementById('ab-sub').textContent = L.ab.sub;
+    document.getElementById('ab-btn').setAttribute('aria-label', L.ab.open);
+    document.getElementById('ab-btn-text').textContent = L.ab.open;
     document.getElementById('subtitle').textContent = L.subtitle;
     document.getElementById("availability").textContent = L.availability;
     const jfBtn = document.getElementById('jf-btn');
@@ -125,24 +131,35 @@ tm && tm.addEventListener('click', actMore);
 (function () {
     const tj = document.getElementById('tab-jellyfin');
     const tf = document.getElementById('tab-filebrowser');
+    const ta = document.getElementById('tab-autobrr');
     const tm = document.getElementById('tab-more');
 
     function setActive(tab) {
-        [tj, tf, tm].forEach(b => b && b.setAttribute('aria-selected', String(b === tab)));
+        [tj, tf, ta, tm].forEach(b => b && b.setAttribute('aria-selected', String(b === tab)));
         document.querySelectorAll('section.card').forEach(s => s.classList.remove('active-card'));
 
         if (tab === tj) {
             const sec = document.getElementById('jf-title')?.closest('section.card');
             if (sec) sec.classList.add('active-card');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else if (tab === tf) {
+        }
+        else if (tab === tf) {
             const anchor = document.getElementById('fb-title');
             if (anchor) {
                 const sec = anchor.closest('section.card');
                 if (sec) sec.classList.add('active-card');
                 anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-        } else if (tab === tm) {
+        }
+        else if (tab === ta) {
+            const anchor = document.getElementById('ab-title');
+            if (anchor) {
+                const sec = anchor.closest('section.card');
+                if (sec) sec.classList.add('active-card');
+                anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        else if (tab === tm) {
             const lang = localStorage.getItem('adiker.lang') || 'en';
             const toast = document.getElementById('toast');
             if (toast) {
@@ -154,9 +171,10 @@ tm && tm.addEventListener('click', actMore);
 
     tj && tj.addEventListener('click', () => setActive(tj));
     tf && tf.addEventListener('click', () => setActive(tf));
+    ta && ta.addEventListener('click', () => setActive(ta));
     tm && tm.addEventListener('click', () => setActive(tm));
 
-    if (![tj, tf, tm].some(b => b && b.getAttribute('aria-selected') === 'true')) {
+    if (![tj, tf, ta, tm].some(b => b && b.getAttribute('aria-selected') === 'true')) {
         tj && setActive(tj);
     }
 })();
@@ -192,4 +210,8 @@ tm && tm.addEventListener('click', actMore);
     // Filebrowser
     refreshService('fb', 'https://files.adiker.eu/health');
     setInterval(() => refreshService('fb', 'https://files.adiker.eu/health'), 30000);
+
+    // Autobrr
+    refreshService('ab', 'https://autobrr.adiker.eu/api/healthz/liveness');
+    setInterval(() => refreshService('ab', 'https://autobrr.adiker.eu/api/healthz/liveness'), 30000);
 })();
