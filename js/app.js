@@ -182,7 +182,7 @@ tm && tm.addEventListener('click', actMore);
 (function () {
     async function refreshService(prefix, url) {
         const ctrl = new AbortController();
-        const t = setTimeout(() => ctrl.abort(), 2000); // szybki timeout
+        const t = setTimeout(() => ctrl.abort(), 2000);
         try {
             const res = await fetch(url, { signal: ctrl.signal, credentials: 'omit', cache: 'no-store' });
             clearTimeout(t);
@@ -204,8 +204,8 @@ tm && tm.addEventListener('click', actMore);
     }
 
     // Jellyfin
-    refreshService('ping', 'https://jellyfin.adiker.eu/health');
-    setInterval(() => refreshService('ping', 'https://jellyfin.adiker.eu/health'), 30000);
+    refreshService('jf', 'https://jellyfin.adiker.eu/health');
+    setInterval(() => refreshService('jf', 'https://jellyfin.adiker.eu/health'), 30000);
 
     // Filebrowser
     refreshService('fb', 'https://files.adiker.eu/health');
