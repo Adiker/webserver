@@ -11,7 +11,7 @@ const STR = {
         availability: "Usually available: 9:00 AM – 1:00 AM CEST",
         ui: { theme: 'Theme', themeTitle: 'Toggle theme', language: 'Language', sections: 'Sections (placeholder)' },
         jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin' },
-        fb: { title: 'Filebrowser', sub: 'Your file manager', open: 'Open Filebrowser' },
+        fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum' },
         ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr' },
         status: { online: 'Online', offline: 'Offline' },
         footer: { served: 'Served by GitHub/Caddy' }
@@ -22,7 +22,7 @@ const STR = {
         availability: "Zwykle dostępny: 09:00 – 01:00 CEST",
         ui: { theme: 'Motyw', themeTitle: 'Przełącz motyw', language: 'Język', sections: 'Sekcje (wkrótce)' },
         jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin' },
-        fb: { title: 'Filebrowser', sub: 'Twój menedżer plików', open: 'Otwórz Filebrowsera' },
+        fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum' },
         ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr' },
         status: { online: 'Online', offline: 'Offline' },
         footer: { served: 'Hostowane przez GitHub/Caddy' }
@@ -205,13 +205,13 @@ tm && tm.addEventListener('click', actMore);
 
     // Jellyfin
     refreshService('jf', 'https://jellyfin.adiker.eu/health');
-    setInterval(() => refreshService('jf', 'https://jellyfin.adiker.eu/health'), 30000);
+    setInterval(() => refreshService('jf', 'https://jellyfin.adiker.eu/health'), 5000);
 
     // Filebrowser
     refreshService('fb', 'https://files.adiker.eu/health');
-    setInterval(() => refreshService('fb', 'https://files.adiker.eu/health'), 30000);
+    setInterval(() => refreshService('fb', 'https://files.adiker.eu/health'), 5000);
 
     // Autobrr
     refreshService('ab', 'https://autobrr.adiker.eu/api/healthz/liveness');
-    setInterval(() => refreshService('ab', 'https://autobrr.adiker.eu/api/healthz/liveness'), 30000);
+    setInterval(() => refreshService('ab', 'https://autobrr.adiker.eu/api/healthz/liveness'), 5000);
 })();
