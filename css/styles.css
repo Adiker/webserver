@@ -447,3 +447,70 @@ html.theme-light #theme-toggle {
 .github-link:hover {
     text-decoration: underline;
 }
+
+/* ---- Mobile-only layout fixes (desktop stays unchanged) ---- */
+@media (max-width: 768px) {
+    .wrap {
+        padding: 16px;
+    }
+
+    .topbar-inner {
+        padding: 10px 16px;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .brand {
+        min-width: 0;
+        flex: 1 1 100%;
+        align-items: flex-start;
+    }
+
+    nav.tabs {
+        flex: 1 1 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 2px;
+    }
+
+    .controls {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .chip,
+    .tab {
+        padding: 8px 10px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .j-wrap {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    .j-left {
+        align-items: flex-start;
+    }
+
+    .j-icon svg,
+    .j-icon img {
+        width: 56px;
+        height: 56px;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    footer {
+        flex-wrap: wrap;
+        text-align: center;
+        row-gap: 4px;
+    }
+}
