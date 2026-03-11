@@ -5,6 +5,7 @@ let __animTheme = false;
 const LANG_KEY = 'adiker.lang';
 
 const THEME_ORDER = ['dark', 'light', 'oled'];
+const SERVICE_STATE = { jf: false, fb: false, ab: false };
 
 const STR = {
     en: {
@@ -24,6 +25,7 @@ const STR = {
         fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum' },
         ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr' },
         status: { online: 'Online', offline: 'Offline' },
+        pc: { on: 'My PC is on :)', off: 'My PC is off :(' },
         footer: { served: 'Served by GitHub/Caddy' }
     },
     pl: {
@@ -43,9 +45,20 @@ const STR = {
         fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum' },
         ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr' },
         status: { online: 'Online', offline: 'Offline' },
+        pc: { on: 'Mój PC jest włączony :)', off: 'Mój PC jest wyłączony :(' },
         footer: { served: 'Hostowane przez GitHub/Caddy' }
     }
 };
+
+function renderPcStatus(lang = (localStorage.getItem(LANG_KEY) || 'en')) {
+    const L = STR[lang] || STR.en;
+    const anyOnline = Object.values(SERVICE_STATE).some(Boolean);
+    const pcStatus = document.getElementById('pc-status');
+    if (!pcStatus) return;
+    pcStatus.textContent = anyOnline ? L.pc.on : L.pc.off;
+    pcStatus.classList.toggle('is-on', anyOnline);
+    pcStatus.classList.toggle('is-off', !anyOnline);
+}
 
 function applyLang(lang) {
     const L = STR[lang] || STR.en;
@@ -72,6 +85,7 @@ function applyLang(lang) {
     const tabsNav = document.querySelector('nav.tabs');
     tabsNav && tabsNav.setAttribute('aria-label', L.ui.sections);
     document.getElementById('served').textContent = L.footer.served;
+    renderPcStatus(lang);
     const langGroup = document.querySelector('[role="group"]');
     langGroup && langGroup.setAttribute('aria-label', L.ui.language);
     document.getElementById('lang-en').setAttribute('aria-pressed', String(lang === 'en'));
@@ -221,13 +235,15 @@ tm && tm.addEventListener('click', actMore);
     }
 
     function setStatus(prefix, ok) {
-        const L = STR[localStorage.getItem(LANG_KEY) || 'en'];
+        const L = STR[localStorage.getItem(LANG_KEY) || 'en'] || STR.en;
         const dot = document.getElementById(prefix + '-dot');
         const txt = document.getElementById(prefix + '-text');
         const pill = document.getElementById(prefix + '-pill');
         if (dot) dot.style.background = ok ? 'var(--good)' : 'var(--bad)';
         if (txt) txt.textContent = ok ? L.status.online : L.status.offline;
         if (pill) pill.setAttribute('aria-label', ok ? L.status.online : L.status.offline);
+        SERVICE_STATE[prefix] = !!ok;
+        renderPcStatus();
     }
 
     // Jellyfin

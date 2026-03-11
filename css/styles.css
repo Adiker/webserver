@@ -88,6 +88,26 @@ h1 {
     color: var(--mut)
 }
 
+.pc-status {
+    margin-top: 0;
+    display: inline-block;
+    white-space: nowrap;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, #111b26, #0b111a);
+    font-weight: 700;
+    font-size: .92rem;
+}
+
+.pc-status.is-on {
+    color: var(--good);
+}
+
+.pc-status.is-off {
+    color: var(--bad);
+}
+
 nav.tabs {
     display: flex;
     gap: 8px;
