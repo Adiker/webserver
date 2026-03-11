@@ -335,7 +335,8 @@ footer {
 
 .theme-light .tab,
 .theme-light .chip,
-.theme-light .pill {
+.theme-light .pill,
+.theme-light .pc-status {
     background: linear-gradient(180deg, #ffffff, #eef3f9);
     border-color: #d9e1ec;
     color: #0b1220
@@ -348,7 +349,8 @@ footer {
 .theme-light .tab,
 .theme-light .chip,
 .theme-light .btn,
-.theme-light .pill {
+.theme-light .pill,
+.theme-light .pc-status {
     background: linear-gradient(180deg, #f9fafb, #f3f4f6);
     color: var(--fg)
 }
@@ -417,6 +419,7 @@ footer {
 .theme-oled .tab,
 .theme-oled .chip,
 .theme-oled .pill,
+.theme-oled .pc-status,
 .theme-oled .toast {
     background: #000;
     border-color: var(--line);
