@@ -4,12 +4,22 @@ const THEME_KEY = 'adiker.theme'
 let __animTheme = false;
 const LANG_KEY = 'adiker.lang';
 
+const THEME_ORDER = ['dark', 'light', 'oled'];
+
 const STR = {
     en: {
         nav: { jellyfin: 'Jellyfin', more: 'More services (soon)' },
         subtitle: "My Playground",
         availability: "Usually available: 9:00 AM – 1:00 AM CEST",
-        ui: { theme: 'Theme', themeTitle: 'Toggle theme', language: 'Language', sections: 'Sections (placeholder)' },
+        ui: {
+            theme: 'Theme',
+            themeTitle: 'Toggle theme',
+            language: 'Language',
+            sections: 'Sections (placeholder)',
+            dark: 'Dark',
+            light: 'Light',
+            oled: 'OLED'
+        },
         jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin' },
         fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum' },
         ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr' },
@@ -20,7 +30,15 @@ const STR = {
         nav: { jellyfin: 'Jellyfin', more: 'Więcej usług (wkrótce)' },
         subtitle: "Mój plac zabaw",
         availability: "Zwykle dostępny: 09:00 – 01:00 CEST",
-        ui: { theme: 'Motyw', themeTitle: 'Przełącz motyw', language: 'Język', sections: 'Sekcje (wkrótce)' },
+        ui: {
+            theme: 'Motyw',
+            themeTitle: 'Przełącz motyw',
+            language: 'Język',
+            sections: 'Sekcje (wkrótce)',
+            dark: 'Ciemny',
+            light: 'Jasny',
+            oled: 'OLED'
+        },
         jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin' },
         fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum' },
         ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr' },
@@ -63,16 +81,23 @@ function applyLang(lang) {
 }
 
 function setTheme(mode) {
-    document.documentElement.classList.toggle('theme-light', mode === 'light');
-    localStorage.setItem(THEME_KEY, mode);
+    const normalizedMode = THEME_ORDER.includes(mode) ? mode : 'dark';
+    document.documentElement.classList.toggle('theme-light', normalizedMode === 'light');
+    document.documentElement.classList.toggle('theme-oled', normalizedMode === 'oled');
+    const themeColor = normalizedMode === 'light' ? '#f7f9fc' : (normalizedMode === 'oled' ? '#000000' : '#0b0f14');
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeColorMeta) themeColorMeta.setAttribute('content', themeColor);
+    localStorage.setItem(THEME_KEY, normalizedMode);
 }
 
 const themeBtn = document.getElementById('theme-toggle');
 function updateThemeUI(lang) {
     const L = STR[lang] || STR.en;
-    const isLight = (localStorage.getItem(THEME_KEY) === 'light');
-    themeBtn.setAttribute('aria-pressed', String(isLight));
-    themeBtn.innerHTML = `<span class="emoji">${isLight ? '☀️' : '🌙'}</span> ${L.ui.theme}`;
+    const mode = localStorage.getItem(THEME_KEY) || 'dark';
+    const icon = mode === 'light' ? '☀️' : (mode === 'oled' ? '🖤' : '🌙');
+    const modeLabel = mode === 'light' ? L.ui.light : (mode === 'oled' ? L.ui.oled : L.ui.dark);
+    themeBtn.setAttribute('aria-pressed', String(mode !== 'dark'));
+    themeBtn.innerHTML = `<span class="emoji">${icon}</span> ${L.ui.theme}: ${modeLabel}`;
     themeBtn.title = L.ui.themeTitle;
     if (__animTheme) {
         const e = themeBtn.querySelector('.emoji');
@@ -87,7 +112,9 @@ updateThemeUI(localStorage.getItem(LANG_KEY) || 'en');
 
 themeBtn.addEventListener('click', () => {
     __animTheme = true;
-    const newMode = (localStorage.getItem(THEME_KEY) === 'light') ? 'dark' : 'light';
+    const currentMode = localStorage.getItem(THEME_KEY) || 'dark';
+    const currentIndex = THEME_ORDER.indexOf(currentMode);
+    const newMode = THEME_ORDER[(currentIndex + 1) % THEME_ORDER.length];
     setTheme(newMode);
     updateThemeUI(localStorage.getItem(LANG_KEY) || 'en');
 });

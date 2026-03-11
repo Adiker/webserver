@@ -369,6 +369,46 @@ footer {
     color: #374151;
 }
 
+/* OLED theme */
+.theme-oled {
+    --bg: #000000;
+    --fg: #f4f7ff;
+    --mut: #9aa7ba;
+    --line: #121212;
+    --card: #000000;
+    --acc: #6db5ff;
+    --ring: 0 0 0 2px #6db5ff55;
+    --good: #22c55e;
+    --bad: #ef4444;
+    --shadow: 0 12px 30px rgba(0, 0, 0, .6);
+}
+
+.theme-oled body {
+    background: #000 fixed;
+}
+
+.theme-oled .topbar {
+    background: rgba(0, 0, 0, 0.92);
+    border-bottom: 1px solid var(--line);
+}
+
+.theme-oled .card,
+.theme-oled .btn,
+.theme-oled .tab,
+.theme-oled .chip,
+.theme-oled .pill,
+.theme-oled .toast {
+    background: #000;
+    border-color: var(--line);
+    color: var(--fg);
+}
+
+.theme-oled .tab:hover,
+.theme-oled .btn:hover,
+.theme-oled .chip:hover {
+    background: #050505;
+}
+
 /* ---- Theme toggle animations ---- */
 
 #theme-toggle .emoji {
