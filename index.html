@@ -20,6 +20,7 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div class="topbar">
         <div class="topbar-inner">
             <div class="brand">
@@ -30,11 +31,14 @@
                     <div class="tag" id="availability">Usually available: 9:00 AM – 1:00 AM CEST</div>
                 </div>
             </div>
-            <nav aria-label="Sections (placeholder)" class="tabs">
-                <button aria-selected="true" class="tab" id="tab-jellyfin" type="button">Jellyfin</button>
-                <button aria-selected="false" class="tab" id="tab-filebrowser" type="button">Filebrowser</button>
-                <button aria-selected="false" class="tab" id="tab-autobrr" type="button">Autobrr</button>
-                <button aria-selected="false" class="tab" id="tab-more" type="button">More services (soon)</button>
+            <nav aria-label="Sections" class="tabs" role="tablist">
+                <button aria-controls="section-jf" aria-selected="true" class="tab" id="tab-jellyfin" role="tab"
+                    type="button">Jellyfin</button>
+                <button aria-controls="section-fb" aria-selected="false" class="tab" id="tab-filebrowser" role="tab"
+                    type="button">Filebrowser</button>
+                <button aria-controls="section-ab" aria-selected="false" class="tab" id="tab-autobrr" role="tab"
+                    type="button">Autobrr</button>
+                <button class="tab" id="tab-more" type="button">More services (soon)</button>
             </nav>
             <div class="controls">
                 <button aria-pressed="false" class="chip" id="theme-toggle" title="Toggle theme">🌙 Theme</button>
@@ -49,8 +53,20 @@
         </div>
     </div>
     <div class="wrap">
-        <main>
-            <section class="card">
+        <main id="main-content" tabindex="-1">
+            <section class="card" id="section-dashboard">
+                <h2 id="dash-title" style="margin:0 0 6px">📊 Service dashboard</h2>
+                <p class="tag" id="dash-sub" style="margin:0 0 12px">Live status overview</p>
+                <div class="dashboard-grid">
+                    <span class="pill" id="dash-overall" aria-live="polite">0/3 online</span>
+                    <span class="pill" id="dash-lastcheck" aria-live="polite">Last check: --</span>
+                    <span class="pill" id="dash-jf-latency">Jellyfin: -- ms</span>
+                    <span class="pill" id="dash-fb-latency">FileBrowser: -- ms</span>
+                    <span class="pill" id="dash-ab-latency">autobrr: -- ms</span>
+                </div>
+            </section>
+
+            <section class="card service-section" id="section-jf" role="tabpanel" aria-labelledby="tab-jellyfin">
                 <div class="j-wrap">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
@@ -78,7 +94,8 @@
                     </div>
                 </div>
             </section>
-            <section class="card">
+            <section class="card service-section" id="section-fb" role="tabpanel" aria-labelledby="tab-filebrowser"
+                hidden>
                 <div class="j-wrap">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
@@ -106,7 +123,7 @@
                     </div>
                 </div>
             </section>
-            <section class="card">
+            <section class="card service-section" id="section-ab" role="tabpanel" aria-labelledby="tab-autobrr" hidden>
                 <div class="j-wrap">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">

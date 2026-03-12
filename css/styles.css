@@ -31,6 +31,24 @@ body {
     transition: background .3s ease, color .3s ease;
 }
 
+.skip-link {
+    position: absolute;
+    left: 12px;
+    top: -48px;
+    z-index: 100;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--fg);
+    font-weight: 700;
+    transition: top .2s ease;
+}
+
+.skip-link:focus {
+    top: 12px;
+}
+
 .wrap {
     max-width: 980px;
     margin: 0 auto;
@@ -189,6 +207,13 @@ nav.tabs::-webkit-scrollbar {
     outline: 2px solid var(--acc)
 }
 
+.tab:focus-visible,
+.chip:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--acc);
+    outline-offset: 2px;
+}
+
 main {
     padding-top: 18px
 }
@@ -284,6 +309,12 @@ a:hover {
     border-radius: 999px;
     background: linear-gradient(180deg, #111b26, #0b111a);
     color: var(--fg)
+}
+
+.dashboard-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .dot {
@@ -493,7 +524,7 @@ html.theme-light #theme-toggle {
 }
 
 .card.active-card {
-    outline: 3px solid var(--accent);
+    outline: 3px solid var(--acc);
     outline-offset: 4px;
     border-radius: 1rem
 }
@@ -575,5 +606,20 @@ html.theme-light #theme-toggle {
         flex-wrap: wrap;
         text-align: center;
         row-gap: 4px;
+    }
+
+    .dashboard-grid .pill {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
     }
 }
