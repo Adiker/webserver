@@ -6,9 +6,9 @@ let __animTheme = false;
 let lastCheckAt = null;
 
 const SERVICE_STATE = {
-    jf: { online: false, latency: null, failCount: 0, nextDelay: 5000 },
-    fb: { online: false, latency: null, failCount: 0, nextDelay: 5000 },
-    ab: { online: false, latency: null, failCount: 0, nextDelay: 5000 }
+    jf: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
+    fb: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
+    ab: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] }
 };
 
 const SERVICES = [
@@ -232,6 +232,13 @@ function setServiceStatus(prefix, ok, latency) {
     renderDashboard();
 }
 
+function getSmoothedLatency(state, latency) {
+    state.latencySamples.push(latency);
+    if (state.latencySamples.length > 3) state.latencySamples.shift();
+    const avg = state.latencySamples.reduce((sum, v) => sum + v, 0) / state.latencySamples.length;
+    return Math.round(avg);
+}
+
 async function refreshService(service) {
     const state = SERVICE_STATE[service.key];
     const ctrl = new AbortController();
@@ -248,18 +255,28 @@ async function refreshService(service) {
 
         const latency = Math.round(performance.now() - started);
         const ok = !!(res && res.ok);
-        setServiceStatus(service.key, ok, latency);
 
-        if (ok) {
+        if (ok && !state.warmedUp) {
+            // Pierwszy pomiar zwykle zawiera koszt DNS/TLS i potrafi być zawyżony.
+            // Traktujemy go jako warm-up i pokazujemy stabilniejszy wynik z kolejnego sprawdzenia.
+            state.warmedUp = true;
+            setServiceStatus(service.key, true, null);
+            state.failCount = 0;
+            state.nextDelay = 800;
+        } else if (ok) {
+            const smoothedLatency = getSmoothedLatency(state, latency);
+            setServiceStatus(service.key, true, smoothedLatency);
             state.failCount = 0;
             state.nextDelay = 15000;
         } else {
+            setServiceStatus(service.key, false, null);
             state.failCount += 1;
             state.nextDelay = Math.min(60000, 5000 * (2 ** state.failCount));
         }
     } catch (_e) {
         clearTimeout(timeout);
         setServiceStatus(service.key, false, null);
+        state.latencySamples = [];
         state.failCount += 1;
         state.nextDelay = Math.min(60000, 5000 * (2 ** state.failCount));
     }
