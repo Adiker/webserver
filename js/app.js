@@ -5,6 +5,8 @@ const THEME_ORDER = ['dark', 'light', 'oled'];
 let __animTheme = false;
 let lastCheckAt = null;
 
+const DETECTED_OS = detectClientOS();
+
 const SERVICE_STATE = {
     jf: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
     fb: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
@@ -47,7 +49,16 @@ const STR = {
         fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum', short: 'FileBrowser' },
         ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr', short: 'autobrr' },
         status: { online: 'Online', offline: 'Offline' },
-        pc: { on: 'My PC is on :)', off: 'My PC is off :(' },
+        pc: {
+            on: 'My PC is on :)',
+            off: 'My PC is off :(',
+            osPrefix: 'OS',
+            os: {
+                windows: 'Windows',
+                linux: 'Linux',
+                other: 'Other'
+            }
+        },
         footer: { served: 'Served by GitHub/Caddy' },
         toastMore: 'Coming soon 🙂'
     },
@@ -80,11 +91,33 @@ const STR = {
         fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum', short: 'FileBrowser' },
         ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr', short: 'autobrr' },
         status: { online: 'Online', offline: 'Offline' },
-        pc: { on: 'Mój PC jest włączony :)', off: 'Mój PC jest wyłączony :(' },
+        pc: {
+            on: 'Mój PC jest włączony :)',
+            off: 'Mój PC jest wyłączony :(',
+            osPrefix: 'System',
+            os: {
+                windows: 'Windows',
+                linux: 'Linux',
+                other: 'Inny'
+            }
+        },
         footer: { served: 'Hostowane przez GitHub/Caddy' },
         toastMore: 'Wkrótce 🙂'
     }
 };
+
+function detectClientOS() {
+    const uaDataPlatform = navigator.userAgentData && typeof navigator.userAgentData.platform === 'string'
+        ? navigator.userAgentData.platform
+        : '';
+    const platform = typeof navigator.platform === 'string' ? navigator.platform : '';
+    const userAgent = typeof navigator.userAgent === 'string' ? navigator.userAgent : '';
+    const source = `${uaDataPlatform} ${platform} ${userAgent}`.toLowerCase();
+
+    if (source.includes('win')) return 'windows';
+    if (source.includes('linux') || source.includes('x11')) return 'linux';
+    return 'other';
+}
 
 function getLang() {
     return localStorage.getItem(LANG_KEY) || 'en';
@@ -108,7 +141,14 @@ function renderPcStatus(lang = getLang()) {
     const anyOnline = Object.values(SERVICE_STATE).some((s) => s.online);
     const pcStatus = document.getElementById('pc-status');
     if (!pcStatus) return;
-    pcStatus.textContent = anyOnline ? L.pc.on : L.pc.off;
+
+    const osLabel = L.pc.os[DETECTED_OS] || L.pc.os.other;
+    const pcText = anyOnline ? L.pc.on : L.pc.off;
+    pcStatus.innerHTML = `
+        <span class="pc-main">${pcText}</span>
+        <span class="pc-os" aria-label="${L.pc.osPrefix}: ${osLabel}">${L.pc.osPrefix}: ${osLabel}</span>
+    `;
+
     pcStatus.classList.toggle('is-on', anyOnline);
     pcStatus.classList.toggle('is-off', !anyOnline);
 }

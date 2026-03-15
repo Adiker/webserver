@@ -108,21 +108,39 @@ h1 {
 
 .pc-status {
     margin-top: 0;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     white-space: nowrap;
     padding: 6px 10px;
     border-radius: 999px;
     border: 1px solid var(--line);
     background: linear-gradient(180deg, #111b26, #0b111a);
-    font-weight: 700;
+    font-weight: 600;
     font-size: .92rem;
 }
 
-.pc-status.is-on {
+.pc-status .pc-main {
+    font-weight: 700;
+}
+
+.pc-status .pc-os {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--card) 88%, transparent);
+    color: var(--mut);
+    font-size: .8rem;
+    line-height: 1.2;
+}
+
+.pc-status.is-on .pc-main {
     color: var(--good);
 }
 
-.pc-status.is-off {
+.pc-status.is-off .pc-main {
     color: var(--bad);
 }
 
