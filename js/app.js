@@ -59,6 +59,9 @@ const STR = {
             devicePrefix: 'Your device',
             os: {
                 windows: 'Windows',
+                android: 'Android',
+                ios: 'iOS',
+                macos: 'macOS',
                 linux: 'Linux',
                 other: 'Other'
             },
@@ -124,6 +127,9 @@ const STR = {
             devicePrefix: 'Twoje urządzenie',
             os: {
                 windows: 'Windows',
+                android: 'Android',
+                ios: 'iOS',
+                macos: 'macOS',
                 linux: 'Linux',
                 other: 'Inny'
             },
@@ -162,6 +168,9 @@ function detectClientOS() {
     const userAgent = typeof navigator.userAgent === 'string' ? navigator.userAgent : '';
     const source = `${uaDataPlatform} ${platform} ${userAgent}`.toLowerCase();
 
+    if (source.includes('android')) return 'android';
+    if (source.includes('iphone') || source.includes('ipad') || source.includes('ipod') || source.includes('ios')) return 'ios';
+    if (source.includes('mac')) return 'macos';
     if (source.includes('win')) return 'windows';
     if (source.includes('linux') || source.includes('x11')) return 'linux';
     return 'other';
