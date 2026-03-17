@@ -6,6 +6,8 @@ let __animTheme = false;
 let lastCheckAt = null;
 
 const DETECTED_OS = detectClientOS();
+const DETECTED_BROWSER = detectClientBrowser();
+const DETECTED_DEVICE = detectClientDevice();
 
 const SERVICE_STATE = {
     jf: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
@@ -52,10 +54,33 @@ const STR = {
         pc: {
             on: 'My PC is on :)',
             off: 'My PC is off :(',
-            osPrefix: 'OS',
+            osPrefix: 'Your OS',
+            browserPrefix: 'Your browser',
+            devicePrefix: 'Your device',
             os: {
                 windows: 'Windows',
                 linux: 'Linux',
+                other: 'Other'
+            },
+            browser: {
+                chrome: 'Chrome',
+                edge: 'Microsoft Edge',
+                brave: 'Brave',
+                vivaldi: 'Vivaldi',
+                arc: 'Arc',
+                firefox: 'Firefox',
+                safari: 'Safari',
+                opera: 'Opera',
+                samsung: 'Samsung Internet',
+                yandex: 'Yandex Browser',
+                duckduckgo: 'DuckDuckGo Browser',
+                ie: 'Internet Explorer',
+                other: 'Other'
+            },
+            device: {
+                phone: 'Phone',
+                tablet: 'Tablet',
+                desktop: 'Desktop',
                 other: 'Other'
             }
         },
@@ -94,11 +119,34 @@ const STR = {
         pc: {
             on: 'Mój PC jest włączony :)',
             off: 'Mój PC jest wyłączony :(',
-            osPrefix: 'System',
+            osPrefix: 'Twój OS',
+            browserPrefix: 'Twoja przeglądarka',
+            devicePrefix: 'Twoje urządzenie',
             os: {
                 windows: 'Windows',
                 linux: 'Linux',
                 other: 'Inny'
+            },
+            browser: {
+                chrome: 'Chrome',
+                edge: 'Microsoft Edge',
+                brave: 'Brave',
+                vivaldi: 'Vivaldi',
+                arc: 'Arc',
+                firefox: 'Firefox',
+                safari: 'Safari',
+                opera: 'Opera',
+                samsung: 'Samsung Internet',
+                yandex: 'Yandex Browser',
+                duckduckgo: 'DuckDuckGo Browser',
+                ie: 'Internet Explorer',
+                other: 'Inna'
+            },
+            device: {
+                phone: 'Telefon',
+                tablet: 'Tablet',
+                desktop: 'Komputer',
+                other: 'Inne'
             }
         },
         footer: { served: 'Hostowane przez GitHub/Caddy' },
@@ -116,6 +164,71 @@ function detectClientOS() {
 
     if (source.includes('win')) return 'windows';
     if (source.includes('linux') || source.includes('x11')) return 'linux';
+    return 'other';
+}
+
+function detectClientBrowser() {
+    const userAgent = typeof navigator.userAgent === 'string' ? navigator.userAgent.toLowerCase() : '';
+    const brands = Array.isArray(navigator.userAgentData?.brands)
+        ? navigator.userAgentData.brands.map((b) => String(b.brand || '').toLowerCase())
+        : [];
+
+    const hasBrand = (name) => brands.some((b) => b.includes(name));
+
+    const BROWSER_RULES = [
+        { key: 'edge', brand: ['microsoft edge'], ua: ['edg/'] },
+        { key: 'opera', brand: ['opera'], ua: ['opr/', 'opera'] },
+        { key: 'vivaldi', brand: ['vivaldi'], ua: ['vivaldi'] },
+        { key: 'brave', brand: ['brave'], ua: ['brave'] },
+        { key: 'arc', brand: ['arc'], ua: [' arc/'] },
+        { key: 'duckduckgo', brand: ['duckduckgo'], ua: ['duckduckgo'] },
+        { key: 'yandex', brand: ['yandex'], ua: ['yabrowser'] },
+        { key: 'samsung', brand: ['samsung internet'], ua: ['samsungbrowser'] },
+        { key: 'ie', brand: [], ua: ['trident/', 'msie'] },
+        { key: 'firefox', brand: ['firefox'], ua: ['firefox/'] }
+    ];
+
+    const matchedRule = BROWSER_RULES.find((rule) => {
+        const byBrand = rule.brand.some((name) => hasBrand(name));
+        const byUA = rule.ua.some((token) => userAgent.includes(token));
+        return byBrand || byUA;
+    });
+
+    if (matchedRule) return matchedRule.key;
+
+    const isSafari = (hasBrand('safari') || userAgent.includes('safari/'))
+        && !userAgent.includes('chrome/')
+        && !userAgent.includes('chromium')
+        && !userAgent.includes('crios/')
+        && !userAgent.includes('edg/')
+        && !userAgent.includes('opr/')
+        && !userAgent.includes('vivaldi');
+
+    if (isSafari) return 'safari';
+    if (hasBrand('google chrome') || hasBrand('chromium') || userAgent.includes('chrome/') || userAgent.includes('crios/')) return 'chrome';
+
+    return 'other';
+}
+
+function detectClientDevice() {
+    const userAgent = typeof navigator.userAgent === 'string' ? navigator.userAgent.toLowerCase() : '';
+    const uaMobile = typeof navigator.userAgentData?.mobile === 'boolean' ? navigator.userAgentData.mobile : null;
+
+    if (uaMobile === true) return 'phone';
+
+    if (userAgent.includes('ipad') || userAgent.includes('tablet') || userAgent.includes('sm-t') || userAgent.includes('tab')) {
+        return 'tablet';
+    }
+
+    if (userAgent.includes('mobi') || userAgent.includes('iphone') || userAgent.includes('android')) {
+        return 'phone';
+    }
+
+    if (uaMobile === false) return 'desktop';
+    if (userAgent.includes('windows') || userAgent.includes('macintosh') || userAgent.includes('linux') || userAgent.includes('x11')) {
+        return 'desktop';
+    }
+
     return 'other';
 }
 
@@ -143,10 +256,14 @@ function renderPcStatus(lang = getLang()) {
     if (!pcStatus) return;
 
     const osLabel = L.pc.os[DETECTED_OS] || L.pc.os.other;
+    const browserLabel = L.pc.browser[DETECTED_BROWSER] || L.pc.browser.other;
+    const deviceLabel = L.pc.device[DETECTED_DEVICE] || L.pc.device.other;
     const pcText = anyOnline ? L.pc.on : L.pc.off;
     pcStatus.innerHTML = `
         <span class="pc-main">${pcText}</span>
         <span class="pc-os" aria-label="${L.pc.osPrefix}: ${osLabel}">${L.pc.osPrefix}: ${osLabel}</span>
+        <span class="pc-os" aria-label="${L.pc.browserPrefix}: ${browserLabel}">${L.pc.browserPrefix}: ${browserLabel}</span>
+        <span class="pc-os" aria-label="${L.pc.devicePrefix}: ${deviceLabel}">${L.pc.devicePrefix}: ${deviceLabel}</span>
     `;
 
     pcStatus.classList.toggle('is-on', anyOnline);
