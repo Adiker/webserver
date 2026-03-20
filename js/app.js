@@ -336,8 +336,13 @@ function applyLang(lang) {
 
     const enBtn = document.getElementById('lang-en');
     const plBtn = document.getElementById('lang-pl');
+    const langSwitch = document.querySelector('.lang-switch');
     if (enBtn) enBtn.setAttribute('aria-pressed', String(lang === 'en'));
     if (plBtn) plBtn.setAttribute('aria-pressed', String(lang === 'pl'));
+    if (langSwitch) {
+        langSwitch.classList.toggle('is-en', lang === 'en');
+        langSwitch.classList.toggle('is-pl', lang === 'pl');
+    }
 
     updateThemeUI(lang);
     renderPcStatus(lang);

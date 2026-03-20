@@ -541,6 +541,15 @@ html.theme-light #theme-toggle {
     left: 0;
 }
 
+/* Fallback for browsers without :has() support */
+.lang-switch.is-pl::before {
+    left: calc(50% + 4px);
+}
+
+.lang-switch.is-en::before {
+    left: 0;
+}
+
 .card.active-card {
     outline: 3px solid var(--acc);
     outline-offset: 4px;
@@ -582,17 +591,26 @@ html.theme-light #theme-toggle {
         flex: 1 1 100%;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
-        padding-bottom: 2px;
+        padding: 4px;
+    }
+
+    .tab[aria-selected="true"]::after {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
     }
 
     .controls {
         flex: 1 1 100%;
         width: 100%;
+        gap: 10px;
     }
 
     .chip,
     .tab {
-        padding: 8px 10px;
+        padding: 10px 12px;
+        min-height: 44px;
     }
 
     .card {
@@ -618,6 +636,20 @@ html.theme-light #theme-toggle {
     .btn {
         width: 100%;
         justify-content: center;
+        min-height: 44px;
+    }
+
+    .pc-status {
+        width: 100%;
+        white-space: normal;
+        flex-wrap: wrap;
+        row-gap: 6px;
+    }
+
+    .pc-status .pc-os,
+    .pc-status .pc-main {
+        max-width: 100%;
+        overflow-wrap: anywhere;
     }
 
     footer {
