@@ -116,30 +116,44 @@ Contributions are welcome.
 
 ## 🇵🇱 adiker.eu — Osobisty hub usług
 
-Lekka, szybka i responsywna strona startowa dla **adiker.eu**.
-Umożliwia szybki dostęp do usług self-hosted, pokazuje ich status na żywo i oferuje wygodny, czytelny interfejs.
+Lekka, szybka i przyjazna mobilnie strona startowa dla **adiker.eu**.
+Umożliwia szybki dostęp do usług self-hosted, sprawdzanie ich statusu na żywo oraz oferuje wygodny i dostępny interfejs.
 
-### Opis
+### Przegląd
 
-Projekt to statyczna strona (bez frameworków), będąca panelem dostępu do:
+To repozytorium zawiera statyczną aplikację jednostronicową, używaną jako strona główna dla:
 
 - **Jellyfin**
 - **FileBrowser Quantum**
 - **autobrr**
 
-Podejście „vanilla” (HTML/CSS/JS) gwarantuje prostotę utrzymania i bardzo dobrą wydajność.
+Strona celowo nie używa frameworków (czyste HTML/CSS/JS), aby była szybka, przenośna i łatwa w hostowaniu.
 
-### Najważniejsze funkcje
+### Funkcje
 
 - ✅ Zakładki usług z czytelnym układem kart
-- ✅ Live-check statusu usług + pomiar opóźnień (latency)
-- ✅ Inteligentne odpytywanie (warm-up + backoff przy błędach)
+- ✅ Sprawdzanie statusu usług na żywo + pomiar opóźnień
+- ✅ Odpytywanie z pomiarem rozgrzewkowym i backoffem przy błędach
 - ✅ Przełącznik języka EN/PL
 - ✅ Motywy: Dark / Light / OLED
 - ✅ Etykieta z wykrytym OS, przeglądarką i typem urządzenia
-- ✅ Obsługa klawiatury i elementy a11y
+- ✅ Zakładki dostępne z klawiatury i czytelne stany focus
 
-### Uruchomienie lokalnie
+### Struktura projektu
+
+```text
+.
+├── index.html          # Główny markup strony
+├── css/
+│   └── styles.css      # Style, motywy, reguły responsywne
+├── js/
+│   └── app.js          # Logika UI, i18n, odpytywanie statusów
+├── img/                # Lokalne zasoby/ikony
+├── CNAME               # Własna domena dla GitHub Pages (adiker.eu)
+└── index_old.html      # Kopia starszej wersji strony
+```
+
+### Uruchom lokalnie
 
 Nie wymaga builda.
 
@@ -151,7 +165,11 @@ Następnie otwórz: `http://localhost:8080`
 
 ### Konfiguracja
 
-Adresy endpointów health-check znajdują się w `js/app.js`.
+Endpointy usług są zdefiniowane w `js/app.js`:
+
+- `https://jellyfin.adiker.eu/health`
+- `https://files.adiker.eu/health`
+- `https://autobrr.adiker.eu/api/healthz/liveness`
 
 Preferencje użytkownika zapisywane są w `localStorage`:
 
@@ -168,11 +186,22 @@ Preferencje użytkownika zapisywane są w `localStorage`:
 
 ### Wdrożenie
 
-Projekt jest gotowy pod statyczny hosting (np. GitHub Pages) + domenę z `CNAME`.
+Projekt jest przygotowany pod hosting statyczny (np. GitHub Pages).
+
+Typowy proces wdrożenia:
+
+1. Wypchnij zmiany na główną gałąź
+2. Włącz GitHub Pages w ustawieniach repozytorium
+3. Zostaw plik `CNAME` w katalogu głównym dla mapowania własnej domeny
 
 ### Współtworzenie
 
-Masz pomysł na usprawnienie? Super — otwórz issue albo PR ✨
+Wkład jest mile widziany.
+
+1. Zrób fork projektu
+2. Utwórz gałąź z funkcją/poprawką
+3. Zacommituj zmiany
+4. Otwórz Pull Request
 
 ---
 
