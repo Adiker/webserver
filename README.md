@@ -2,8 +2,8 @@
 
 > 🇵🇱 Polska wersja README znajduje się poniżej: [Przejdź do sekcji PL](#-adikereu--osobisty-hub-usług)
 
-A lightweight, fast and mobile-friendly homepage for **adiker.eu**.
-It provides quick access to self-hosted services, live availability checks, language/theme controls, and an accessible interface.
+A lightweight, fast, and mobile-friendly homepage for **[adiker.eu](https://adiker.eu)**.
+It gives quick access to self-hosted services, live status checks, language and theme controls, and an accessible interface.
 
 ![Status](https://img.shields.io/badge/status-active-success)
 ![Stack](https://img.shields.io/badge/stack-HTML%20%7C%20CSS%20%7C%20Vanilla%20JS-informational)
@@ -36,7 +36,7 @@ This repository contains a static single-page application used as a front page f
 - **FileBrowser Quantum**
 - **autobrr**
 
-The page is intentionally framework-free (plain HTML/CSS/JS) to keep it fast, portable, and easy to host.
+The page is intentionally framework-free (plain HTML/CSS/JS), which keeps it fast, portable, and easy to host.
 
 ### Features
 
@@ -116,8 +116,8 @@ Contributions are welcome.
 
 ## 🇵🇱 adiker.eu — Osobisty hub usług
 
-Lekka, szybka i przyjazna mobilnie strona startowa dla **adiker.eu**.
-Umożliwia szybki dostęp do usług self-hosted, sprawdzanie ich statusu na żywo oraz oferuje wygodny i dostępny interfejs.
+Lekka, szybka i przyjazna mobilnie strona startowa dla **[adiker.eu](https://adiker.eu)**.
+Zapewnia szybki dostęp do usług self-hosted, sprawdzanie ich statusu na żywo oraz wygodny, dostępny interfejs.
 
 ### Przegląd
 
@@ -127,7 +127,7 @@ To repozytorium zawiera statyczną aplikację jednostronicową, używaną jako s
 - **FileBrowser Quantum**
 - **autobrr**
 
-Strona celowo nie używa frameworków (czyste HTML/CSS/JS), aby była szybka, przenośna i łatwa w hostowaniu.
+Strona celowo nie używa frameworków (czyste HTML/CSS/JS), dzięki czemu pozostaje szybka, przenośna i łatwa w hostowaniu.
 
 ### Funkcje
 
