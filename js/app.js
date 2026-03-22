@@ -12,13 +12,15 @@ const DETECTED_DEVICE = detectClientDevice();
 const SERVICE_STATE = {
     jf: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
     fb: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
-    ab: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] }
+    ab: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
+    st: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] }
 };
 
 const SERVICES = [
     { key: 'jf', url: 'https://jellyfin.adiker.eu/health' },
     { key: 'fb', url: 'https://files.adiker.eu/health' },
-    { key: 'ab', url: 'https://autobrr.adiker.eu/api/healthz/liveness' }
+    { key: 'ab', url: 'https://autobrr.adiker.eu/api/healthz/liveness' },
+    { key: 'st', url: 'https://speedtest.adiker.eu/health' }
 ];
 
 const STR = {
@@ -27,6 +29,7 @@ const STR = {
             jellyfin: 'Jellyfin',
             filebrowser: 'Filebrowser',
             autobrr: 'Autobrr',
+            openspeedtest: 'OpenSpeedTest',
             more: 'More services (soon)'
         },
         subtitle: 'My Playground',
@@ -50,6 +53,7 @@ const STR = {
         jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin', short: 'Jellyfin' },
         fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum', short: 'FileBrowser' },
         ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr', short: 'autobrr' },
+        st: { title: 'OpenSpeedTest', sub: 'Network speed test', open: 'Open OpenSpeedTest', short: 'OpenSpeedTest' },
         status: { online: 'Online', offline: 'Offline' },
         pc: {
             on: 'My PC is on :)',
@@ -95,6 +99,7 @@ const STR = {
             jellyfin: 'Jellyfin',
             filebrowser: 'Filebrowser',
             autobrr: 'Autobrr',
+            openspeedtest: 'OpenSpeedTest',
             more: 'Więcej usług (wkrótce)'
         },
         subtitle: 'Mój plac zabaw',
@@ -118,6 +123,7 @@ const STR = {
         jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin', short: 'Jellyfin' },
         fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum', short: 'FileBrowser' },
         ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr', short: 'autobrr' },
+        st: { title: 'OpenSpeedTest', sub: 'Test prędkości sieci', open: 'Otwórz OpenSpeedTest', short: 'OpenSpeedTest' },
         status: { online: 'Online', offline: 'Offline' },
         pc: {
             on: 'Mój PC jest włączony :)',
@@ -296,6 +302,7 @@ function renderDashboard(lang = getLang()) {
     setText('dash-jf-latency', `${L.jf.short}: ${SERVICE_STATE.jf.latency ?? '--'} ms`);
     setText('dash-fb-latency', `${L.fb.short}: ${SERVICE_STATE.fb.latency ?? '--'} ms`);
     setText('dash-ab-latency', `${L.ab.short}: ${SERVICE_STATE.ab.latency ?? '--'} ms`);
+    setText('dash-st-latency', `${L.st.short}: ${SERVICE_STATE.st.latency ?? '--'} ms`);
 }
 
 function applyLang(lang) {
@@ -311,6 +318,9 @@ function applyLang(lang) {
     setText('ab-title', '⚡ ' + L.ab.title);
     setText('ab-sub', L.ab.sub);
     setText('ab-btn-text', L.ab.open);
+    setText('st-title', '🚀 ' + L.st.title);
+    setText('st-sub', L.st.sub);
+    setText('st-btn-text', L.st.open);
 
     setText('subtitle', L.subtitle);
     setText('availability', L.availability);
@@ -319,13 +329,16 @@ function applyLang(lang) {
     const jfBtn = document.getElementById('jf-btn');
     const fbBtn = document.getElementById('fb-btn');
     const abBtn = document.getElementById('ab-btn');
+    const stBtn = document.getElementById('st-btn');
     if (jfBtn) jfBtn.setAttribute('aria-label', L.jf.open);
     if (fbBtn) fbBtn.setAttribute('aria-label', L.fb.open);
     if (abBtn) abBtn.setAttribute('aria-label', L.ab.open);
+    if (stBtn) stBtn.setAttribute('aria-label', L.st.open);
 
     setText('tab-jellyfin', L.nav.jellyfin);
     setText('tab-filebrowser', L.nav.filebrowser);
     setText('tab-autobrr', L.nav.autobrr);
+    setText('tab-speedtest', L.nav.openspeedtest);
     setText('tab-more', L.nav.more);
 
     const tabsNav = document.querySelector('nav.tabs');
@@ -456,11 +469,12 @@ async function refreshService(service) {
 }
 
 function initTabs() {
-    const tabIds = ['tab-jellyfin', 'tab-filebrowser', 'tab-autobrr'];
+    const tabIds = ['tab-jellyfin', 'tab-filebrowser', 'tab-autobrr', 'tab-speedtest'];
     const map = {
         'tab-jellyfin': 'section-jf',
         'tab-filebrowser': 'section-fb',
-        'tab-autobrr': 'section-ab'
+        'tab-autobrr': 'section-ab',
+        'tab-speedtest': 'section-st'
     };
 
     const tabs = tabIds.map((id) => document.getElementById(id)).filter(Boolean);
