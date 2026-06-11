@@ -1,6 +1,8 @@
 const THEME_KEY = 'adiker.theme';
 const LANG_KEY = 'adiker.lang';
+const STATUS_HISTORY_KEY = 'adiker.statusHistory.v1';
 const THEME_ORDER = ['dark', 'light', 'oled'];
+const HISTORY_LIMIT = 24;
 
 let __animTheme = false;
 let lastCheckAt = null;
@@ -10,10 +12,10 @@ const DETECTED_BROWSER = detectClientBrowser();
 const DETECTED_DEVICE = detectClientDevice();
 
 const SERVICE_STATE = {
-    jf: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
-    fb: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
-    ab: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
-    st: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] }
+    jf: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    fb: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    ab: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    st: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] }
 };
 
 const SERVICES = [
@@ -48,7 +50,14 @@ const STR = {
             sub: 'Live status overview',
             overall: 'online',
             lastCheck: 'Last check',
-            notYet: '--'
+            notYet: '--',
+            historyTitle: 'Recent checks',
+            avgLatency: 'Avg',
+            noData: 'No data yet',
+            stable: 'Stable',
+            recovering: 'Recovering',
+            issues: 'Issues detected',
+            timelineLabel: 'recent checks'
         },
         jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin', short: 'Jellyfin' },
         fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum', short: 'FileBrowser' },
@@ -118,7 +127,14 @@ const STR = {
             sub: 'Podgląd statusu na żywo',
             overall: 'online',
             lastCheck: 'Ostatnie sprawdzenie',
-            notYet: '--'
+            notYet: '--',
+            historyTitle: 'Ostatnie sprawdzenia',
+            avgLatency: 'Śr.',
+            noData: 'Brak danych',
+            stable: 'Stabilnie',
+            recovering: 'Wraca do normy',
+            issues: 'Wykryto problemy',
+            timelineLabel: 'ostatnie sprawdzenia'
         },
         jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin', short: 'Jellyfin' },
         fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum', short: 'FileBrowser' },
@@ -264,6 +280,127 @@ function showToast(msg) {
     setTimeout(() => t.classList.remove('show'), 1600);
 }
 
+function getServiceLabel(key, lang = getLang()) {
+    const L = STR[lang] || STR.en;
+    return (L[key] && L[key].short) || key;
+}
+
+function loadStatusHistory() {
+    try {
+        const raw = localStorage.getItem(STATUS_HISTORY_KEY);
+        const parsed = raw ? JSON.parse(raw) : {};
+
+        SERVICES.forEach((service) => {
+            const entries = Array.isArray(parsed[service.key]) ? parsed[service.key] : [];
+            SERVICE_STATE[service.key].history = entries
+                .filter((entry) => entry && Number.isFinite(entry.at) && typeof entry.online === 'boolean')
+                .map((entry) => ({
+                    at: entry.at,
+                    online: entry.online,
+                    latency: Number.isFinite(entry.latency) ? entry.latency : null
+                }))
+                .slice(-HISTORY_LIMIT);
+        });
+    } catch (_e) {
+        SERVICES.forEach((service) => {
+            SERVICE_STATE[service.key].history = [];
+        });
+    }
+}
+
+function saveStatusHistory() {
+    const history = {};
+    SERVICES.forEach((service) => {
+        history[service.key] = SERVICE_STATE[service.key].history.slice(-HISTORY_LIMIT);
+    });
+
+    try {
+        localStorage.setItem(STATUS_HISTORY_KEY, JSON.stringify(history));
+    } catch (_e) {
+        // History is useful, but the dashboard should keep working without storage.
+    }
+}
+
+function addStatusHistoryEntry(key, ok, latency) {
+    const state = SERVICE_STATE[key];
+    if (!state) return;
+
+    state.history.push({
+        at: Date.now(),
+        online: !!ok,
+        latency: Number.isFinite(latency) ? latency : null
+    });
+
+    if (state.history.length > HISTORY_LIMIT) {
+        state.history = state.history.slice(-HISTORY_LIMIT);
+    }
+
+    saveStatusHistory();
+}
+
+function getAverageHistoryLatency(history) {
+    const samples = history
+        .filter((entry) => entry.online && Number.isFinite(entry.latency))
+        .map((entry) => entry.latency);
+
+    if (!samples.length) return null;
+    const avg = samples.reduce((sum, value) => sum + value, 0) / samples.length;
+    return Math.round(avg);
+}
+
+function getHistorySummary(history, L) {
+    if (!history.length) return L.dashboard.noData;
+
+    const recent = history.slice(-6);
+    const failures = recent.filter((entry) => !entry.online).length;
+    const last = history[history.length - 1];
+
+    if (failures === 0) return L.dashboard.stable;
+    if (last.online && failures > 0) return L.dashboard.recovering;
+    if (!last.online || failures >= 2) return L.dashboard.issues;
+    return L.dashboard.recovering;
+}
+
+function renderHistoryTimeline(key, lang, L) {
+    const state = SERVICE_STATE[key];
+    if (!state) return;
+
+    const history = state.history.slice(-HISTORY_LIMIT);
+    const label = getServiceLabel(key, lang);
+    const summary = getHistorySummary(history, L);
+    const avgLatency = getAverageHistoryLatency(history);
+    const onlineCount = history.filter((entry) => entry.online).length;
+    const offlineCount = history.length - onlineCount;
+
+    setText(`history-${key}-name`, label);
+    setText(`history-${key}-summary`, summary);
+    setText(`history-${key}-avg`, `${L.dashboard.avgLatency}: ${avgLatency ?? '--'} ms`);
+
+    const line = document.getElementById(`history-${key}-line`);
+    if (!line) return;
+
+    line.innerHTML = '';
+    for (let i = 0; i < HISTORY_LIMIT; i += 1) {
+        const entry = history[i];
+        const segment = document.createElement('span');
+        segment.className = 'history-segment';
+        segment.setAttribute('aria-hidden', 'true');
+
+        if (!entry) {
+            segment.classList.add('is-unknown');
+        } else {
+            segment.classList.add(entry.online ? 'is-online' : 'is-offline');
+        }
+
+        line.appendChild(segment);
+    }
+
+    const ariaText = history.length
+        ? `${label}: ${summary}. ${onlineCount} ${L.status.online}, ${offlineCount} ${L.status.offline}, ${L.dashboard.avgLatency}: ${avgLatency ?? L.dashboard.notYet} ms.`
+        : `${label}: ${L.dashboard.noData}.`;
+    line.setAttribute('aria-label', `${ariaText} ${L.dashboard.timelineLabel}.`);
+}
+
 function renderPcStatus(lang = getLang()) {
     const L = STR[lang] || STR.en;
     const anyOnline = Object.values(SERVICE_STATE).some((s) => s.online);
@@ -303,6 +440,9 @@ function renderDashboard(lang = getLang()) {
     setText('dash-fb-latency', `${L.fb.short}: ${SERVICE_STATE.fb.latency ?? '--'} ms`);
     setText('dash-ab-latency', `${L.ab.short}: ${SERVICE_STATE.ab.latency ?? '--'} ms`);
     setText('dash-st-latency', `${L.st.short}: ${SERVICE_STATE.st.latency ?? '--'} ms`);
+    setText('history-title', L.dashboard.historyTitle);
+
+    SERVICES.forEach((service) => renderHistoryTimeline(service.key, lang, L));
 }
 
 function applyLang(lang) {
@@ -411,6 +551,7 @@ function setServiceStatus(prefix, ok, latency) {
     SERVICE_STATE[prefix].online = !!ok;
     SERVICE_STATE[prefix].latency = Number.isFinite(latency) ? latency : null;
     lastCheckAt = Date.now();
+    addStatusHistoryEntry(prefix, ok, latency);
 
     renderPcStatus();
     renderDashboard();
@@ -520,6 +661,7 @@ function initTabs() {
 
 function init() {
     setText('year', new Date().getFullYear());
+    loadStatusHistory();
 
     const currentTheme = localStorage.getItem(THEME_KEY) || 'dark';
     setTheme(currentTheme);
