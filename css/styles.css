@@ -348,7 +348,7 @@ a:hover {
 
 .history-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
     gap: 10px;
 }
 
@@ -652,6 +652,26 @@ html.theme-light #theme-toggle {
     text-decoration: underline;
 }
 
+@media (max-width: 900px) {
+    .controls {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .pc-status {
+        width: 100%;
+        white-space: normal;
+        flex-wrap: wrap;
+        row-gap: 6px;
+    }
+
+    .pc-status .pc-os,
+    .pc-status .pc-main {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+}
+
 /* ---- Mobile-only layout fixes (desktop stays unchanged) ---- */
 @media (max-width: 768px) {
     .wrap {
@@ -685,8 +705,6 @@ html.theme-light #theme-toggle {
     }
 
     .controls {
-        flex: 1 1 100%;
-        width: 100%;
         gap: 10px;
     }
 
@@ -720,19 +738,6 @@ html.theme-light #theme-toggle {
         width: 100%;
         justify-content: center;
         min-height: 44px;
-    }
-
-    .pc-status {
-        width: 100%;
-        white-space: normal;
-        flex-wrap: wrap;
-        row-gap: 6px;
-    }
-
-    .pc-status .pc-os,
-    .pc-status .pc-main {
-        max-width: 100%;
-        overflow-wrap: anywhere;
     }
 
     footer {

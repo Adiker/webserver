@@ -356,8 +356,8 @@ function getHistorySummary(history, L) {
     const last = history[history.length - 1];
 
     if (failures === 0) return L.dashboard.stable;
-    if (last.online && failures > 0) return L.dashboard.recovering;
     if (!last.online || failures >= 2) return L.dashboard.issues;
+    if (last.online) return L.dashboard.recovering;
     return L.dashboard.recovering;
 }
 
