@@ -117,14 +117,25 @@ Claude-specific quick context is available in [CLAUDE.md](CLAUDE.md). If
 
 ### Deployment
 
-The project is designed for static hosting, especially GitHub Pages.
+The project is designed for static hosting, especially GitHub Pages. The
+repository uses GitHub Actions to validate pull requests and publish the static
+site from `main`.
 
 Typical deployment flow:
 
 1. Push changes to a branch.
 2. Open a pull request to `main`.
-3. Merge after review.
-4. Keep `CNAME` in the repository root for the custom domain mapping.
+3. Wait for the `Pages` workflow to pass.
+4. Merge after review.
+5. GitHub Actions publishes the runtime files to GitHub Pages.
+6. Keep `CNAME` in the repository root for the custom domain mapping.
+
+The workflow runs lightweight smoke checks: required file presence, `CNAME`
+validation, JavaScript syntax validation, and a local static server check for
+the HTML, CSS, JavaScript, and local image asset.
+
+In repository settings, set GitHub Pages to use **GitHub Actions** as the build
+and deployment source.
 
 ### Contributing
 
@@ -234,13 +245,24 @@ Szybki kontekst dla Claude znajduje się w [CLAUDE.md](CLAUDE.md). Jeżeli
 ### Wdrożenie
 
 Projekt jest przygotowany pod hosting statyczny, szczególnie GitHub Pages.
+Repozytorium używa GitHub Actions do walidowania pull requestów i publikowania
+statycznej strony z `main`.
 
 Typowy proces wdrożenia:
 
 1. Wypchnij zmiany na branch.
 2. Otwórz pull request do `main`.
-3. Zmerguj po review.
-4. Zostaw plik `CNAME` w katalogu głównym dla mapowania własnej domeny.
+3. Poczekaj, aż workflow `Pages` przejdzie poprawnie.
+4. Zmerguj po review.
+5. GitHub Actions opublikuje pliki runtime na GitHub Pages.
+6. Zostaw plik `CNAME` w katalogu głównym dla mapowania własnej domeny.
+
+Workflow wykonuje lekkie smoke checki: obecność wymaganych plików, walidację
+`CNAME`, sprawdzenie składni JavaScript oraz lokalny test serwera statycznego
+dla HTML, CSS, JavaScriptu i lokalnego obrazka.
+
+W ustawieniach repozytorium ustaw GitHub Pages na źródło builda i wdrożenia
+**GitHub Actions**.
 
 ### Współtworzenie
 
