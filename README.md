@@ -1,9 +1,10 @@
-# adiker.eu — Personal Service Hub
+# adiker.eu - Personal Service Hub
 
-> 🇵🇱 Polska wersja README znajduje się poniżej: [Przejdź do sekcji PL](#-adikereu--osobisty-hub-usług)
+> Polska wersja README znajduje się poniżej: [Przejdź do sekcji PL](#polski)
 
 A lightweight, fast, and mobile-friendly homepage for **[adiker.eu](https://adiker.eu)**.
-It gives quick access to self-hosted services, live status checks, language and theme controls, and an accessible interface.
+It gives quick access to self-hosted services, live status checks, latency display,
+language and theme controls, and an accessible interface.
 
 ![Status](https://img.shields.io/badge/status-active-success)
 ![Stack](https://img.shields.io/badge/stack-HTML%20%7C%20CSS%20%7C%20Vanilla%20JS-informational)
@@ -11,7 +12,7 @@ It gives quick access to self-hosted services, live status checks, language and 
 
 ---
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [English](#english)
   - [Overview](#overview)
@@ -20,9 +21,10 @@ It gives quick access to self-hosted services, live status checks, language and 
   - [Run Locally](#run-locally)
   - [Configuration](#configuration)
   - [Accessibility](#accessibility)
+  - [AI Agent Notes](#ai-agent-notes)
   - [Deployment](#deployment)
   - [Contributing](#contributing)
-- [Polski](#-adikereu--osobisty-hub-usług)
+- [Polski](#polski)
 
 ---
 
@@ -35,31 +37,40 @@ This repository contains a static single-page application used as a front page f
 - **Jellyfin**
 - **FileBrowser Quantum**
 - **autobrr**
+- **OpenSpeedTest**
 
-The page is intentionally framework-free (plain HTML/CSS/JS), which keeps it fast, portable, and easy to host.
+The page is intentionally framework-free: plain HTML, CSS, and vanilla JavaScript.
+That keeps it fast, portable, and easy to host on GitHub Pages or any static
+server.
 
 ### Features
 
-- ✅ Service tabs with clean card-based layout
-- ✅ Live health checks + latency display
-- ✅ Polling with warm-up measurement and failure backoff
-- ✅ EN/PL language switcher
-- ✅ Dark / Light / OLED themes
-- ✅ Client info badge (OS, browser, device detection)
-- ✅ Keyboard-accessible tabs and focus states
+- Service tabs with a clean card-based layout
+- Live service dashboard with online count, last check time, and latency labels
+- Health checks for all configured services
+- Polling with warm-up measurement and failure backoff
+- EN/PL language switcher
+- Dark / Light / OLED themes
+- Client info badge with OS, browser, and device detection
+- Keyboard-accessible tabs and visible focus states
 
 ### Project Structure
 
 ```text
 .
-├── index.html          # Main page markup
+├── AGENTS.md          # Canonical instructions for AI agents
+├── CLAUDE.md          # Claude-specific quick context
+├── CNAME              # Custom domain for GitHub Pages (adiker.eu)
+├── README.md          # Project documentation
 ├── css/
-│   └── styles.css      # Styling, themes, responsive rules
-├── js/
-│   └── app.js          # UI logic, i18n, status polling
-├── img/                # Local assets/icons
-├── CNAME               # Custom domain for GitHub Pages (adiker.eu)
-└── index_old.html      # Legacy page backup
+│   └── styles.css     # Styling, themes, responsive rules
+├── img/
+│   └── 505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png
+│                     # Local FileBrowser Quantum logo asset
+├── index.html         # Main page markup
+├── index_old.html     # Legacy page backup
+└── js/
+    └── app.js         # UI logic, i18n, status polling
 ```
 
 ### Run Locally
@@ -70,7 +81,7 @@ No build step is required.
 python3 -m http.server 8080
 ```
 
-Then open: `http://localhost:8080`
+Then open `http://localhost:8080`.
 
 ### Configuration
 
@@ -79,6 +90,7 @@ Service endpoints are defined in `js/app.js`:
 - `https://jellyfin.adiker.eu/health`
 - `https://files.adiker.eu/health`
 - `https://autobrr.adiker.eu/api/healthz/liveness`
+- `https://speedtest.adiker.eu/health`
 
 User preferences are stored in `localStorage`:
 
@@ -87,70 +99,94 @@ User preferences are stored in `localStorage`:
 
 ### Accessibility
 
-- skip link to main content
-- semantic tablist + tabpanel roles
-- keyboard navigation (left/right arrows in tabs)
+- Skip link to main content
+- Semantic `tablist` and `tabpanel` roles
+- Keyboard navigation with left/right arrows in tabs
+- `aria-live` updates for dashboard/status text
 - `:focus-visible` styles
-- reduced-motion support via `prefers-reduced-motion`
+- Reduced-motion support via `prefers-reduced-motion`
+
+### AI Agent Notes
+
+AI agents should read [AGENTS.md](AGENTS.md) before making changes. It is the
+canonical source for repository guardrails, Git workflow, branch naming, commit
+style, and verification rules.
+
+Claude-specific quick context is available in [CLAUDE.md](CLAUDE.md). If
+`CLAUDE.md` conflicts with `AGENTS.md`, follow `AGENTS.md`.
 
 ### Deployment
 
-The project is designed for static hosting (e.g. GitHub Pages).
+The project is designed for static hosting, especially GitHub Pages.
 
 Typical deployment flow:
 
-1. Push to your main branch
-2. Enable GitHub Pages in repository settings
-3. Keep `CNAME` in repo root for custom domain mapping
+1. Push changes to a branch.
+2. Open a pull request to `main`.
+3. Merge after review.
+4. Keep `CNAME` in the repository root for the custom domain mapping.
 
 ### Contributing
 
 Contributions are welcome.
 
-1. Fork the project
-2. Create a feature branch
-3. Commit your changes
-4. Open a Pull Request
+1. Fork the project.
+2. Create a feature branch.
+3. Commit your changes.
+4. Open a pull request.
 
 ---
 
-## 🇵🇱 adiker.eu — Osobisty hub usług
+<a id="polski"></a>
+
+## adiker.eu - Osobisty hub usług
 
 Lekka, szybka i przyjazna mobilnie strona startowa dla **[adiker.eu](https://adiker.eu)**.
-Zapewnia szybki dostęp do usług self-hosted, sprawdzanie ich statusu na żywo oraz wygodny, dostępny interfejs.
+Zapewnia szybki dostęp do usług self-hosted, sprawdzanie ich statusu na żywo,
+pomiar opóźnień oraz wygodny, dostępny interfejs.
 
 ### Przegląd
 
-To repozytorium zawiera statyczną aplikację jednostronicową, używaną jako strona główna dla:
+To repozytorium zawiera statyczną aplikację jednostronicową, używaną jako strona
+główna dla:
 
 - **Jellyfin**
 - **FileBrowser Quantum**
 - **autobrr**
+- **OpenSpeedTest**
 
-Strona celowo nie używa frameworków (czyste HTML/CSS/JS), dzięki czemu pozostaje szybka, przenośna i łatwa w hostowaniu.
+Strona celowo nie używa frameworków: to czysty HTML, CSS i vanilla JavaScript.
+Dzięki temu pozostaje szybka, przenośna i łatwa w hostowaniu na GitHub Pages
+albo dowolnym serwerze statycznym.
 
 ### Funkcje
 
-- ✅ Zakładki usług z czytelnym układem kart
-- ✅ Sprawdzanie statusu usług na żywo + pomiar opóźnień
-- ✅ Odpytywanie z pomiarem rozgrzewkowym i backoffem przy błędach
-- ✅ Przełącznik języka EN/PL
-- ✅ Motywy: Dark / Light / OLED
-- ✅ Etykieta z wykrytym OS, przeglądarką i typem urządzenia
-- ✅ Zakładki dostępne z klawiatury i czytelne stany focus
+- Zakładki usług z czytelnym układem kart
+- Dashboard statusów z liczbą usług online, czasem ostatniego sprawdzenia i opóźnieniami
+- Health checki dla wszystkich skonfigurowanych usług
+- Odpytywanie z pomiarem rozgrzewkowym i backoffem przy błędach
+- Przełącznik języka EN/PL
+- Motywy Dark / Light / OLED
+- Etykieta z wykrytym OS, przeglądarką i typem urządzenia
+- Zakładki dostępne z klawiatury i czytelne stany focus
 
 ### Struktura projektu
 
 ```text
 .
-├── index.html          # Główny markup strony
+├── AGENTS.md          # Kanoniczne instrukcje dla agentów AI
+├── CLAUDE.md          # Szybki kontekst specyficzny dla Claude
+├── CNAME              # Własna domena dla GitHub Pages (adiker.eu)
+├── README.md          # Dokumentacja projektu
 ├── css/
-│   └── styles.css      # Style, motywy, reguły responsywne
-├── js/
-│   └── app.js          # Logika UI, i18n, odpytywanie statusów
-├── img/                # Lokalne zasoby/ikony
-├── CNAME               # Własna domena dla GitHub Pages (adiker.eu)
-└── index_old.html      # Kopia starszej wersji strony
+│   └── styles.css     # Style, motywy, reguły responsywne
+├── img/
+│   └── 505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png
+│                     # Lokalny zasób logo FileBrowser Quantum
+├── index.html         # Główny markup strony
+├── index_old.html     # Kopia starszej wersji strony
+└── js/
+    └── app.js         # Logika UI, i18n, odpytywanie statusów
 ```
 
 ### Uruchom lokalnie
@@ -161,7 +197,7 @@ Nie wymaga builda.
 python3 -m http.server 8080
 ```
 
-Następnie otwórz: `http://localhost:8080`
+Następnie otwórz `http://localhost:8080`.
 
 ### Konfiguracja
 
@@ -170,6 +206,7 @@ Endpointy usług są zdefiniowane w `js/app.js`:
 - `https://jellyfin.adiker.eu/health`
 - `https://files.adiker.eu/health`
 - `https://autobrr.adiker.eu/api/healthz/liveness`
+- `https://speedtest.adiker.eu/health`
 
 Preferencje użytkownika zapisywane są w `localStorage`:
 
@@ -178,30 +215,41 @@ Preferencje użytkownika zapisywane są w `localStorage`:
 
 ### Dostępność
 
-- link „skip to content”
-- poprawna semantyka ARIA dla tabów
-- nawigacja klawiaturą
-- czytelne focus states
-- wsparcie dla `prefers-reduced-motion`
+- Link skip do głównej treści
+- Semantyczne role `tablist` i `tabpanel`
+- Nawigacja klawiaturą przy pomocy strzałek lewo/prawo w tabach
+- Aktualizacje `aria-live` dla dashboardu i statusów
+- Style `:focus-visible`
+- Wsparcie dla `prefers-reduced-motion`
+
+### Notatki dla agentów AI
+
+Agenci AI powinni przeczytać [AGENTS.md](AGENTS.md) przed wprowadzaniem zmian.
+To kanoniczne źródło zasad repozytorium, workflow Git, nazewnictwa branchy,
+stylu commitów i oczekiwanej weryfikacji.
+
+Szybki kontekst dla Claude znajduje się w [CLAUDE.md](CLAUDE.md). Jeżeli
+`CLAUDE.md` jest sprzeczny z `AGENTS.md`, obowiązuje `AGENTS.md`.
 
 ### Wdrożenie
 
-Projekt jest przygotowany pod hosting statyczny (np. GitHub Pages).
+Projekt jest przygotowany pod hosting statyczny, szczególnie GitHub Pages.
 
 Typowy proces wdrożenia:
 
-1. Wypchnij zmiany na główną gałąź
-2. Włącz GitHub Pages w ustawieniach repozytorium
-3. Zostaw plik `CNAME` w katalogu głównym dla mapowania własnej domeny
+1. Wypchnij zmiany na branch.
+2. Otwórz pull request do `main`.
+3. Zmerguj po review.
+4. Zostaw plik `CNAME` w katalogu głównym dla mapowania własnej domeny.
 
 ### Współtworzenie
 
 Wkład jest mile widziany.
 
-1. Zrób fork projektu
-2. Utwórz gałąź z funkcją/poprawką
-3. Zacommituj zmiany
-4. Otwórz Pull Request
+1. Zrób fork projektu.
+2. Utwórz branch z funkcją albo poprawką.
+3. Zacommituj zmiany.
+4. Otwórz pull request.
 
 ---
 
