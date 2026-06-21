@@ -6,6 +6,7 @@ const HISTORY_LIMIT = 24;
 
 let __animTheme = false;
 let lastCheckAt = null;
+let _saveTimer = null;
 
 const DETECTED_OS = detectClientOS();
 const DETECTED_BROWSER = detectClientBrowser();
@@ -56,8 +57,7 @@ const STR = {
             noData: 'No data yet',
             stable: 'Stable',
             recovering: 'Recovering',
-            issues: 'Issues detected',
-            timelineLabel: 'recent checks'
+            issues: 'Issues detected'
         },
         jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin', short: 'Jellyfin' },
         fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum', short: 'FileBrowser' },
@@ -133,8 +133,7 @@ const STR = {
             noData: 'Brak danych',
             stable: 'Stabilnie',
             recovering: 'Wraca do normy',
-            issues: 'Wykryto problemy',
-            timelineLabel: 'ostatnie sprawdzenia'
+            issues: 'Wykryto problemy'
         },
         jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin', short: 'Jellyfin' },
         fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum', short: 'FileBrowser' },
@@ -282,7 +281,9 @@ function showToast(msg) {
 
 function getServiceLabel(key, lang = getLang()) {
     const L = STR[lang] || STR.en;
-    return (L[key] && L[key].short) || key;
+    if (L[key] && L[key].short) return L[key].short;
+    const service = SERVICES.find((s) => s.key === key);
+    return service ? new URL(service.url).hostname : key;
 }
 
 function loadStatusHistory() {
@@ -292,8 +293,9 @@ function loadStatusHistory() {
 
         SERVICES.forEach((service) => {
             const entries = Array.isArray(parsed[service.key]) ? parsed[service.key] : [];
+            const cutoff = Date.now() - 48 * 60 * 60 * 1000;
             SERVICE_STATE[service.key].history = entries
-                .filter((entry) => entry && Number.isFinite(entry.at) && typeof entry.online === 'boolean')
+                .filter((entry) => entry && Number.isFinite(entry.at) && typeof entry.online === 'boolean' && entry.at >= cutoff)
                 .map((entry) => ({
                     at: entry.at,
                     online: entry.online,
@@ -321,6 +323,22 @@ function saveStatusHistory() {
     }
 }
 
+function scheduleSaveHistory() {
+    if (_saveTimer) return;
+    _saveTimer = setTimeout(() => {
+        _saveTimer = null;
+        saveStatusHistory();
+    }, 30000);
+}
+
+function flushSaveHistory() {
+    if (_saveTimer) {
+        clearTimeout(_saveTimer);
+        _saveTimer = null;
+    }
+    saveStatusHistory();
+}
+
 function addStatusHistoryEntry(key, ok, latency) {
     const state = SERVICE_STATE[key];
     if (!state) return;
@@ -335,7 +353,7 @@ function addStatusHistoryEntry(key, ok, latency) {
         state.history = state.history.slice(-HISTORY_LIMIT);
     }
 
-    saveStatusHistory();
+    scheduleSaveHistory();
 }
 
 function getAverageHistoryLatency(history) {
@@ -348,57 +366,79 @@ function getAverageHistoryLatency(history) {
     return Math.round(avg);
 }
 
-function getHistorySummary(history, L) {
-    if (!history.length) return L.dashboard.noData;
+function getHistorySummaryType(history) {
+    if (!history.length) return 'noData';
 
     const recent = history.slice(-6);
     const failures = recent.filter((entry) => !entry.online).length;
-    const last = history[history.length - 1];
+    const lastOnline = history[history.length - 1].online;
 
-    if (failures === 0) return L.dashboard.stable;
-    if (!last.online || failures >= 2) return L.dashboard.issues;
-    if (last.online) return L.dashboard.recovering;
-    return L.dashboard.recovering;
+    if (failures >= 2) return 'issues';
+    if (failures === 0) return 'stable';
+    return lastOnline ? 'recovering' : 'issues';
+}
+
+function getHistorySummary(history, L) {
+    return L.dashboard[getHistorySummaryType(history)];
 }
 
 function renderHistoryTimeline(key, lang, L) {
     const state = SERVICE_STATE[key];
     if (!state) return;
 
-    const history = state.history.slice(-HISTORY_LIMIT);
+    const history = state.history;
     const label = getServiceLabel(key, lang);
-    const summary = getHistorySummary(history, L);
+    const summaryType = getHistorySummaryType(history);
+    const summary = L.dashboard[summaryType];
     const avgLatency = getAverageHistoryLatency(history);
     const onlineCount = history.filter((entry) => entry.online).length;
     const offlineCount = history.length - onlineCount;
 
     setText(`history-${key}-name`, label);
-    setText(`history-${key}-summary`, summary);
+    const summaryEl = document.getElementById(`history-${key}-summary`);
+    if (summaryEl) {
+        summaryEl.textContent = summary;
+        summaryEl.classList.remove('is-stable', 'is-recovering', 'is-issues');
+        if (summaryType !== 'noData') summaryEl.classList.add(`is-${summaryType}`);
+    }
     setText(`history-${key}-avg`, `${L.dashboard.avgLatency}: ${avgLatency ?? '--'} ms`);
 
     const line = document.getElementById(`history-${key}-line`);
     if (!line) return;
 
-    line.innerHTML = '';
-    for (let i = 0; i < HISTORY_LIMIT; i += 1) {
-        const entry = history[i];
-        const segment = document.createElement('span');
-        segment.className = 'history-segment';
-        segment.setAttribute('aria-hidden', 'true');
+    if (line.children.length !== HISTORY_LIMIT) {
+        line.innerHTML = '';
+        for (let i = 0; i < HISTORY_LIMIT; i += 1) {
+            const segment = document.createElement('span');
+            segment.className = 'history-segment';
+            segment.setAttribute('aria-hidden', 'true');
+            line.appendChild(segment);
+        }
+    }
 
+    const timeOpts = { hour: '2-digit', minute: '2-digit' };
+    const locale = lang === 'pl' ? 'pl-PL' : 'en-GB';
+    for (let i = 0; i < HISTORY_LIMIT; i += 1) {
+        const segment = line.children[i];
+        const entry = history[i];
+        segment.classList.remove('is-online', 'is-offline', 'is-unknown');
         if (!entry) {
             segment.classList.add('is-unknown');
+            segment.title = L.dashboard.noData;
         } else {
             segment.classList.add(entry.online ? 'is-online' : 'is-offline');
+            const time = new Date(entry.at).toLocaleTimeString(locale, timeOpts);
+            const status = entry.online ? L.status.online : L.status.offline;
+            segment.title = entry.online && entry.latency != null
+                ? `${status} — ${entry.latency} ms — ${time}`
+                : `${status} — ${time}`;
         }
-
-        line.appendChild(segment);
     }
 
     const ariaText = history.length
-        ? `${label}: ${summary}. ${onlineCount} ${L.status.online}, ${offlineCount} ${L.status.offline}, ${L.dashboard.avgLatency}: ${avgLatency ?? L.dashboard.notYet} ms.`
-        : `${label}: ${L.dashboard.noData}.`;
-    line.setAttribute('aria-label', `${ariaText} ${L.dashboard.timelineLabel}.`);
+        ? `${label}: ${summary}. ${onlineCount} ${L.status.online}, ${offlineCount} ${L.status.offline}, ${L.dashboard.avgLatency}: ${avgLatency ?? L.dashboard.notYet} ms`
+        : `${label}: ${L.dashboard.noData}`;
+    line.setAttribute('aria-label', ariaText);
 }
 
 function renderPcStatus(lang = getLang()) {
@@ -684,6 +724,11 @@ function init() {
     const plBtn = document.getElementById('lang-pl');
     if (enBtn) enBtn.addEventListener('click', () => applyLang('en'));
     if (plBtn) plBtn.addEventListener('click', () => applyLang('pl'));
+
+    window.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') flushSaveHistory();
+    });
+    window.addEventListener('beforeunload', flushSaveHistory);
 
     initTabs();
     SERVICES.forEach((service) => refreshService(service));
