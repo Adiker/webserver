@@ -47,6 +47,7 @@ server.
 
 - Service tabs with a clean card-based layout
 - Live service dashboard with online count, last check time, and latency labels
+- Browser-local recent status history with mini timelines and average latency
 - Health checks for all configured services
 - Polling with warm-up measurement and failure backoff
 - EN/PL language switcher
@@ -96,6 +97,7 @@ User preferences are stored in `localStorage`:
 
 - `adiker.theme`
 - `adiker.lang`
+- `adiker.statusHistory.v1`
 
 ### Accessibility
 
@@ -163,6 +165,7 @@ albo dowolnym serwerze statycznym.
 
 - Zakładki usług z czytelnym układem kart
 - Dashboard statusów z liczbą usług online, czasem ostatniego sprawdzenia i opóźnieniami
+- Lokalna historia ostatnich statusów z mini-timeline i średnim opóźnieniem
 - Health checki dla wszystkich skonfigurowanych usług
 - Odpytywanie z pomiarem rozgrzewkowym i backoffem przy błędach
 - Przełącznik języka EN/PL
@@ -212,6 +215,7 @@ Preferencje użytkownika zapisywane są w `localStorage`:
 
 - `adiker.theme`
 - `adiker.lang`
+- `adiker.statusHistory.v1`
 
 ### Dostępność
 

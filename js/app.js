@@ -1,19 +1,22 @@
 const THEME_KEY = 'adiker.theme';
 const LANG_KEY = 'adiker.lang';
+const STATUS_HISTORY_KEY = 'adiker.statusHistory.v1';
 const THEME_ORDER = ['dark', 'light', 'oled'];
+const HISTORY_LIMIT = 24;
 
 let __animTheme = false;
 let lastCheckAt = null;
+let _saveTimer = null;
 
 const DETECTED_OS = detectClientOS();
 const DETECTED_BROWSER = detectClientBrowser();
 const DETECTED_DEVICE = detectClientDevice();
 
 const SERVICE_STATE = {
-    jf: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
-    fb: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
-    ab: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] },
-    st: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [] }
+    jf: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    fb: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    ab: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    st: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] }
 };
 
 const SERVICES = [
@@ -48,7 +51,13 @@ const STR = {
             sub: 'Live status overview',
             overall: 'online',
             lastCheck: 'Last check',
-            notYet: '--'
+            notYet: '--',
+            historyTitle: 'Recent checks',
+            avgLatency: 'Avg',
+            noData: 'No data yet',
+            stable: 'Stable',
+            recovering: 'Recovering',
+            issues: 'Issues detected'
         },
         jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin', short: 'Jellyfin' },
         fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum', short: 'FileBrowser' },
@@ -118,7 +127,13 @@ const STR = {
             sub: 'Podgląd statusu na żywo',
             overall: 'online',
             lastCheck: 'Ostatnie sprawdzenie',
-            notYet: '--'
+            notYet: '--',
+            historyTitle: 'Ostatnie sprawdzenia',
+            avgLatency: 'Śr.',
+            noData: 'Brak danych',
+            stable: 'Stabilnie',
+            recovering: 'Wraca do normy',
+            issues: 'Wykryto problemy'
         },
         jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin', short: 'Jellyfin' },
         fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum', short: 'FileBrowser' },
@@ -264,6 +279,168 @@ function showToast(msg) {
     setTimeout(() => t.classList.remove('show'), 1600);
 }
 
+function getServiceLabel(key, lang = getLang()) {
+    const L = STR[lang] || STR.en;
+    if (L[key] && L[key].short) return L[key].short;
+    const service = SERVICES.find((s) => s.key === key);
+    return service ? new URL(service.url).hostname : key;
+}
+
+function loadStatusHistory() {
+    try {
+        const raw = localStorage.getItem(STATUS_HISTORY_KEY);
+        const parsed = raw ? JSON.parse(raw) : {};
+
+        SERVICES.forEach((service) => {
+            const entries = Array.isArray(parsed[service.key]) ? parsed[service.key] : [];
+            const cutoff = Date.now() - 48 * 60 * 60 * 1000;
+            SERVICE_STATE[service.key].history = entries
+                .filter((entry) => entry && Number.isFinite(entry.at) && typeof entry.online === 'boolean' && entry.at >= cutoff)
+                .map((entry) => ({
+                    at: entry.at,
+                    online: entry.online,
+                    latency: Number.isFinite(entry.latency) ? entry.latency : null
+                }))
+                .slice(-HISTORY_LIMIT);
+        });
+    } catch (_e) {
+        SERVICES.forEach((service) => {
+            SERVICE_STATE[service.key].history = [];
+        });
+    }
+}
+
+function saveStatusHistory() {
+    const history = {};
+    SERVICES.forEach((service) => {
+        history[service.key] = SERVICE_STATE[service.key].history.slice(-HISTORY_LIMIT);
+    });
+
+    try {
+        localStorage.setItem(STATUS_HISTORY_KEY, JSON.stringify(history));
+    } catch (_e) {
+        // History is useful, but the dashboard should keep working without storage.
+    }
+}
+
+function scheduleSaveHistory() {
+    if (_saveTimer) return;
+    _saveTimer = setTimeout(() => {
+        _saveTimer = null;
+        saveStatusHistory();
+    }, 30000);
+}
+
+function flushSaveHistory() {
+    if (_saveTimer) {
+        clearTimeout(_saveTimer);
+        _saveTimer = null;
+    }
+    saveStatusHistory();
+}
+
+function addStatusHistoryEntry(key, ok, latency) {
+    const state = SERVICE_STATE[key];
+    if (!state) return;
+
+    state.history.push({
+        at: Date.now(),
+        online: !!ok,
+        latency: Number.isFinite(latency) ? latency : null
+    });
+
+    if (state.history.length > HISTORY_LIMIT) {
+        state.history = state.history.slice(-HISTORY_LIMIT);
+    }
+
+    scheduleSaveHistory();
+}
+
+function getAverageHistoryLatency(history) {
+    const samples = history
+        .filter((entry) => entry.online && Number.isFinite(entry.latency))
+        .map((entry) => entry.latency);
+
+    if (!samples.length) return null;
+    const avg = samples.reduce((sum, value) => sum + value, 0) / samples.length;
+    return Math.round(avg);
+}
+
+function getHistorySummaryType(history) {
+    if (!history.length) return 'noData';
+
+    const recent = history.slice(-6);
+    const failures = recent.filter((entry) => !entry.online).length;
+    const lastOnline = history[history.length - 1].online;
+
+    if (failures >= 2) return 'issues';
+    if (failures === 0) return 'stable';
+    return lastOnline ? 'recovering' : 'issues';
+}
+
+function getHistorySummary(history, L) {
+    return L.dashboard[getHistorySummaryType(history)];
+}
+
+function renderHistoryTimeline(key, lang, L) {
+    const state = SERVICE_STATE[key];
+    if (!state) return;
+
+    const history = state.history;
+    const label = getServiceLabel(key, lang);
+    const summaryType = getHistorySummaryType(history);
+    const summary = L.dashboard[summaryType];
+    const avgLatency = getAverageHistoryLatency(history);
+    const onlineCount = history.filter((entry) => entry.online).length;
+    const offlineCount = history.length - onlineCount;
+
+    setText(`history-${key}-name`, label);
+    const summaryEl = document.getElementById(`history-${key}-summary`);
+    if (summaryEl) {
+        summaryEl.textContent = summary;
+        summaryEl.classList.remove('is-stable', 'is-recovering', 'is-issues');
+        if (summaryType !== 'noData') summaryEl.classList.add(`is-${summaryType}`);
+    }
+    setText(`history-${key}-avg`, `${L.dashboard.avgLatency}: ${avgLatency ?? '--'} ms`);
+
+    const line = document.getElementById(`history-${key}-line`);
+    if (!line) return;
+
+    if (line.children.length !== HISTORY_LIMIT) {
+        line.innerHTML = '';
+        for (let i = 0; i < HISTORY_LIMIT; i += 1) {
+            const segment = document.createElement('span');
+            segment.className = 'history-segment';
+            segment.setAttribute('aria-hidden', 'true');
+            line.appendChild(segment);
+        }
+    }
+
+    const timeOpts = { hour: '2-digit', minute: '2-digit' };
+    const locale = lang === 'pl' ? 'pl-PL' : 'en-GB';
+    for (let i = 0; i < HISTORY_LIMIT; i += 1) {
+        const segment = line.children[i];
+        const entry = history[i];
+        segment.classList.remove('is-online', 'is-offline', 'is-unknown');
+        if (!entry) {
+            segment.classList.add('is-unknown');
+            segment.title = L.dashboard.noData;
+        } else {
+            segment.classList.add(entry.online ? 'is-online' : 'is-offline');
+            const time = new Date(entry.at).toLocaleTimeString(locale, timeOpts);
+            const status = entry.online ? L.status.online : L.status.offline;
+            segment.title = entry.online && entry.latency != null
+                ? `${status} — ${entry.latency} ms — ${time}`
+                : `${status} — ${time}`;
+        }
+    }
+
+    const ariaText = history.length
+        ? `${label}: ${summary}. ${onlineCount} ${L.status.online}, ${offlineCount} ${L.status.offline}, ${L.dashboard.avgLatency}: ${avgLatency ?? L.dashboard.notYet} ms`
+        : `${label}: ${L.dashboard.noData}`;
+    line.setAttribute('aria-label', ariaText);
+}
+
 function renderPcStatus(lang = getLang()) {
     const L = STR[lang] || STR.en;
     const anyOnline = Object.values(SERVICE_STATE).some((s) => s.online);
@@ -303,6 +480,9 @@ function renderDashboard(lang = getLang()) {
     setText('dash-fb-latency', `${L.fb.short}: ${SERVICE_STATE.fb.latency ?? '--'} ms`);
     setText('dash-ab-latency', `${L.ab.short}: ${SERVICE_STATE.ab.latency ?? '--'} ms`);
     setText('dash-st-latency', `${L.st.short}: ${SERVICE_STATE.st.latency ?? '--'} ms`);
+    setText('history-title', L.dashboard.historyTitle);
+
+    SERVICES.forEach((service) => renderHistoryTimeline(service.key, lang, L));
 }
 
 function applyLang(lang) {
@@ -411,6 +591,7 @@ function setServiceStatus(prefix, ok, latency) {
     SERVICE_STATE[prefix].online = !!ok;
     SERVICE_STATE[prefix].latency = Number.isFinite(latency) ? latency : null;
     lastCheckAt = Date.now();
+    addStatusHistoryEntry(prefix, ok, latency);
 
     renderPcStatus();
     renderDashboard();
@@ -520,6 +701,7 @@ function initTabs() {
 
 function init() {
     setText('year', new Date().getFullYear());
+    loadStatusHistory();
 
     const currentTheme = localStorage.getItem(THEME_KEY) || 'dark';
     setTheme(currentTheme);
@@ -542,6 +724,11 @@ function init() {
     const plBtn = document.getElementById('lang-pl');
     if (enBtn) enBtn.addEventListener('click', () => applyLang('en'));
     if (plBtn) plBtn.addEventListener('click', () => applyLang('pl'));
+
+    window.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') flushSaveHistory();
+    });
+    window.addEventListener('beforeunload', flushSaveHistory);
 
     initTabs();
     SERVICES.forEach((service) => refreshService(service));
