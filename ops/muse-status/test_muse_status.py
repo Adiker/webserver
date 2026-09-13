@@ -51,6 +51,16 @@ class FakeDocker:
 
 
 class MuseStatusTests(unittest.TestCase):
+    def test_probe_reports_stopped_container_offline(self):
+        docker = FakeDocker()
+        probe = muse_status.MuseProbe(
+            docker,
+            muse_status.ProbeConfig(),
+            resolver=lambda _host: {GATEWAY_IP},
+        )
+        with patch.object(docker, "state", return_value={"Running": False, "Pid": 0, "StartedAt": STARTED_AT}):
+            self.assertFalse(probe.check(now=100))
+
     def test_gateway_socket_matching_discord_address(self):
         tables = {"tcp": tcp_table(), "tcp6": tcp_table(remote_ip="192.0.2.10")}
         result = muse_status.has_gateway_connection(
