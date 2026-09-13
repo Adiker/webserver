@@ -1,0 +1,40 @@
+muse.adiker.eu {
+	@health-options {
+		path /health
+		method OPTIONS
+	}
+
+	handle @health-options {
+		header {
+			Access-Control-Allow-Origin "*"
+			Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+			Access-Control-Allow-Headers "Content-Type"
+			Cache-Control "no-store"
+		}
+		respond "" 204
+	}
+
+	@health path /health
+	handle @health {
+		header {
+			Access-Control-Allow-Origin "*"
+			Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+			Access-Control-Allow-Headers "Content-Type"
+			Cache-Control "no-store"
+		}
+		reverse_proxy unix//run/muse-status/status.sock
+	}
+
+	respond 404
+
+	handle_errors {
+		header {
+			Access-Control-Allow-Origin "*"
+			Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+			Access-Control-Allow-Headers "Content-Type"
+			Cache-Control "no-store"
+			Content-Type "application/json; charset=utf-8"
+		}
+		respond "{\"status\":\"offline\"}" 503
+	}
+}

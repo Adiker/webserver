@@ -1,0 +1,39 @@
+[Unit]
+Description=Muse Discord readiness status probe
+After=docker.service network-online.target
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=adiker
+Group=caddy
+SupplementaryGroups=docker
+Environment=MUSE_COMPOSE_PROJECT=docker-compose
+Environment=MUSE_COMPOSE_SERVICE=muse
+Environment=MUSE_STATUS_SOCKET=/run/muse-status/status.sock
+Environment=MUSE_POLL_INTERVAL=5
+Environment=MUSE_STATUS_MAX_AGE=15
+ExecStart=/usr/bin/python3 /usr/local/lib/muse-status/muse_status.py
+Restart=on-failure
+RestartSec=5s
+RuntimeDirectory=muse-status
+RuntimeDirectoryMode=0750
+UMask=0007
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectKernelLogs=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+ReadWritePaths=/run/muse-status
+
+[Install]
+WantedBy=multi-user.target

@@ -38,6 +38,7 @@ This repository contains a static single-page application used as a front page f
 - **FileBrowser Quantum**
 - **autobrr**
 - **OpenSpeedTest**
+- **Muse** (Discord music bot)
 
 The page is intentionally framework-free: plain HTML, CSS, and vanilla JavaScript.
 That keeps it fast, portable, and easy to host on GitHub Pages or any static
@@ -49,6 +50,7 @@ server.
 - Live service dashboard with online count, last check time, and latency labels
 - Browser-local recent status history with mini timelines and average latency
 - Health checks for all configured services
+- Local Muse readiness probe with Discord gateway connectivity check
 - Polling with warm-up measurement and failure backoff
 - EN/PL language switcher
 - Dark / Light / OLED themes
@@ -66,12 +68,15 @@ server.
 ├── css/
 │   └── styles.css     # Styling, themes, responsive rules
 ├── img/
-│   └── 505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png
-│                     # Local FileBrowser Quantum logo asset
+│   ├── 505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png
+│   │                   # Local FileBrowser Quantum logo asset
+│   └── muse-logo.png   # Local Muse logo asset
 ├── index.html         # Main page markup
 ├── index_old.html     # Legacy page backup
-└── js/
-    └── app.js         # UI logic, i18n, status polling
+├── js/
+│   └── app.js         # UI logic, i18n, status polling
+└── ops/
+    └── muse-status/   # Host probe, systemd/Caddy templates, and tests
 ```
 
 ### Run Locally
@@ -92,6 +97,36 @@ Service endpoints are defined in `js/app.js`:
 - `https://files.adiker.eu/health`
 - `https://autobrr.adiker.eu/api/healthz/liveness`
 - `https://speedtest.adiker.eu/health`
+- `https://muse.adiker.eu/health`
+
+The Muse endpoint returns `200 {"status":"online"}` only when the local
+container is running, has logged `Ready!` after its current start, and has an
+established TCP connection to `gateway.discord.gg`. Otherwise it returns
+`503 {"status":"offline"}`. It intentionally publishes no Discord, channel,
+track, container, or failure details.
+
+The local logo is copied from the [official Muse repository](https://github.com/museofficial/muse/blob/master/.github/logo.png).
+
+The local bridge is installed from `ops/muse-status/`. It listens only on a
+Unix socket and requires the `adiker` account to be a member of the Docker
+group:
+
+```bash
+sudo install -Dm755 ops/muse-status/muse_status.py /usr/local/lib/muse-status/muse_status.py
+sudo install -Dm644 ops/muse-status/muse-status.service /etc/systemd/system/muse-status.service
+# Back up an existing Caddy snippet before replacing it.
+sudo install -Dm644 ops/muse-status/Caddyfile /etc/caddy/conf.d/muse-status.caddy
+sudo systemctl daemon-reload
+sudo systemctl enable --now muse-status.service
+sudo caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+```
+
+Run the probe tests with:
+
+```bash
+python3 -m unittest discover -s ops/muse-status -p 'test_*.py'
+```
 
 User preferences are stored in `localStorage`:
 
@@ -167,6 +202,7 @@ główna dla:
 - **FileBrowser Quantum**
 - **autobrr**
 - **OpenSpeedTest**
+- **Muse** (bot muzyczny Discorda)
 
 Strona celowo nie używa frameworków: to czysty HTML, CSS i vanilla JavaScript.
 Dzięki temu pozostaje szybka, przenośna i łatwa w hostowaniu na GitHub Pages
@@ -178,6 +214,7 @@ albo dowolnym serwerze statycznym.
 - Dashboard statusów z liczbą usług online, czasem ostatniego sprawdzenia i opóźnieniami
 - Lokalna historia ostatnich statusów z mini-timeline i średnim opóźnieniem
 - Health checki dla wszystkich skonfigurowanych usług
+- Lokalna sonda gotowości Muse ze sprawdzeniem połączenia z gateway Discorda
 - Odpytywanie z pomiarem rozgrzewkowym i backoffem przy błędach
 - Przełącznik języka EN/PL
 - Motywy Dark / Light / OLED
@@ -195,12 +232,15 @@ albo dowolnym serwerze statycznym.
 ├── css/
 │   └── styles.css     # Style, motywy, reguły responsywne
 ├── img/
-│   └── 505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png
-│                     # Lokalny zasób logo FileBrowser Quantum
+│   ├── 505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png
+│   │                   # Lokalny zasób logo FileBrowser Quantum
+│   └── muse-logo.png   # Lokalny zasób logo Muse
 ├── index.html         # Główny markup strony
 ├── index_old.html     # Kopia starszej wersji strony
-└── js/
-    └── app.js         # Logika UI, i18n, odpytywanie statusów
+├── js/
+│   └── app.js         # Logika UI, i18n, odpytywanie statusów
+└── ops/
+    └── muse-status/   # Sonda hosta, szablony systemd/Caddy i testy
 ```
 
 ### Uruchom lokalnie
@@ -221,6 +261,35 @@ Endpointy usług są zdefiniowane w `js/app.js`:
 - `https://files.adiker.eu/health`
 - `https://autobrr.adiker.eu/api/healthz/liveness`
 - `https://speedtest.adiker.eu/health`
+- `https://muse.adiker.eu/health`
+
+Endpoint Muse zwraca `200 {"status":"online"}` tylko wtedy, gdy lokalny
+kontener działa, po bieżącym uruchomieniu zalogował `Ready!` i ma aktywne
+połączenie TCP z `gateway.discord.gg`. W przeciwnym razie zwraca
+`503 {"status":"offline"}`. Publiczna odpowiedź nie ujawnia serwera Discord,
+kanału, utworu, kontenera ani przyczyny awarii.
+
+Lokalne logo pochodzi z [oficjalnego repozytorium Muse](https://github.com/museofficial/muse/blob/master/.github/logo.png).
+
+Lokalny most instaluje się z `ops/muse-status/`. Nasłuchuje wyłącznie na
+sockecie Unix, a konto `adiker` musi należeć do grupy `docker`:
+
+```bash
+sudo install -Dm755 ops/muse-status/muse_status.py /usr/local/lib/muse-status/muse_status.py
+sudo install -Dm644 ops/muse-status/muse-status.service /etc/systemd/system/muse-status.service
+# Przed zastąpieniem istniejącego snippetu Caddy wykonaj jego kopię zapasową.
+sudo install -Dm644 ops/muse-status/Caddyfile /etc/caddy/conf.d/muse-status.caddy
+sudo systemctl daemon-reload
+sudo systemctl enable --now muse-status.service
+sudo caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+```
+
+Testy sondy uruchomisz poleceniem:
+
+```bash
+python3 -m unittest discover -s ops/muse-status -p 'test_*.py'
+```
 
 Preferencje użytkownika zapisywane są w `localStorage`:
 

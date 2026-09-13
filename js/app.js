@@ -16,14 +16,16 @@ const SERVICE_STATE = {
     jf: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
     fb: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
     ab: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
-    st: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] }
+    st: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    mu: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] }
 };
 
 const SERVICES = [
     { key: 'jf', url: 'https://jellyfin.adiker.eu/health' },
     { key: 'fb', url: 'https://files.adiker.eu/health' },
     { key: 'ab', url: 'https://autobrr.adiker.eu/api/healthz/liveness' },
-    { key: 'st', url: 'https://speedtest.adiker.eu/health' }
+    { key: 'st', url: 'https://speedtest.adiker.eu/health' },
+    { key: 'mu', url: 'https://muse.adiker.eu/health' }
 ];
 
 const STR = {
@@ -33,6 +35,7 @@ const STR = {
             filebrowser: 'Filebrowser',
             autobrr: 'Autobrr',
             openspeedtest: 'OpenSpeedTest',
+            muse: 'Muse',
             more: 'More services (soon)'
         },
         subtitle: 'My Playground',
@@ -63,6 +66,7 @@ const STR = {
         fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum', short: 'FileBrowser' },
         ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr', short: 'autobrr' },
         st: { title: 'OpenSpeedTest', sub: 'Network speed test', open: 'Open OpenSpeedTest', short: 'OpenSpeedTest' },
+        mu: { title: 'Muse', sub: 'Discord music bot', short: 'Muse' },
         status: { online: 'Online', offline: 'Offline' },
         pc: {
             on: 'My PC is on :)',
@@ -109,6 +113,7 @@ const STR = {
             filebrowser: 'Filebrowser',
             autobrr: 'Autobrr',
             openspeedtest: 'OpenSpeedTest',
+            muse: 'Muse',
             more: 'Więcej usług (wkrótce)'
         },
         subtitle: 'Mój plac zabaw',
@@ -139,6 +144,7 @@ const STR = {
         fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum', short: 'FileBrowser' },
         ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr', short: 'autobrr' },
         st: { title: 'OpenSpeedTest', sub: 'Test prędkości sieci', open: 'Otwórz OpenSpeedTest', short: 'OpenSpeedTest' },
+        mu: { title: 'Muse', sub: 'Bot muzyczny Discorda', short: 'Muse' },
         status: { online: 'Online', offline: 'Offline' },
         pc: {
             on: 'Mój PC jest włączony :)',
@@ -480,6 +486,7 @@ function renderDashboard(lang = getLang()) {
     setText('dash-fb-latency', `${L.fb.short}: ${SERVICE_STATE.fb.latency ?? '--'} ms`);
     setText('dash-ab-latency', `${L.ab.short}: ${SERVICE_STATE.ab.latency ?? '--'} ms`);
     setText('dash-st-latency', `${L.st.short}: ${SERVICE_STATE.st.latency ?? '--'} ms`);
+    setText('dash-mu-latency', `${L.mu.short}: ${SERVICE_STATE.mu.latency ?? '--'} ms`);
     setText('history-title', L.dashboard.historyTitle);
 
     SERVICES.forEach((service) => renderHistoryTimeline(service.key, lang, L));
@@ -501,6 +508,8 @@ function applyLang(lang) {
     setText('st-title', '🚀 ' + L.st.title);
     setText('st-sub', L.st.sub);
     setText('st-btn-text', L.st.open);
+    setText('mu-title', '🎧 ' + L.mu.title);
+    setText('mu-sub', L.mu.sub);
 
     setText('subtitle', L.subtitle);
     setText('availability', L.availability);
@@ -519,6 +528,7 @@ function applyLang(lang) {
     setText('tab-filebrowser', L.nav.filebrowser);
     setText('tab-autobrr', L.nav.autobrr);
     setText('tab-speedtest', L.nav.openspeedtest);
+    setText('tab-muse', L.nav.muse);
     setText('tab-more', L.nav.more);
 
     const tabsNav = document.querySelector('nav.tabs');
@@ -650,12 +660,13 @@ async function refreshService(service) {
 }
 
 function initTabs() {
-    const tabIds = ['tab-jellyfin', 'tab-filebrowser', 'tab-autobrr', 'tab-speedtest'];
+    const tabIds = ['tab-jellyfin', 'tab-filebrowser', 'tab-autobrr', 'tab-speedtest', 'tab-muse'];
     const map = {
         'tab-jellyfin': 'section-jf',
         'tab-filebrowser': 'section-fb',
         'tab-autobrr': 'section-ab',
-        'tab-speedtest': 'section-st'
+        'tab-speedtest': 'section-st',
+        'tab-muse': 'section-muse'
     };
 
     const tabs = tabIds.map((id) => document.getElementById(id)).filter(Boolean);
