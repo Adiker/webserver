@@ -36,10 +36,12 @@ jobs:
           test -f css/styles.css
           test -f js/app.js
           test -f img/505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png
+          test -f img/muse-logo.png
           test -f CNAME
           grep -qx 'adiker.eu' CNAME
 
           node --check js/app.js
+          python3 -m unittest discover -s ops/muse-status -p 'test_*.py'
 
           python3 -m http.server 18080 --bind 127.0.0.1 > /tmp/adiker-http.log 2>&1 &
           server_pid="$!"
@@ -62,6 +64,7 @@ jobs:
           curl --fail --silent --output /dev/null http://127.0.0.1:18080/css/styles.css
           curl --fail --silent --output /dev/null http://127.0.0.1:18080/js/app.js
           curl --fail --silent --output /dev/null http://127.0.0.1:18080/img/505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png
+          curl --fail --silent --output /dev/null http://127.0.0.1:18080/img/muse-logo.png
 
   deploy:
     name: Deploy to GitHub Pages
