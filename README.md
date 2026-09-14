@@ -46,16 +46,16 @@ server.
 
 ### Features
 
-- Responsive service cards with direct links to every web service
-- Compact live service summary with online count and last update time
-- Collapsed browser-local history of the last 24 measurements with mini timelines
-- Health checks with explicit checking, online, and unreachable states
+- Service tabs with a clean card-based layout
+- Live service dashboard with online count, last check time, and latency labels
+- Browser-local recent status history with mini timelines and average latency
+- Health checks for all configured services
 - Local Muse readiness probe with Discord gateway connectivity check
 - Polling with warm-up measurement and failure backoff
 - EN/PL language switcher
 - Dark / Light / OLED themes
-- Collapsed client information with OS, browser, and device detection
-- Keyboard-accessible controls, skip link, and visible focus states
+- Client info badge with OS, browser, and device detection
+- Keyboard-accessible tabs and visible focus states
 
 ### Project Structure
 
@@ -210,16 +210,16 @@ albo dowolnym serwerze statycznym.
 
 ### Funkcje
 
-- Responsywne karty usług z bezpośrednimi linkami do każdej usługi WWW
-- Kompaktowe podsumowanie na żywo z liczbą usług online i czasem aktualizacji
-- Zwijana lokalna historia 24 ostatnich pomiarów z mini-timeline
-- Health checki ze stanami: sprawdzanie, online i brak odpowiedzi
+- Zakładki usług z czytelnym układem kart
+- Dashboard statusów z liczbą usług online, czasem ostatniego sprawdzenia i opóźnieniami
+- Lokalna historia ostatnich statusów z mini-timeline i średnim opóźnieniem
+- Health checki dla wszystkich skonfigurowanych usług
 - Lokalna sonda gotowości Muse ze sprawdzeniem połączenia z gateway Discorda
 - Odpytywanie z pomiarem rozgrzewkowym i backoffem przy błędach
 - Przełącznik języka EN/PL
 - Motywy Dark / Light / OLED
-- Zwijane informacje o wykrytym OS, przeglądarce i typie urządzenia
-- Dostępne z klawiatury kontrolki, skip link i czytelne stany focus
+- Etykieta z wykrytym OS, przeglądarką i typem urządzenia
+- Zakładki dostępne z klawiatury i czytelne stany focus
 
 ### Struktura projektu
 

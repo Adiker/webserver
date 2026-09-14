@@ -42,7 +42,6 @@ const STR = {
             clientInfo: 'Client information',
             services: 'Services',
             latency: 'Latency',
-            source: 'Measured from this browser',
             dark: 'Dark',
             light: 'Light',
             oled: 'OLED'
@@ -118,7 +117,6 @@ const STR = {
             clientInfo: 'Informacje o kliencie',
             services: 'Usługi',
             latency: 'Opóźnienie',
-            source: 'Pomiar z tej przeglądarki',
             dark: 'Ciemny',
             light: 'Jasny',
             oled: 'OLED'
@@ -537,10 +535,7 @@ function applyLang(lang) {
     updateThemeUI(lang);
     renderPcStatus(lang);
     renderDashboard(lang);
-    SERVICES.forEach((service) => {
-        setText(`${service.key}-source`, L.ui.source);
-        renderServiceCard(service.key, lang);
-    });
+    SERVICES.forEach((service) => renderServiceCard(service.key, lang));
     localStorage.setItem(LANG_KEY, lang);
 }
 
