@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a class="skip-link" href="#main-content" id="skip-link">Skip to main content</a>
     <div class="topbar">
         <div class="topbar-inner">
             <div class="brand">
@@ -42,7 +42,6 @@
                     type="button">OpenSpeedTest</button>
                 <button aria-controls="section-muse" aria-selected="false" class="tab" id="tab-muse" role="tab"
                     type="button">Muse</button>
-                <button class="tab" id="tab-more" type="button">More services (soon)</button>
             </nav>
             <div class="controls">
                 <button aria-pressed="false" class="chip" id="theme-toggle" title="Toggle theme">🌙 Theme</button>
@@ -52,7 +51,6 @@
                         <button aria-pressed="false" class="chip" id="lang-pl">PL</button>
                     </div>
                 </div>
-                <div class="pc-status" id="pc-status">My PC is off :(</div>
             </div>
         </div>
     </div>
@@ -63,15 +61,42 @@
                 <p class="tag" id="dash-sub" style="margin:0 0 12px">Live status overview</p>
                 <div class="dashboard-grid">
                     <span class="pill" id="dash-overall" aria-live="polite">0/5 online</span>
-                    <span class="pill" id="dash-lastcheck" aria-live="polite">Last check: --</span>
-                    <span class="pill" id="dash-jf-latency">Jellyfin: -- ms</span>
-                    <span class="pill" id="dash-fb-latency">FileBrowser: -- ms</span>
-                    <span class="pill" id="dash-ab-latency">autobrr: -- ms</span>
-                    <span class="pill" id="dash-st-latency">OpenSpeedTest: -- ms</span>
-                    <span class="pill" id="dash-mu-latency">Muse: -- ms</span>
+                    <span class="pill" id="dash-lastcheck" aria-live="polite">Last update: --</span>
                 </div>
-                <div class="status-history" id="status-history">
-                    <h3 id="history-title">Recent checks</h3>
+                <div class="dashboard-services" id="dashboard-services" aria-label="Service details">
+                    <div class="dashboard-service" id="dash-jf-status">
+                        <span class="dot" aria-hidden="true"></span>
+                        <span class="dashboard-service-name" id="dash-jf-name">Jellyfin</span>
+                        <span class="dashboard-service-state" id="dash-jf-text">Checking…</span>
+                        <span class="dashboard-service-latency" id="dash-jf-latency">-- ms</span>
+                    </div>
+                    <div class="dashboard-service" id="dash-fb-status">
+                        <span class="dot" aria-hidden="true"></span>
+                        <span class="dashboard-service-name" id="dash-fb-name">FileBrowser</span>
+                        <span class="dashboard-service-state" id="dash-fb-text">Checking…</span>
+                        <span class="dashboard-service-latency" id="dash-fb-latency">-- ms</span>
+                    </div>
+                    <div class="dashboard-service" id="dash-ab-status">
+                        <span class="dot" aria-hidden="true"></span>
+                        <span class="dashboard-service-name" id="dash-ab-name">autobrr</span>
+                        <span class="dashboard-service-state" id="dash-ab-text">Checking…</span>
+                        <span class="dashboard-service-latency" id="dash-ab-latency">-- ms</span>
+                    </div>
+                    <div class="dashboard-service" id="dash-st-status">
+                        <span class="dot" aria-hidden="true"></span>
+                        <span class="dashboard-service-name" id="dash-st-name">OpenSpeedTest</span>
+                        <span class="dashboard-service-state" id="dash-st-text">Checking…</span>
+                        <span class="dashboard-service-latency" id="dash-st-latency">-- ms</span>
+                    </div>
+                    <div class="dashboard-service" id="dash-mu-status">
+                        <span class="dot" aria-hidden="true"></span>
+                        <span class="dashboard-service-name" id="dash-mu-name">Muse</span>
+                        <span class="dashboard-service-state" id="dash-mu-text">Checking…</span>
+                        <span class="dashboard-service-latency" id="dash-mu-latency">-- ms</span>
+                    </div>
+                </div>
+                <details class="status-history" id="status-history">
+                    <summary id="history-title">Recent measurements</summary>
                     <div class="history-grid">
                         <div class="history-row">
                             <div class="history-meta">
@@ -119,7 +144,7 @@
                             <span class="history-avg" id="history-mu-avg">Avg: -- ms</span>
                         </div>
                     </div>
-                </div>
+                </details>
             </section>
 
             <section class="card service-section" id="section-jf" role="tabpanel" aria-labelledby="tab-jellyfin">
@@ -132,10 +157,13 @@
                         <div>
                             <h2 id="jf-title" style="margin:0 0 6px">🎬 Jellyfin</h2>
                             <p class="tag" id="jf-sub" style="margin:0">Your media server</p>
-                            <div class="status-wrap" style="margin-top:8px">
-                                <span class="pill" id="jf-pill"><span class="dot" id="jf-dot"
-                                        style="background:var(--bad)"></span><span id="jf-text">Offline</span></span>
+                            <div class="service-meta" style="margin-top:8px">
+                                <span class="pill service-status status-checking" id="jf-pill" aria-label="Jellyfin: Checking…">
+                                    <span class="dot" id="jf-dot"></span><span id="jf-text">Checking…</span>
+                                </span>
+                                <span class="pill service-latency" id="jf-latency">Latency: -- ms</span>
                             </div>
+                            <p class="service-source" id="jf-source">Measured from this browser</p>
                         </div>
                     </div>
                     <div>
@@ -161,14 +189,17 @@
                         <div>
                             <h2 id="fb-title" style="margin:0 0 6px">📁 FileBrowser Quantum</h2>
                             <p class="tag" id="fb-sub" style="margin:0">Your file manager</p>
-                            <div class="status-wrap" style="margin-top:8px">
-                                <span class="pill" id="fb-pill"><span class="dot" id="fb-dot"
-                                        style="background:var(--bad)"></span><span id="fb-text">Offline</span></span>
+                            <div class="service-meta" style="margin-top:8px">
+                                <span class="pill service-status status-checking" id="fb-pill" aria-label="FileBrowser Quantum: Checking…">
+                                    <span class="dot" id="fb-dot"></span><span id="fb-text">Checking…</span>
+                                </span>
+                                <span class="pill service-latency" id="fb-latency">Latency: -- ms</span>
                             </div>
+                            <p class="service-source" id="fb-source">Measured from this browser</p>
                         </div>
                     </div>
                     <div>
-                        <a aria-label="Open Jellyfin" class="btn" href="https://files.adiker.eu" id="fb-btn"
+                        <a aria-label="Open FileBrowser Quantum" class="btn" href="https://files.adiker.eu" id="fb-btn"
                             rel="noopener" target="_blank">
                             <svg aria-hidden="true" fill="none" height="18" viewbox="0 0 24 24" width="18">
                                 <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
@@ -189,12 +220,13 @@
                         <div>
                             <h2 id="ab-title" style="margin:0 0 6px">⚡ autobrr</h2>
                             <p class="tag" id="ab-sub" style="margin:0">Automated torrent management</p>
-                            <div class="status-wrap" style="margin-top:8px">
-                                <span class="pill" id="ab-pill">
-                                    <span class="dot" id="ab-dot" style="background:var(--bad)"></span>
-                                    <span id="ab-text">Offline</span>
+                            <div class="service-meta" style="margin-top:8px">
+                                <span class="pill service-status status-checking" id="ab-pill" aria-label="autobrr: Checking…">
+                                    <span class="dot" id="ab-dot"></span><span id="ab-text">Checking…</span>
                                 </span>
+                                <span class="pill service-latency" id="ab-latency">Latency: -- ms</span>
                             </div>
+                            <p class="service-source" id="ab-source">Measured from this browser</p>
                         </div>
                     </div>
                     <div>
@@ -218,12 +250,13 @@
                         <div>
                             <h2 id="st-title" style="margin:0 0 6px">🚀 OpenSpeedTest</h2>
                             <p class="tag" id="st-sub" style="margin:0">Network speed test</p>
-                            <div class="status-wrap" style="margin-top:8px">
-                                <span class="pill" id="st-pill">
-                                    <span class="dot" id="st-dot" style="background:var(--bad)"></span>
-                                    <span id="st-text">Offline</span>
+                            <div class="service-meta" style="margin-top:8px">
+                                <span class="pill service-status status-checking" id="st-pill" aria-label="OpenSpeedTest: Checking…">
+                                    <span class="dot" id="st-dot"></span><span id="st-text">Checking…</span>
                                 </span>
+                                <span class="pill service-latency" id="st-latency">Latency: -- ms</span>
                             </div>
+                            <p class="service-source" id="st-source">Measured from this browser</p>
                         </div>
                     </div>
                     <div>
@@ -247,16 +280,22 @@
                         <div>
                             <h2 id="mu-title" style="margin:0 0 6px">🎧 Muse</h2>
                             <p class="tag" id="mu-sub" style="margin:0">Discord music bot</p>
-                            <div class="status-wrap" style="margin-top:8px">
-                                <span class="pill" id="mu-pill">
-                                    <span class="dot" id="mu-dot" style="background:var(--bad)"></span>
-                                    <span id="mu-text">Offline</span>
+                            <div class="service-meta" style="margin-top:8px">
+                                <span class="pill service-status status-checking" id="mu-pill" aria-label="Muse: Checking…">
+                                    <span class="dot" id="mu-dot"></span><span id="mu-text">Checking…</span>
                                 </span>
+                                <span class="pill service-latency" id="mu-latency">Latency: -- ms</span>
                             </div>
+                            <p class="service-source" id="mu-source">Measured from this browser</p>
+                            <p class="service-note" id="mu-note">Status only · no web interface</p>
                         </div>
                     </div>
                 </div>
             </section>
+            <details class="card client-info" id="client-info">
+                <summary id="client-title">Client information</summary>
+                <div class="pc-status" id="pc-status"></div>
+            </details>
         </main>
         <footer>
             <span class="brand-year">© <span id="year"></span> adiker.eu •</span>
@@ -268,12 +307,14 @@
                 </svg>
                 GitHub
             </a>
+            <span aria-hidden="true">•</span>
+            <a href="https://keepandroidopen.org/" target="_blank" rel="noopener" class="campaign-link" id="campaign-link">
+                Keep Android Open
+            </a>
         </footer>
     </div>
-    <div aria-atomic="true" aria-live="polite" class="toast" id="toast"></div>
-    <link href="css/styles.css?v=20260913-muse-status" rel="stylesheet" />
-    <script src="js/app.js?v=20260913-muse-status"></script>
-    <script src="https://keepandroidopen.org/banner.js?size=mini"></script>
+    <link href="css/styles.css?v=20260914-p0compact" rel="stylesheet" />
+    <script src="js/app.js?v=20260914-p0compact"></script>
 </body>
 
 </html>

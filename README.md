@@ -46,15 +46,16 @@ server.
 
 ### Features
 
-- Service tabs with a clean card-based layout
-- Live service dashboard with online count, last check time, and latency labels
-- Browser-local recent status history with mini timelines and average latency
+- Service tabs with a compact status overview and one focused detail card
+- Live dashboard showing every service's status and latency as measured by this browser
+- Collapsed browser-local history of the last 24 measurements with mini timelines and averages
 - Health checks for all configured services
+- Explicit `Checking`, `Online`, `Unreachable`, and `Unknown` service states
 - Local Muse readiness probe with Discord gateway connectivity check
 - Polling with warm-up measurement and failure backoff
 - EN/PL language switcher
 - Dark / Light / OLED themes
-- Client info badge with OS, browser, and device detection
+- Collapsed client information with OS, browser, and device detection
 - Keyboard-accessible tabs and visible focus states
 
 ### Project Structure
@@ -210,15 +211,16 @@ albo dowolnym serwerze statycznym.
 
 ### Funkcje
 
-- Zakładki usług z czytelnym układem kart
-- Dashboard statusów z liczbą usług online, czasem ostatniego sprawdzenia i opóźnieniami
-- Lokalna historia ostatnich statusów z mini-timeline i średnim opóźnieniem
+- Zakładki usług z kompaktowym podsumowaniem i jednym aktywnym panelem szczegółów
+- Dashboard pokazujący status i opóźnienie każdej usługi, mierzone z tej przeglądarki
+- Zwijana lokalna historia ostatnich 24 pomiarów z mini-timeline i średnim opóźnieniem
 - Health checki dla wszystkich skonfigurowanych usług
+- Jawne stany usług: `Checking`, `Online`, `Unreachable` i `Unknown`
 - Lokalna sonda gotowości Muse ze sprawdzeniem połączenia z gateway Discorda
 - Odpytywanie z pomiarem rozgrzewkowym i backoffem przy błędach
 - Przełącznik języka EN/PL
 - Motywy Dark / Light / OLED
-- Etykieta z wykrytym OS, przeglądarką i typem urządzenia
+- Zwijane informacje o kliencie: OS, przeglądarka i typ urządzenia
 - Zakładki dostępne z klawiatury i czytelne stany focus
 
 ### Struktura projektu
