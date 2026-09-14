@@ -3,7 +3,6 @@ const LANG_KEY = 'adiker.lang';
 const STATUS_HISTORY_KEY = 'adiker.statusHistory.v1';
 const THEME_ORDER = ['dark', 'light', 'oled'];
 const HISTORY_LIMIT = 24;
-const MIN_STABLE_SAMPLES = 6;
 
 let __animTheme = false;
 let lastCheckAt = null;
@@ -14,11 +13,11 @@ const DETECTED_BROWSER = detectClientBrowser();
 const DETECTED_DEVICE = detectClientDevice();
 
 const SERVICE_STATE = {
-    jf: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
-    fb: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
-    ab: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
-    st: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
-    mu: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] }
+    jf: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    fb: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    ab: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    st: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    mu: { online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] }
 };
 
 const SERVICES = [
@@ -31,33 +30,34 @@ const SERVICES = [
 
 const STR = {
     en: {
-        documentTitle: 'Homepage',
+        nav: {
+            jellyfin: 'Jellyfin',
+            filebrowser: 'Filebrowser',
+            autobrr: 'Autobrr',
+            openspeedtest: 'OpenSpeedTest',
+            muse: 'Muse',
+            more: 'More services (soon)'
+        },
         subtitle: 'My Playground',
         availability: 'Usually available: 9:00 AM – 1:00 AM CEST',
         ui: {
             theme: 'Theme',
             themeTitle: 'Toggle theme',
             language: 'Language',
-            skipLink: 'Skip to main content',
-            clientInfo: 'Client information',
-            services: 'Services',
-            latency: 'Latency',
+            sections: 'Sections',
             dark: 'Dark',
             light: 'Light',
             oled: 'OLED'
         },
         dashboard: {
-            title: '📊 Service status',
-            sub: 'Live health checks from this browser',
+            title: '📊 Service dashboard',
+            sub: 'Live status overview',
             overall: 'online',
-            checking: 'Checking…',
-            unreachable: 'unreachable',
-            lastCheck: 'Last update',
+            lastCheck: 'Last check',
             notYet: '--',
-            historyTitle: 'Recent measurements',
+            historyTitle: 'Recent checks',
             avgLatency: 'Avg',
             noData: 'No data yet',
-            collecting: 'Collecting data',
             stable: 'Stable',
             recovering: 'Recovering',
             issues: 'Issues detected'
@@ -66,10 +66,11 @@ const STR = {
         fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum', short: 'FileBrowser' },
         ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr', short: 'autobrr' },
         st: { title: 'OpenSpeedTest', sub: 'Network speed test', open: 'Open OpenSpeedTest', short: 'OpenSpeedTest' },
-        mu: { title: 'Muse', sub: 'Discord music bot', note: 'Status only · no web interface', short: 'Muse' },
-        status: { checking: 'Checking…', online: 'Online', unreachable: 'Unreachable', unknown: 'Unknown' },
-        statusSource: 'Status measured from this browser',
+        mu: { title: 'Muse', sub: 'Discord music bot', short: 'Muse' },
+        status: { online: 'Online', offline: 'Offline' },
         pc: {
+            on: 'My PC is on :)',
+            off: 'My PC is off :(',
             osPrefix: 'Your OS',
             browserPrefix: 'Your browser',
             devicePrefix: 'Your device',
@@ -103,36 +104,38 @@ const STR = {
                 other: 'Other'
             }
         },
-        footer: { served: 'Served by GitHub/Caddy', campaign: 'Keep Android Open' }
+        footer: { served: 'Served by GitHub/Caddy' },
+        toastMore: 'Coming soon 🙂'
     },
     pl: {
-        documentTitle: 'Strona główna',
+        nav: {
+            jellyfin: 'Jellyfin',
+            filebrowser: 'Filebrowser',
+            autobrr: 'Autobrr',
+            openspeedtest: 'OpenSpeedTest',
+            muse: 'Muse',
+            more: 'Więcej usług (wkrótce)'
+        },
         subtitle: 'Mój plac zabaw',
         availability: 'Zwykle dostępny: 09:00 – 01:00 CEST',
         ui: {
             theme: 'Motyw',
             themeTitle: 'Przełącz motyw',
             language: 'Język',
-            skipLink: 'Przejdź do treści głównej',
-            clientInfo: 'Informacje o kliencie',
-            services: 'Usługi',
-            latency: 'Opóźnienie',
+            sections: 'Sekcje',
             dark: 'Ciemny',
             light: 'Jasny',
             oled: 'OLED'
         },
         dashboard: {
-            title: '📊 Status usług',
-            sub: 'Bieżące pomiary z tej przeglądarki',
+            title: '📊 Panel usług',
+            sub: 'Podgląd statusu na żywo',
             overall: 'online',
-            checking: 'Sprawdzanie…',
-            unreachable: 'bez odpowiedzi',
-            lastCheck: 'Ostatnia aktualizacja',
+            lastCheck: 'Ostatnie sprawdzenie',
             notYet: '--',
-            historyTitle: 'Ostatnie pomiary',
+            historyTitle: 'Ostatnie sprawdzenia',
             avgLatency: 'Śr.',
             noData: 'Brak danych',
-            collecting: 'Zbieranie danych',
             stable: 'Stabilnie',
             recovering: 'Wraca do normy',
             issues: 'Wykryto problemy'
@@ -141,10 +144,11 @@ const STR = {
         fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum', short: 'FileBrowser' },
         ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr', short: 'autobrr' },
         st: { title: 'OpenSpeedTest', sub: 'Test prędkości sieci', open: 'Otwórz OpenSpeedTest', short: 'OpenSpeedTest' },
-        mu: { title: 'Muse', sub: 'Bot muzyczny Discorda', note: 'Tylko status · brak interfejsu WWW', short: 'Muse' },
-        status: { checking: 'Sprawdzanie…', online: 'Online', unreachable: 'Brak odpowiedzi', unknown: 'Nieznany' },
-        statusSource: 'Status mierzony z tej przeglądarki',
+        mu: { title: 'Muse', sub: 'Bot muzyczny Discorda', short: 'Muse' },
+        status: { online: 'Online', offline: 'Offline' },
         pc: {
+            on: 'Mój PC jest włączony :)',
+            off: 'Mój PC jest wyłączony :(',
             osPrefix: 'Twój OS',
             browserPrefix: 'Twoja przeglądarka',
             devicePrefix: 'Twoje urządzenie',
@@ -178,7 +182,8 @@ const STR = {
                 other: 'Inne'
             }
         },
-        footer: { served: 'Hostowane przez GitHub/Caddy', campaign: 'Keep Android Open' }
+        footer: { served: 'Hostowane przez GitHub/Caddy' },
+        toastMore: 'Wkrótce 🙂'
     }
 };
 
@@ -270,6 +275,14 @@ function getLang() {
 function setText(id, value) {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1600);
 }
 
 function getServiceLabel(key, lang = getLang()) {
@@ -367,7 +380,6 @@ function getHistorySummaryType(history) {
     const lastOnline = history[history.length - 1].online;
 
     if (failures >= 2) return 'issues';
-    if (failures === 0 && history.length < MIN_STABLE_SAMPLES) return 'collecting';
     if (failures === 0) return 'stable';
     return lastOnline ? 'recovering' : 'issues';
 }
@@ -392,7 +404,7 @@ function renderHistoryTimeline(key, lang, L) {
     const summaryEl = document.getElementById(`history-${key}-summary`);
     if (summaryEl) {
         summaryEl.textContent = summary;
-        summaryEl.classList.remove('is-stable', 'is-recovering', 'is-issues', 'is-collecting');
+        summaryEl.classList.remove('is-stable', 'is-recovering', 'is-issues');
         if (summaryType !== 'noData') summaryEl.classList.add(`is-${summaryType}`);
     }
     setText(`history-${key}-avg`, `${L.dashboard.avgLatency}: ${avgLatency ?? '--'} ms`);
@@ -422,7 +434,7 @@ function renderHistoryTimeline(key, lang, L) {
         } else {
             segment.classList.add(entry.online ? 'is-online' : 'is-offline');
             const time = new Date(entry.at).toLocaleTimeString(locale, timeOpts);
-            const status = entry.online ? L.status.online : L.status.unreachable;
+            const status = entry.online ? L.status.online : L.status.offline;
             segment.title = entry.online && entry.latency != null
                 ? `${status} — ${entry.latency} ms — ${time}`
                 : `${status} — ${time}`;
@@ -430,55 +442,52 @@ function renderHistoryTimeline(key, lang, L) {
     }
 
     const ariaText = history.length
-        ? `${label}: ${summary}. ${onlineCount} ${L.status.online}, ${offlineCount} ${L.status.unreachable}, ${L.dashboard.avgLatency}: ${avgLatency ?? L.dashboard.notYet} ms`
+        ? `${label}: ${summary}. ${onlineCount} ${L.status.online}, ${offlineCount} ${L.status.offline}, ${L.dashboard.avgLatency}: ${avgLatency ?? L.dashboard.notYet} ms`
         : `${label}: ${L.dashboard.noData}`;
     line.setAttribute('aria-label', ariaText);
 }
 
 function renderPcStatus(lang = getLang()) {
     const L = STR[lang] || STR.en;
+    const anyOnline = Object.values(SERVICE_STATE).some((s) => s.online);
     const pcStatus = document.getElementById('pc-status');
     if (!pcStatus) return;
 
     const osLabel = L.pc.os[DETECTED_OS] || L.pc.os.other;
     const browserLabel = L.pc.browser[DETECTED_BROWSER] || L.pc.browser.other;
     const deviceLabel = L.pc.device[DETECTED_DEVICE] || L.pc.device.other;
+    const pcText = anyOnline ? L.pc.on : L.pc.off;
     pcStatus.innerHTML = `
+        <span class="pc-main">${pcText}</span>
         <span class="pc-os" aria-label="${L.pc.osPrefix}: ${osLabel}">${L.pc.osPrefix}: ${osLabel}</span>
         <span class="pc-os" aria-label="${L.pc.browserPrefix}: ${browserLabel}">${L.pc.browserPrefix}: ${browserLabel}</span>
         <span class="pc-os" aria-label="${L.pc.devicePrefix}: ${deviceLabel}">${L.pc.devicePrefix}: ${deviceLabel}</span>
     `;
+
+    pcStatus.classList.toggle('is-on', anyOnline);
+    pcStatus.classList.toggle('is-off', !anyOnline);
 }
 
 function renderDashboard(lang = getLang()) {
     const L = STR[lang] || STR.en;
     const total = SERVICES.length;
-    const states = Object.values(SERVICE_STATE);
-    const onlineCount = states.filter((s) => s.status === 'online').length;
-    const checkingCount = states.filter((s) => s.status === 'checking' || s.status === 'unknown').length;
-    const unreachableCount = states.filter((s) => s.status === 'unreachable').length;
+    const onlineCount = Object.values(SERVICE_STATE).filter((s) => s.online).length;
 
     setText('dash-overall', `${onlineCount}/${total} ${L.dashboard.overall}`);
     setText('dash-title', L.dashboard.title);
     setText('dash-sub', L.dashboard.sub);
 
-    const overall = document.getElementById('dash-overall');
-    if (overall) {
-        const detail = checkingCount
-            ? `${L.dashboard.checking} ${checkingCount}`
-            : (unreachableCount ? `${unreachableCount} ${L.dashboard.unreachable}` : '');
-        overall.textContent = detail ? `${detail} · ${onlineCount}/${total} ${L.dashboard.overall}` : `${onlineCount}/${total} ${L.dashboard.overall}`;
-        overall.classList.toggle('is-checking', checkingCount > 0);
-        overall.classList.toggle('is-unreachable', checkingCount === 0 && unreachableCount > 0);
-    }
-
     const lastText = lastCheckAt
         ? new Date(lastCheckAt).toLocaleTimeString(lang === 'pl' ? 'pl-PL' : 'en-GB')
         : L.dashboard.notYet;
     setText('dash-lastcheck', `${L.dashboard.lastCheck}: ${lastText}`);
+
+    setText('dash-jf-latency', `${L.jf.short}: ${SERVICE_STATE.jf.latency ?? '--'} ms`);
+    setText('dash-fb-latency', `${L.fb.short}: ${SERVICE_STATE.fb.latency ?? '--'} ms`);
+    setText('dash-ab-latency', `${L.ab.short}: ${SERVICE_STATE.ab.latency ?? '--'} ms`);
+    setText('dash-st-latency', `${L.st.short}: ${SERVICE_STATE.st.latency ?? '--'} ms`);
+    setText('dash-mu-latency', `${L.mu.short}: ${SERVICE_STATE.mu.latency ?? '--'} ms`);
     setText('history-title', L.dashboard.historyTitle);
-    setText('client-title', L.ui.clientInfo);
-    setText('mu-note', L.mu.note);
 
     SERVICES.forEach((service) => renderHistoryTimeline(service.key, lang, L));
 }
@@ -487,9 +496,6 @@ function applyLang(lang) {
     const L = STR[lang] || STR.en;
 
     document.documentElement.lang = lang;
-    document.title = `adiker.eu — ${L.documentTitle}`;
-    setText('skip-link', L.ui.skipLink);
-    setText('services-title', L.ui.services);
     setText('jf-title', '🎬 ' + L.jf.title);
     setText('jf-sub', L.jf.sub);
     setText('jf-btn-text', L.jf.open);
@@ -508,7 +514,6 @@ function applyLang(lang) {
     setText('subtitle', L.subtitle);
     setText('availability', L.availability);
     setText('served', L.footer.served);
-    setText('campaign-link', L.footer.campaign);
 
     const jfBtn = document.getElementById('jf-btn');
     const fbBtn = document.getElementById('fb-btn');
@@ -518,6 +523,16 @@ function applyLang(lang) {
     if (fbBtn) fbBtn.setAttribute('aria-label', L.fb.open);
     if (abBtn) abBtn.setAttribute('aria-label', L.ab.open);
     if (stBtn) stBtn.setAttribute('aria-label', L.st.open);
+
+    setText('tab-jellyfin', L.nav.jellyfin);
+    setText('tab-filebrowser', L.nav.filebrowser);
+    setText('tab-autobrr', L.nav.autobrr);
+    setText('tab-speedtest', L.nav.openspeedtest);
+    setText('tab-muse', L.nav.muse);
+    setText('tab-more', L.nav.more);
+
+    const tabsNav = document.querySelector('nav.tabs');
+    if (tabsNav) tabsNav.setAttribute('aria-label', L.ui.sections);
 
     const langGroup = document.querySelector('[role="group"]');
     if (langGroup) langGroup.setAttribute('aria-label', L.ui.language);
@@ -535,7 +550,6 @@ function applyLang(lang) {
     updateThemeUI(lang);
     renderPcStatus(lang);
     renderDashboard(lang);
-    SERVICES.forEach((service) => renderServiceCard(service.key, lang));
     localStorage.setItem(LANG_KEY, lang);
 }
 
@@ -574,40 +588,22 @@ function updateThemeUI(lang) {
     }
 }
 
-function renderServiceCard(prefix, lang = getLang()) {
-    const L = STR[lang] || STR.en;
-    const state = SERVICE_STATE[prefix];
-    if (!state) return;
-
-    const pill = document.getElementById(prefix + '-pill');
+function setServiceStatus(prefix, ok, latency) {
+    const L = STR[getLang()] || STR.en;
+    const dot = document.getElementById(prefix + '-dot');
     const txt = document.getElementById(prefix + '-text');
-    const latency = document.getElementById(prefix + '-latency');
-    const label = getServiceLabel(prefix, lang);
-    const statusLabel = L.status[state.status] || L.status.unknown;
+    const pill = document.getElementById(prefix + '-pill');
 
-    if (pill) {
-        pill.classList.remove('status-checking', 'status-online', 'status-unreachable', 'status-unknown');
-        pill.classList.add(`status-${state.status}`);
-        pill.setAttribute('aria-label', `${label}: ${statusLabel}. ${L.statusSource}`);
-    }
-    if (txt) txt.textContent = statusLabel;
-    if (latency) latency.textContent = `${L.ui.latency}: ${state.latency ?? '--'} ms`;
-}
+    if (dot) dot.style.background = ok ? 'var(--good)' : 'var(--bad)';
+    if (txt) txt.textContent = ok ? L.status.online : L.status.offline;
+    if (pill) pill.setAttribute('aria-label', ok ? L.status.online : L.status.offline);
 
-function setServiceStatus(prefix, status, latency = null) {
-    const state = SERVICE_STATE[prefix];
-    if (!state) return;
+    SERVICE_STATE[prefix].online = !!ok;
+    SERVICE_STATE[prefix].latency = Number.isFinite(latency) ? latency : null;
+    lastCheckAt = Date.now();
+    addStatusHistoryEntry(prefix, ok, latency);
 
-    state.status = status;
-    state.online = status === 'online';
-    state.latency = status === 'online' && Number.isFinite(latency) ? latency : null;
-    renderServiceCard(prefix);
-
-    if (status === 'online' || status === 'unreachable') {
-        lastCheckAt = Date.now();
-        addStatusHistoryEntry(prefix, status === 'online', state.latency);
-    }
-
+    renderPcStatus();
     renderDashboard();
 }
 
@@ -620,7 +616,6 @@ function getSmoothedLatency(state, latency) {
 
 async function refreshService(service) {
     const state = SERVICE_STATE[service.key];
-    if (state.status === 'unknown') setServiceStatus(service.key, 'checking');
     const ctrl = new AbortController();
     const timeout = setTimeout(() => ctrl.abort(), 2500);
     const started = performance.now();
@@ -640,28 +635,79 @@ async function refreshService(service) {
             // Pierwszy pomiar zwykle zawiera koszt DNS/TLS i potrafi być zawyżony.
             // Traktujemy go jako warm-up i pokazujemy stabilniejszy wynik z kolejnego sprawdzenia.
             state.warmedUp = true;
-            setServiceStatus(service.key, 'online', null);
+            setServiceStatus(service.key, true, null);
             state.failCount = 0;
             state.nextDelay = 800;
         } else if (ok) {
             const smoothedLatency = getSmoothedLatency(state, latency);
-            setServiceStatus(service.key, 'online', smoothedLatency);
+            setServiceStatus(service.key, true, smoothedLatency);
             state.failCount = 0;
             state.nextDelay = 15000;
         } else {
-            setServiceStatus(service.key, 'unreachable');
+            setServiceStatus(service.key, false, null);
             state.failCount += 1;
             state.nextDelay = Math.min(60000, 5000 * (2 ** state.failCount));
         }
     } catch (_e) {
         clearTimeout(timeout);
-        setServiceStatus(service.key, 'unreachable');
+        setServiceStatus(service.key, false, null);
         state.latencySamples = [];
         state.failCount += 1;
         state.nextDelay = Math.min(60000, 5000 * (2 ** state.failCount));
     }
 
     setTimeout(() => refreshService(service), state.nextDelay);
+}
+
+function initTabs() {
+    const tabIds = ['tab-jellyfin', 'tab-filebrowser', 'tab-autobrr', 'tab-speedtest', 'tab-muse'];
+    const map = {
+        'tab-jellyfin': 'section-jf',
+        'tab-filebrowser': 'section-fb',
+        'tab-autobrr': 'section-ab',
+        'tab-speedtest': 'section-st',
+        'tab-muse': 'section-muse'
+    };
+
+    const tabs = tabIds.map((id) => document.getElementById(id)).filter(Boolean);
+    const moreBtn = document.getElementById('tab-more');
+
+    function activate(tabId) {
+        tabs.forEach((tab) => {
+            const active = tab.id === tabId;
+            tab.setAttribute('aria-selected', String(active));
+            tab.setAttribute('tabindex', active ? '0' : '-1');
+
+            const panel = document.getElementById(map[tab.id]);
+            if (panel) {
+                panel.hidden = !active;
+                panel.classList.toggle('active-card', active);
+            }
+        });
+    }
+
+    tabs.forEach((tab) => {
+        tab.addEventListener('click', () => activate(tab.id));
+        tab.addEventListener('keydown', (e) => {
+            const index = tabs.indexOf(tab);
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                const delta = e.key === 'ArrowRight' ? 1 : -1;
+                const next = (index + delta + tabs.length) % tabs.length;
+                tabs[next].focus();
+                activate(tabs[next].id);
+            }
+        });
+    });
+
+    if (moreBtn) {
+        moreBtn.addEventListener('click', () => {
+            const L = STR[getLang()] || STR.en;
+            showToast(L.toastMore);
+        });
+    }
+
+    activate('tab-jellyfin');
 }
 
 function init() {
@@ -695,6 +741,7 @@ function init() {
     });
     window.addEventListener('beforeunload', flushSaveHistory);
 
+    initTabs();
     SERVICES.forEach((service) => refreshService(service));
 }
 
