@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a class="skip-link" href="#main-content" id="skip-link">Skip to main content</a>
     <div class="topbar">
         <div class="topbar-inner">
             <div class="brand">
@@ -31,19 +31,6 @@
                     <div class="tag" id="availability">Usually available: 9:00 AM – 1:00 AM CEST</div>
                 </div>
             </div>
-            <nav aria-label="Sections" class="tabs" role="tablist">
-                <button aria-controls="section-jf" aria-selected="true" class="tab" id="tab-jellyfin" role="tab"
-                    type="button">Jellyfin</button>
-                <button aria-controls="section-fb" aria-selected="false" class="tab" id="tab-filebrowser" role="tab"
-                    type="button">Filebrowser</button>
-                <button aria-controls="section-ab" aria-selected="false" class="tab" id="tab-autobrr" role="tab"
-                    type="button">Autobrr</button>
-                <button aria-controls="section-st" aria-selected="false" class="tab" id="tab-speedtest" role="tab"
-                    type="button">OpenSpeedTest</button>
-                <button aria-controls="section-muse" aria-selected="false" class="tab" id="tab-muse" role="tab"
-                    type="button">Muse</button>
-                <button class="tab" id="tab-more" type="button">More services (soon)</button>
-            </nav>
             <div class="controls">
                 <button aria-pressed="false" class="chip" id="theme-toggle" title="Toggle theme">🌙 Theme</button>
                 <div aria-label="Language" class="chip" role="group">
@@ -52,211 +39,200 @@
                         <button aria-pressed="false" class="chip" id="lang-pl">PL</button>
                     </div>
                 </div>
-                <div class="pc-status" id="pc-status">My PC is off :(</div>
             </div>
         </div>
     </div>
     <div class="wrap">
         <main id="main-content" tabindex="-1">
-            <section class="card" id="section-dashboard">
-                <h2 id="dash-title" style="margin:0 0 6px">📊 Service dashboard</h2>
-                <p class="tag" id="dash-sub" style="margin:0 0 12px">Live status overview</p>
+            <section class="card dashboard-summary" id="section-dashboard">
+                <h2 id="dash-title">📊 Service status</h2>
+                <p class="tag" id="dash-sub">Live health checks from this browser</p>
                 <div class="dashboard-grid">
-                    <span class="pill" id="dash-overall" aria-live="polite">0/5 online</span>
-                    <span class="pill" id="dash-lastcheck" aria-live="polite">Last check: --</span>
-                    <span class="pill" id="dash-jf-latency">Jellyfin: -- ms</span>
-                    <span class="pill" id="dash-fb-latency">FileBrowser: -- ms</span>
-                    <span class="pill" id="dash-ab-latency">autobrr: -- ms</span>
-                    <span class="pill" id="dash-st-latency">OpenSpeedTest: -- ms</span>
-                    <span class="pill" id="dash-mu-latency">Muse: -- ms</span>
-                </div>
-                <div class="status-history" id="status-history">
-                    <h3 id="history-title">Recent checks</h3>
-                    <div class="history-grid">
-                        <div class="history-row">
-                            <div class="history-meta">
-                                <span class="history-name" id="history-jf-name">Jellyfin</span>
-                                <span class="history-summary" id="history-jf-summary">No data yet</span>
-                            </div>
-                            <div class="history-line" id="history-jf-line" role="img" aria-label="Jellyfin: no data yet">
-                            </div>
-                            <span class="history-avg" id="history-jf-avg">Avg: -- ms</span>
-                        </div>
-                        <div class="history-row">
-                            <div class="history-meta">
-                                <span class="history-name" id="history-fb-name">FileBrowser</span>
-                                <span class="history-summary" id="history-fb-summary">No data yet</span>
-                            </div>
-                            <div class="history-line" id="history-fb-line" role="img" aria-label="FileBrowser: no data yet">
-                            </div>
-                            <span class="history-avg" id="history-fb-avg">Avg: -- ms</span>
-                        </div>
-                        <div class="history-row">
-                            <div class="history-meta">
-                                <span class="history-name" id="history-ab-name">autobrr</span>
-                                <span class="history-summary" id="history-ab-summary">No data yet</span>
-                            </div>
-                            <div class="history-line" id="history-ab-line" role="img" aria-label="autobrr: no data yet">
-                            </div>
-                            <span class="history-avg" id="history-ab-avg">Avg: -- ms</span>
-                        </div>
-                        <div class="history-row">
-                            <div class="history-meta">
-                                <span class="history-name" id="history-st-name">OpenSpeedTest</span>
-                                <span class="history-summary" id="history-st-summary">No data yet</span>
-                            </div>
-                            <div class="history-line" id="history-st-line" role="img" aria-label="OpenSpeedTest: no data yet">
-                            </div>
-                            <span class="history-avg" id="history-st-avg">Avg: -- ms</span>
-                        </div>
-                        <div class="history-row">
-                            <div class="history-meta">
-                                <span class="history-name" id="history-mu-name">Muse</span>
-                                <span class="history-summary" id="history-mu-summary">No data yet</span>
-                            </div>
-                            <div class="history-line" id="history-mu-line" role="img" aria-label="Muse: no data yet">
-                            </div>
-                            <span class="history-avg" id="history-mu-avg">Avg: -- ms</span>
-                        </div>
-                    </div>
+                    <span class="pill" id="dash-overall" aria-live="polite">Checking… 0/5 online</span>
+                    <span class="pill" id="dash-lastcheck" aria-live="polite">Last update: --</span>
                 </div>
             </section>
 
-            <section class="card service-section" id="section-jf" role="tabpanel" aria-labelledby="tab-jellyfin">
-                <div class="j-wrap">
+            <section class="service-grid" aria-labelledby="services-title">
+                <div class="section-heading">
+                    <h2 id="services-title">Services</h2>
+                </div>
+                <article class="card service-card" id="section-jf">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
                             <img alt="Jellyfin logo"
                                 src="https://upload.wikimedia.org/wikipedia/commons/4/41/Jellyfin_-_icon-transparent.svg" />
                         </div>
-                        <div>
-                            <h2 id="jf-title" style="margin:0 0 6px">🎬 Jellyfin</h2>
-                            <p class="tag" id="jf-sub" style="margin:0">Your media server</p>
-                            <div class="status-wrap" style="margin-top:8px">
-                                <span class="pill" id="jf-pill"><span class="dot" id="jf-dot"
-                                        style="background:var(--bad)"></span><span id="jf-text">Offline</span></span>
+                        <div class="service-card-copy">
+                            <h2 id="jf-title">🎬 Jellyfin</h2>
+                            <p class="tag" id="jf-sub">Your media server</p>
+                            <div class="service-meta">
+                                <span class="pill service-status status-checking" id="jf-pill" aria-label="Jellyfin: Checking…">
+                                    <span class="dot" id="jf-dot"></span><span id="jf-text">Checking…</span>
+                                </span>
+                                <span class="pill service-latency" id="jf-latency">Latency: -- ms</span>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <a aria-label="Open Jellyfin" class="btn" href="https://jellyfin.adiker.eu" id="jf-btn"
-                            rel="noopener" target="_blank">
-                            <svg aria-hidden="true" fill="none" height="18" viewbox="0 0 24 24" width="18">
-                                <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2"></path>
-                            </svg>
-                            <span id="jf-btn-text">Open Jellyfin</span>
-                        </a>
-                    </div>
-                </div>
-            </section>
-            <section class="card service-section" id="section-fb" role="tabpanel" aria-labelledby="tab-filebrowser"
-                hidden>
-                <div class="j-wrap">
+                    <a aria-label="Open Jellyfin" class="btn" href="https://jellyfin.adiker.eu" id="jf-btn"
+                        rel="noopener" target="_blank">
+                        <svg aria-hidden="true" fill="none" height="18" viewBox="0 0 24 24" width="18">
+                            <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span id="jf-btn-text">Open Jellyfin</span>
+                    </a>
+                </article>
+
+                <article class="card service-card" id="section-fb">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
-                            <img alt="Filebrowser logo"
-                                src="img/505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png" />
+                            <img alt="Filebrowser logo" src="img/505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png" />
                         </div>
-                        <div>
-                            <h2 id="fb-title" style="margin:0 0 6px">📁 FileBrowser Quantum</h2>
-                            <p class="tag" id="fb-sub" style="margin:0">Your file manager</p>
-                            <div class="status-wrap" style="margin-top:8px">
-                                <span class="pill" id="fb-pill"><span class="dot" id="fb-dot"
-                                        style="background:var(--bad)"></span><span id="fb-text">Offline</span></span>
+                        <div class="service-card-copy">
+                            <h2 id="fb-title">📁 FileBrowser Quantum</h2>
+                            <p class="tag" id="fb-sub">Your file manager</p>
+                            <div class="service-meta">
+                                <span class="pill service-status status-checking" id="fb-pill" aria-label="FileBrowser Quantum: Checking…">
+                                    <span class="dot" id="fb-dot"></span><span id="fb-text">Checking…</span>
+                                </span>
+                                <span class="pill service-latency" id="fb-latency">Latency: -- ms</span>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <a aria-label="Open Jellyfin" class="btn" href="https://files.adiker.eu" id="fb-btn"
-                            rel="noopener" target="_blank">
-                            <svg aria-hidden="true" fill="none" height="18" viewbox="0 0 24 24" width="18">
-                                <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2"></path>
-                            </svg>
-                            <span id="fb-btn-text">Open FileBrowser Quantum</span>
-                        </a>
-                    </div>
-                </div>
-            </section>
-            <section class="card service-section" id="section-ab" role="tabpanel" aria-labelledby="tab-autobrr" hidden>
-                <div class="j-wrap">
+                    <a aria-label="Open FileBrowser Quantum" class="btn" href="https://files.adiker.eu" id="fb-btn"
+                        rel="noopener" target="_blank">
+                        <svg aria-hidden="true" fill="none" height="18" viewBox="0 0 24 24" width="18">
+                            <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span id="fb-btn-text">Open FileBrowser Quantum</span>
+                    </a>
+                </article>
+
+                <article class="card service-card" id="section-ab">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
                             <img alt="autobrr logo"
                                 src="https://github.com/autobrr/autobrr/blob/develop/.github/images/logo.png?raw=true" />
                         </div>
-                        <div>
-                            <h2 id="ab-title" style="margin:0 0 6px">⚡ autobrr</h2>
-                            <p class="tag" id="ab-sub" style="margin:0">Automated torrent management</p>
-                            <div class="status-wrap" style="margin-top:8px">
-                                <span class="pill" id="ab-pill">
-                                    <span class="dot" id="ab-dot" style="background:var(--bad)"></span>
-                                    <span id="ab-text">Offline</span>
+                        <div class="service-card-copy">
+                            <h2 id="ab-title">⚡ autobrr</h2>
+                            <p class="tag" id="ab-sub">Automated torrent management</p>
+                            <div class="service-meta">
+                                <span class="pill service-status status-checking" id="ab-pill" aria-label="autobrr: Checking…">
+                                    <span class="dot" id="ab-dot"></span><span id="ab-text">Checking…</span>
                                 </span>
+                                <span class="pill service-latency" id="ab-latency">Latency: -- ms</span>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <a aria-label="Open autobrr" class="btn" href="https://autobrr.adiker.eu" id="ab-btn"
-                            rel="noopener" target="_blank">
-                            <svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24">
-                                <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2"></path>
-                            </svg>
-                            <span id="ab-btn-text">Open autobrr</span>
-                        </a>
-                    </div>
-                </div>
-            </section>
-            <section class="card service-section" id="section-st" role="tabpanel" aria-labelledby="tab-speedtest" hidden>
-                <div class="j-wrap">
+                    <a aria-label="Open autobrr" class="btn" href="https://autobrr.adiker.eu" id="ab-btn"
+                        rel="noopener" target="_blank">
+                        <svg aria-hidden="true" fill="none" height="18" viewBox="0 0 24 24" width="18">
+                            <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span id="ab-btn-text">Open autobrr</span>
+                    </a>
+                </article>
+
+                <article class="card service-card" id="section-st">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
                             <img alt="OpenSpeedTest logo" src="https://avatars.githubusercontent.com/u/51720450?v=4" />
                         </div>
-                        <div>
-                            <h2 id="st-title" style="margin:0 0 6px">🚀 OpenSpeedTest</h2>
-                            <p class="tag" id="st-sub" style="margin:0">Network speed test</p>
-                            <div class="status-wrap" style="margin-top:8px">
-                                <span class="pill" id="st-pill">
-                                    <span class="dot" id="st-dot" style="background:var(--bad)"></span>
-                                    <span id="st-text">Offline</span>
+                        <div class="service-card-copy">
+                            <h2 id="st-title">🚀 OpenSpeedTest</h2>
+                            <p class="tag" id="st-sub">Network speed test</p>
+                            <div class="service-meta">
+                                <span class="pill service-status status-checking" id="st-pill" aria-label="OpenSpeedTest: Checking…">
+                                    <span class="dot" id="st-dot"></span><span id="st-text">Checking…</span>
                                 </span>
+                                <span class="pill service-latency" id="st-latency">Latency: -- ms</span>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <a aria-label="Open OpenSpeedTest" class="btn" href="https://speedtest.adiker.eu" id="st-btn"
-                            rel="noopener" target="_blank">
-                            <svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24">
-                                <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2"></path>
-                            </svg>
-                            <span id="st-btn-text">Open OpenSpeedTest</span>
-                        </a>
-                    </div>
-                </div>
-            </section>
-            <section class="card service-section" id="section-muse" role="tabpanel" aria-labelledby="tab-muse" hidden>
-                <div class="j-wrap">
+                    <a aria-label="Open OpenSpeedTest" class="btn" href="https://speedtest.adiker.eu" id="st-btn"
+                        rel="noopener" target="_blank">
+                        <svg aria-hidden="true" fill="none" height="18" viewBox="0 0 24 24" width="18">
+                            <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span id="st-btn-text">Open OpenSpeedTest</span>
+                    </a>
+                </article>
+
+                <article class="card service-card" id="section-muse">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
                             <img alt="Muse logo" src="img/muse-logo.png" />
                         </div>
-                        <div>
-                            <h2 id="mu-title" style="margin:0 0 6px">🎧 Muse</h2>
-                            <p class="tag" id="mu-sub" style="margin:0">Discord music bot</p>
-                            <div class="status-wrap" style="margin-top:8px">
-                                <span class="pill" id="mu-pill">
-                                    <span class="dot" id="mu-dot" style="background:var(--bad)"></span>
-                                    <span id="mu-text">Offline</span>
+                        <div class="service-card-copy">
+                            <h2 id="mu-title">🎧 Muse</h2>
+                            <p class="tag" id="mu-sub">Discord music bot</p>
+                            <div class="service-meta">
+                                <span class="pill service-status status-checking" id="mu-pill" aria-label="Muse: Checking…">
+                                    <span class="dot" id="mu-dot"></span><span id="mu-text">Checking…</span>
                                 </span>
+                                <span class="pill service-latency" id="mu-latency">Latency: -- ms</span>
                             </div>
+                            <p class="service-note" id="mu-note">Status only · no web interface</p>
                         </div>
                     </div>
-                </div>
+                </article>
             </section>
+
+            <details class="card status-history" id="status-history">
+                <summary id="history-title">Recent measurements</summary>
+                <div class="history-grid">
+                    <div class="history-row">
+                        <div class="history-meta">
+                            <span class="history-name" id="history-jf-name">Jellyfin</span>
+                            <span class="history-summary" id="history-jf-summary">No data yet</span>
+                        </div>
+                        <div class="history-line" id="history-jf-line" role="img" aria-label="Jellyfin: no data yet"></div>
+                        <span class="history-avg" id="history-jf-avg">Avg: -- ms</span>
+                    </div>
+                    <div class="history-row">
+                        <div class="history-meta">
+                            <span class="history-name" id="history-fb-name">FileBrowser</span>
+                            <span class="history-summary" id="history-fb-summary">No data yet</span>
+                        </div>
+                        <div class="history-line" id="history-fb-line" role="img" aria-label="FileBrowser: no data yet"></div>
+                        <span class="history-avg" id="history-fb-avg">Avg: -- ms</span>
+                    </div>
+                    <div class="history-row">
+                        <div class="history-meta">
+                            <span class="history-name" id="history-ab-name">autobrr</span>
+                            <span class="history-summary" id="history-ab-summary">No data yet</span>
+                        </div>
+                        <div class="history-line" id="history-ab-line" role="img" aria-label="autobrr: no data yet"></div>
+                        <span class="history-avg" id="history-ab-avg">Avg: -- ms</span>
+                    </div>
+                    <div class="history-row">
+                        <div class="history-meta">
+                            <span class="history-name" id="history-st-name">OpenSpeedTest</span>
+                            <span class="history-summary" id="history-st-summary">No data yet</span>
+                        </div>
+                        <div class="history-line" id="history-st-line" role="img" aria-label="OpenSpeedTest: no data yet"></div>
+                        <span class="history-avg" id="history-st-avg">Avg: -- ms</span>
+                    </div>
+                    <div class="history-row">
+                        <div class="history-meta">
+                            <span class="history-name" id="history-mu-name">Muse</span>
+                            <span class="history-summary" id="history-mu-summary">No data yet</span>
+                        </div>
+                        <div class="history-line" id="history-mu-line" role="img" aria-label="Muse: no data yet"></div>
+                        <span class="history-avg" id="history-mu-avg">Avg: -- ms</span>
+                    </div>
+                </div>
+            </details>
+
+            <details class="card client-info" id="client-info">
+                <summary id="client-title">Client information</summary>
+                <div class="pc-status" id="pc-status"></div>
+            </details>
         </main>
         <footer>
             <span class="brand-year">© <span id="year"></span> adiker.eu •</span>
@@ -268,12 +244,14 @@
                 </svg>
                 GitHub
             </a>
+            <span aria-hidden="true">•</span>
+            <a href="https://keepandroidopen.org/" target="_blank" rel="noopener" class="campaign-link" id="campaign-link">
+                Keep Android Open
+            </a>
         </footer>
     </div>
-    <div aria-atomic="true" aria-live="polite" class="toast" id="toast"></div>
     <link href="css/styles.css?v=20260913-muse-status" rel="stylesheet" />
     <script src="js/app.js?v=20260913-muse-status"></script>
-    <script src="https://keepandroidopen.org/banner.js?size=mini"></script>
 </body>
 
 </html>

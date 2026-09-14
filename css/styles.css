@@ -107,21 +107,11 @@ h1 {
 }
 
 .pc-status {
-    margin-top: 0;
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
-    white-space: nowrap;
-    padding: 6px 10px;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    background: linear-gradient(180deg, #111b26, #0b111a);
-    font-weight: 600;
-    font-size: .92rem;
-}
-
-.pc-status .pc-main {
-    font-weight: 700;
+    margin-top: 14px;
 }
 
 .pc-status .pc-os {
@@ -134,73 +124,6 @@ h1 {
     color: var(--mut);
     font-size: .8rem;
     line-height: 1.2;
-}
-
-.pc-status.is-on .pc-main {
-    color: var(--good);
-}
-
-.pc-status.is-off .pc-main {
-    color: var(--bad);
-}
-
-nav.tabs {
-    display: flex;
-    gap: 8px;
-    flex-wrap: nowrap;
-    overflow: visible;
-    /* no scroll gutter, no clipping */
-    scrollbar-width: none;
-    /* FF: hide scrollbar */
-    flex: 0 1 auto;
-    /* don't steal width from brand */
-}
-
-nav.tabs::-webkit-scrollbar {
-    display: none;
-}
-
-nav.tabs::-webkit-scrollbar {
-    display: none;
-}
-
-.tab {
-    padding: 8px 16px;
-    border: 1px solid var(--line);
-    border-radius: 9999px;
-    background: var(--card);
-    color: var(--fg);
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: transform .2s ease, background .2s ease;
-    position: relative;
-    /* for ::after ring */
-    isolation: isolate;
-    /* create its own stacking context so ring isn't hidden */
-}
-
-.tab:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(180deg, #111b26, #0b111a)
-}
-
-/* Nice, always-visible ring for active tab */
-.tab[aria-selected="true"] {
-    outline: none
-}
-
-.tab[aria-selected="true"]::after {
-    content: "";
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    bottom: -4px;
-    left: -4px;
-    /* extends evenly around */
-    border-radius: 9999px;
-    border: 2px solid var(--acc);
-    pointer-events: none;
 }
 
 .controls {
@@ -225,7 +148,6 @@ nav.tabs::-webkit-scrollbar {
     outline: 2px solid var(--acc)
 }
 
-.tab:focus-visible,
 .chip:focus-visible,
 a:focus-visible {
     outline: 2px solid var(--acc);
@@ -291,18 +213,11 @@ a:hover {
     box-shadow: var(--ring)
 }
 
-.j-wrap {
-    display: flex;
-    gap: 18px;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap
-}
-
 .j-left {
     display: flex;
     gap: 16px;
-    align-items: center
+    align-items: flex-start;
+    min-width: 0;
 }
 
 .j-icon {
@@ -316,6 +231,72 @@ a:hover {
     display: block;
     width: 70px;
     height: 70px;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.section-heading {
+    grid-column: 1 / -1;
+}
+
+.section-heading h2 {
+    margin: 0;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 18px;
+    min-height: 218px;
+    margin-bottom: 0;
+}
+
+.service-card-copy {
+    min-width: 0;
+}
+
+.service-card h2 {
+    margin: 0 0 6px;
+}
+
+.service-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.service-status .dot {
+    background: var(--mut);
+}
+
+.service-status.status-online .dot {
+    background: var(--good);
+}
+
+.service-status.status-unreachable .dot {
+    background: var(--bad);
+}
+
+.service-status.status-unknown .dot {
+    background: var(--mut);
+}
+
+.service-latency {
+    color: var(--mut);
+}
+
+.service-note {
+    margin: 10px 0 0;
+    color: var(--mut);
+    font-size: .85rem;
 }
 
 .pill {
@@ -336,14 +317,19 @@ a:hover {
 }
 
 .status-history {
-    margin-top: 16px;
+    margin-bottom: 18px;
 }
 
-.status-history h3 {
-    margin: 0 0 10px;
-    color: var(--mut);
-    font-size: .95rem;
+.status-history > summary,
+.client-info > summary {
+    cursor: pointer;
     font-weight: 700;
+    list-style-position: outside;
+}
+
+.status-history[open] > summary,
+.client-info[open] > summary {
+    margin-bottom: 14px;
 }
 
 .history-grid {
@@ -385,6 +371,10 @@ a:hover {
 
 .history-summary.is-stable {
     color: var(--good);
+}
+
+.history-summary.is-collecting {
+    color: var(--mut);
 }
 
 .history-summary.is-recovering {
@@ -476,10 +466,9 @@ footer {
     color: #0b1220
 }
 
-.theme-light .tab,
 .theme-light .chip,
 .theme-light .pill,
-.theme-light .pc-status {
+.theme-light .pc-status .pc-os {
     background: linear-gradient(180deg, #ffffff, #eef3f9);
     border-color: #d9e1ec;
     color: #0b1220
@@ -489,11 +478,9 @@ footer {
     background: radial-gradient(1400px 800px at 10% -10%, #ffffff 0, #f2f5fa 60%) fixed
 }
 
-.theme-light .tab,
 .theme-light .chip,
 .theme-light .btn,
-.theme-light .pill,
-.theme-light .pc-status {
+.theme-light .pill {
     background: linear-gradient(180deg, #f9fafb, #f3f4f6);
     color: var(--fg)
 }
@@ -502,34 +489,13 @@ footer {
     background: var(--card)
 }
 
-.theme-light .history-row {
+.theme-light .history-row,
+.theme-light .client-info {
     background: #f9fafb;
 }
 
 .theme-light .history-summary.is-recovering {
     color: #d97706;
-}
-
-.toast {
-    position: fixed;
-    left: 50%;
-    bottom: 20px;
-    transform: translate(-50%, 10px);
-    background: var(--card);
-    color: var(--fg);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 10px 14px;
-    box-shadow: var(--shadow);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .2s ease, transform .2s ease;
-    z-index: 50;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translate(-50%, 0)
 }
 
 .theme-light .topbar {
@@ -567,17 +533,13 @@ footer {
 
 .theme-oled .card,
 .theme-oled .btn,
-.theme-oled .tab,
 .theme-oled .chip,
-.theme-oled .pill,
-.theme-oled .pc-status,
-.theme-oled .toast {
+.theme-oled .pill {
     background: #000;
     border-color: var(--line);
     color: var(--fg);
 }
 
-.theme-oled .tab:hover,
 .theme-oled .btn:hover,
 .theme-oled .chip:hover {
     background: #050505;
@@ -656,12 +618,6 @@ html.theme-light #theme-toggle {
     left: 0;
 }
 
-.card.active-card {
-    outline: 3px solid var(--acc);
-    outline-offset: 4px;
-    border-radius: 1rem
-}
-
 .github-link {
     display: inline-flex;
     align-items: center;
@@ -675,21 +631,17 @@ html.theme-light #theme-toggle {
     text-decoration: underline;
 }
 
+.campaign-link {
+    font-size: .85rem;
+}
+
 @media (max-width: 900px) {
     .controls {
         flex: 1 1 100%;
         width: 100%;
     }
 
-    .pc-status {
-        width: 100%;
-        white-space: normal;
-        flex-wrap: wrap;
-        row-gap: 6px;
-    }
-
-    .pc-status .pc-os,
-    .pc-status .pc-main {
+    .pc-status .pc-os {
         max-width: 100%;
         overflow-wrap: anywhere;
     }
@@ -713,38 +665,17 @@ html.theme-light #theme-toggle {
         align-items: flex-start;
     }
 
-    nav.tabs {
-        flex: 1 1 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding: 4px;
-    }
-
-    .tab[aria-selected="true"]::after {
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
-
     .controls {
         gap: 10px;
     }
 
-    .chip,
-    .tab {
+    .chip {
         padding: 10px 12px;
         min-height: 44px;
     }
 
     .card {
         padding: 16px;
-    }
-
-    .j-wrap {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 14px;
     }
 
     .j-left {
@@ -757,7 +688,11 @@ html.theme-light #theme-toggle {
         height: 56px;
     }
 
-    .btn {
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-card .btn {
         width: 100%;
         justify-content: center;
         min-height: 44px;
