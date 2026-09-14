@@ -299,6 +299,12 @@ a:hover {
     font-size: .85rem;
 }
 
+.service-source {
+    margin: 8px 0 0;
+    color: var(--mut);
+    font-size: .76rem;
+}
+
 .pill {
     display: inline-flex;
     align-items: center;
