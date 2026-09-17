@@ -65,9 +65,13 @@ summary {
     transform: translateY(0);
 }
 
-.wrap,
-.topbar-inner {
+.wrap {
     width: min(100%, 1080px);
+    margin-inline: auto;
+}
+
+.topbar-inner {
+    width: min(100%, 1200px);
     margin-inline: auto;
 }
 
@@ -278,6 +282,10 @@ nav.tabs::-webkit-scrollbar {
     transition: color .16s ease, background .16s ease, transform .16s ease;
 }
 
+.tab-label-compact {
+    display: none;
+}
+
 .tab:hover {
     color: var(--fg);
     background: rgba(103, 189, 255, .08);
@@ -351,8 +359,7 @@ nav.tabs::-webkit-scrollbar {
     color: var(--fg);
     font-size: .72rem;
     font-weight: 800;
-    overflow-wrap: anywhere;
-    white-space: normal;
+    white-space: nowrap;
 }
 
 .tab:focus-visible,
@@ -1002,23 +1009,24 @@ footer {
 
     nav.tabs {
         display: grid;
-        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         width: 100%;
         overflow: visible;
     }
 
     .tab {
         min-width: 0;
-        padding-inline: 8px;
+        padding-inline: 3px;
+        font-size: .69rem;
         text-align: center;
     }
 
-    .tab:nth-child(-n + 3) {
-        grid-column: span 2;
+    .tab-label-full {
+        display: none;
     }
 
-    .tab:nth-child(n + 4) {
-        grid-column: span 3;
+    .tab-label-compact {
+        display: inline;
     }
 
     .tab,
@@ -1104,8 +1112,18 @@ footer {
 }
 
 @media (max-width: 390px) {
+    .client-key {
+        font-size: .54rem;
+        letter-spacing: .02em;
+    }
+
     .client-value {
         font-size: .7rem;
+    }
+
+    .tab {
+        font-size: .64rem;
+        letter-spacing: -.01em;
     }
 }
 

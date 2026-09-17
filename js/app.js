@@ -39,6 +39,13 @@ const STR = {
             openspeedtest: 'OpenSpeedTest',
             muse: 'Muse'
         },
+        navCompact: {
+            jellyfin: 'Jellyfin',
+            filebrowser: 'Files',
+            autobrr: 'autobrr',
+            openspeedtest: 'Speed',
+            muse: 'Muse'
+        },
         subtitle: 'My Playground',
         availability: 'Usually available: 9:00 AM – 1:00 AM CEST',
         ui: {
@@ -121,6 +128,13 @@ const STR = {
             filebrowser: 'Filebrowser',
             autobrr: 'Autobrr',
             openspeedtest: 'OpenSpeedTest',
+            muse: 'Muse'
+        },
+        navCompact: {
+            jellyfin: 'Jellyfin',
+            filebrowser: 'Pliki',
+            autobrr: 'autobrr',
+            openspeedtest: 'Speed',
             muse: 'Muse'
         },
         subtitle: 'Mój plac zabaw',
@@ -288,6 +302,17 @@ function getLang() {
 function setText(id, value) {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
+}
+
+function setTabLabel(id, fullLabel, compactLabel) {
+    const tab = document.getElementById(id);
+    if (!tab) return;
+
+    const full = tab.querySelector('.tab-label-full');
+    const compact = tab.querySelector('.tab-label-compact');
+    if (full) full.textContent = fullLabel;
+    if (compact) compact.textContent = compactLabel;
+    tab.setAttribute('aria-label', fullLabel);
 }
 
 function getServiceLabel(key, lang = getLang()) {
@@ -560,11 +585,11 @@ function applyLang(lang) {
     if (abBtn) abBtn.setAttribute('aria-label', L.ab.open);
     if (stBtn) stBtn.setAttribute('aria-label', L.st.open);
 
-    setText('tab-jellyfin', L.nav.jellyfin);
-    setText('tab-filebrowser', L.nav.filebrowser);
-    setText('tab-autobrr', L.nav.autobrr);
-    setText('tab-speedtest', L.nav.openspeedtest);
-    setText('tab-muse', L.nav.muse);
+    setTabLabel('tab-jellyfin', L.nav.jellyfin, L.navCompact.jellyfin);
+    setTabLabel('tab-filebrowser', L.nav.filebrowser, L.navCompact.filebrowser);
+    setTabLabel('tab-autobrr', L.nav.autobrr, L.navCompact.autobrr);
+    setTabLabel('tab-speedtest', L.nav.openspeedtest, L.navCompact.openspeedtest);
+    setTabLabel('tab-muse', L.nav.muse, L.navCompact.muse);
 
     const tabsNav = document.querySelector('nav.tabs');
     if (tabsNav) tabsNav.setAttribute('aria-label', L.ui.sections);
