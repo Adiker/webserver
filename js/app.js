@@ -48,7 +48,7 @@ const STR = {
             sections: 'Sections',
             services: 'Service details',
             skipLink: 'Skip to main content',
-            clientInfo: 'Client information',
+            clientInfo: 'This device',
             latency: 'Latency',
             source: 'Measured from this browser',
             dark: 'Dark',
@@ -56,8 +56,8 @@ const STR = {
             oled: 'OLED'
         },
         dashboard: {
-            title: '📊 Service dashboard',
-            sub: 'Live status overview from this browser',
+            title: 'Service status',
+            sub: 'Live measurements from this browser',
             overall: 'online',
             checking: 'Checking…',
             unreachable: 'unreachable',
@@ -79,9 +79,9 @@ const STR = {
         status: { checking: 'Checking…', online: 'Online', unreachable: 'Unreachable', unknown: 'Unknown' },
         statusSource: 'Status measured from this browser',
         pc: {
-            osPrefix: 'Your OS',
-            browserPrefix: 'Your browser',
-            devicePrefix: 'Your device',
+            osPrefix: 'OS',
+            browserPrefix: 'Browser',
+            devicePrefix: 'Device',
             os: {
                 windows: 'Windows',
                 android: 'Android',
@@ -132,7 +132,7 @@ const STR = {
             sections: 'Sekcje',
             services: 'Szczegóły usług',
             skipLink: 'Przejdź do treści głównej',
-            clientInfo: 'Informacje o kliencie',
+            clientInfo: 'To urządzenie',
             latency: 'Opóźnienie',
             source: 'Pomiar z tej przeglądarki',
             dark: 'Ciemny',
@@ -140,7 +140,7 @@ const STR = {
             oled: 'OLED'
         },
         dashboard: {
-            title: '📊 Panel usług',
+            title: 'Status usług',
             sub: 'Bieżące pomiary z tej przeglądarki',
             overall: 'online',
             checking: 'Sprawdzanie…',
@@ -163,9 +163,9 @@ const STR = {
         status: { checking: 'Sprawdzanie…', online: 'Online', unreachable: 'Brak odpowiedzi', unknown: 'Nieznany' },
         statusSource: 'Status mierzony z tej przeglądarki',
         pc: {
-            osPrefix: 'Twój OS',
-            browserPrefix: 'Twoja przeglądarka',
-            devicePrefix: 'Twoje urządzenie',
+            osPrefix: 'OS',
+            browserPrefix: 'Przeglądarka',
+            devicePrefix: 'Urządzenie',
             os: {
                 windows: 'Windows',
                 android: 'Android',
@@ -462,11 +462,16 @@ function renderPcStatus(lang = getLang()) {
     const browserLabel = L.pc.browser[DETECTED_BROWSER] || L.pc.browser.other;
     const deviceLabel = L.pc.device[DETECTED_DEVICE] || L.pc.device.other;
     pcStatus.innerHTML = `
-        <span class="pc-os" aria-label="${L.pc.osPrefix}: ${osLabel}">${L.pc.osPrefix}: ${osLabel}</span>
-        <span class="pc-os" aria-label="${L.pc.browserPrefix}: ${browserLabel}">${L.pc.browserPrefix}: ${browserLabel}</span>
-        <span class="pc-os" aria-label="${L.pc.devicePrefix}: ${deviceLabel}">${L.pc.devicePrefix}: ${deviceLabel}</span>
+        <span class="client-metric" aria-label="${L.pc.osPrefix}: ${osLabel}">
+            <span class="client-key">${L.pc.osPrefix}</span><strong class="client-value">${osLabel}</strong>
+        </span>
+        <span class="client-metric" aria-label="${L.pc.browserPrefix}: ${browserLabel}">
+            <span class="client-key">${L.pc.browserPrefix}</span><strong class="client-value">${browserLabel}</strong>
+        </span>
+        <span class="client-metric" aria-label="${L.pc.devicePrefix}: ${deviceLabel}">
+            <span class="client-key">${L.pc.devicePrefix}</span><strong class="client-value">${deviceLabel}</strong>
+        </span>
     `;
-
 }
 
 function renderDashboardService(key, lang, L) {
@@ -525,19 +530,19 @@ function applyLang(lang) {
     document.documentElement.lang = lang;
     document.title = `adiker.eu — ${L.documentTitle}`;
     setText('skip-link', L.ui.skipLink);
-    setText('jf-title', '🎬 ' + L.jf.title);
+    setText('jf-title', L.jf.title);
     setText('jf-sub', L.jf.sub);
     setText('jf-btn-text', L.jf.open);
-    setText('fb-title', '📁 ' + L.fb.title);
+    setText('fb-title', L.fb.title);
     setText('fb-sub', L.fb.sub);
     setText('fb-btn-text', L.fb.open);
-    setText('ab-title', '⚡ ' + L.ab.title);
+    setText('ab-title', L.ab.title);
     setText('ab-sub', L.ab.sub);
     setText('ab-btn-text', L.ab.open);
-    setText('st-title', '🚀 ' + L.st.title);
+    setText('st-title', L.st.title);
     setText('st-sub', L.st.sub);
     setText('st-btn-text', L.st.open);
-    setText('mu-title', '🎧 ' + L.mu.title);
+    setText('mu-title', L.mu.title);
     setText('mu-sub', L.mu.sub);
     setText('mu-note', L.mu.note);
 
@@ -594,7 +599,7 @@ function setTheme(mode) {
 
     const themeColor = normalizedMode === 'light'
         ? '#f7f9fc'
-        : (normalizedMode === 'oled' ? '#000000' : '#0b0f14');
+        : (normalizedMode === 'oled' ? '#000000' : '#080d14');
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) themeColorMeta.setAttribute('content', themeColor);
 

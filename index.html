@@ -7,7 +7,7 @@
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <title>adiker.eu — Homepage</title>
     <meta content="Adiker • Self-hosted services" name="description" />
-    <meta content="#0b0f14" name="theme-color" />
+    <meta content="#080d14" name="theme-color" />
     <meta content="adiker.eu" property="og:title" />
     <meta content="Self-hosted services and live status" property="og:description" />
     <meta content="website" property="og:type" />
@@ -23,45 +23,60 @@
     <a class="skip-link" href="#main-content" id="skip-link">Skip to main content</a>
     <div class="topbar">
         <div class="topbar-inner">
-            <div class="brand">
-                <div aria-hidden="true" class="logo"></div>
-                <div>
-                    <h1 id="title">adiker.eu</h1>
-                    <div class="tag" id="subtitle" style="display:block;">My Playground</div>
-                    <div class="tag" id="availability">Usually available: 9:00 AM – 1:00 AM CEST</div>
+            <div class="topbar-primary">
+                <div class="brand">
+                    <div aria-hidden="true" class="logo"></div>
+                    <div>
+                        <h1 id="title">adiker.eu</h1>
+                        <div class="tag" id="subtitle">My Playground</div>
+                        <div class="tag" id="availability">Usually available: 9:00 AM – 1:00 AM CEST</div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button aria-pressed="false" class="chip" id="theme-toggle" title="Toggle theme">🌙 Theme</button>
+                    <div aria-label="Language" class="chip language-control" role="group">
+                        <div class="lang-switch">
+                            <button aria-pressed="true" class="chip" id="lang-en">EN</button>
+                            <button aria-pressed="false" class="chip" id="lang-pl">PL</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <nav aria-label="Sections" class="tabs" role="tablist">
-                <button aria-controls="section-jf" aria-selected="true" class="tab" id="tab-jellyfin" role="tab"
-                    type="button">Jellyfin</button>
-                <button aria-controls="section-fb" aria-selected="false" class="tab" id="tab-filebrowser" role="tab"
-                    type="button">Filebrowser</button>
-                <button aria-controls="section-ab" aria-selected="false" class="tab" id="tab-autobrr" role="tab"
-                    type="button">Autobrr</button>
-                <button aria-controls="section-st" aria-selected="false" class="tab" id="tab-speedtest" role="tab"
-                    type="button">OpenSpeedTest</button>
-                <button aria-controls="section-muse" aria-selected="false" class="tab" id="tab-muse" role="tab"
-                    type="button">Muse</button>
-            </nav>
-            <div class="controls">
-                <button aria-pressed="false" class="chip" id="theme-toggle" title="Toggle theme">🌙 Theme</button>
-                <div aria-label="Language" class="chip" role="group">
-                    <div class="lang-switch">
-                        <button aria-pressed="true" class="chip" id="lang-en">EN</button>
-                        <button aria-pressed="false" class="chip" id="lang-pl">PL</button>
+            <div class="topbar-lower">
+                <nav aria-label="Sections" class="tabs" role="tablist">
+                    <button aria-controls="section-jf" aria-selected="true" class="tab" id="tab-jellyfin" role="tab"
+                        type="button">Jellyfin</button>
+                    <button aria-controls="section-fb" aria-selected="false" class="tab" id="tab-filebrowser" role="tab"
+                        type="button">Filebrowser</button>
+                    <button aria-controls="section-ab" aria-selected="false" class="tab" id="tab-autobrr" role="tab"
+                        type="button">Autobrr</button>
+                    <button aria-controls="section-st" aria-selected="false" class="tab" id="tab-speedtest" role="tab"
+                        type="button">OpenSpeedTest</button>
+                    <button aria-controls="section-muse" aria-selected="false" class="tab" id="tab-muse" role="tab"
+                        type="button">Muse</button>
+                </nav>
+                <div class="client-info" id="client-info" role="group" aria-labelledby="client-title">
+                    <div class="client-heading">
+                        <span class="client-indicator" aria-hidden="true"></span>
+                        <span id="client-title">This device</span>
                     </div>
+                    <div class="pc-status" id="pc-status">Detecting client…</div>
                 </div>
             </div>
         </div>
     </div>
     <div class="wrap">
         <main id="main-content" tabindex="-1">
-            <section class="card" id="section-dashboard">
-                <h2 id="dash-title" style="margin:0 0 6px">📊 Service dashboard</h2>
-                <p class="tag" id="dash-sub" style="margin:0 0 12px">Live status overview</p>
-                <div class="dashboard-grid">
-                    <span class="pill" id="dash-overall" aria-live="polite">0/5 online</span>
-                    <span class="pill" id="dash-lastcheck" aria-live="polite">Last update: --</span>
+            <section class="card dashboard-card" id="section-dashboard">
+                <div class="dashboard-top">
+                    <div class="dashboard-copy">
+                        <h2 id="dash-title">Service status</h2>
+                        <p class="tag" id="dash-sub">Live measurements from this browser</p>
+                    </div>
+                    <div class="dashboard-grid">
+                        <span class="pill" id="dash-overall" aria-live="polite">0/5 online</span>
+                        <span class="pill" id="dash-lastcheck" aria-live="polite">Last update: --</span>
+                    </div>
                 </div>
                 <div class="dashboard-services" id="dashboard-services" aria-label="Service details">
                     <div class="dashboard-service" id="dash-jf-status">
@@ -155,7 +170,7 @@
                                 src="https://upload.wikimedia.org/wikipedia/commons/4/41/Jellyfin_-_icon-transparent.svg" />
                         </div>
                         <div>
-                            <h2 id="jf-title" style="margin:0 0 6px">🎬 Jellyfin</h2>
+                            <h2 id="jf-title">Jellyfin</h2>
                             <p class="tag" id="jf-sub" style="margin:0">Your media server</p>
                             <div class="service-meta" style="margin-top:8px">
                                 <span class="pill service-status status-checking" id="jf-pill" aria-label="Jellyfin: Checking…">
@@ -166,7 +181,7 @@
                             <p class="service-source" id="jf-source">Measured from this browser</p>
                         </div>
                     </div>
-                    <div>
+                    <div class="service-actions">
                         <a aria-label="Open Jellyfin" class="btn" href="https://jellyfin.adiker.eu" id="jf-btn"
                             rel="noopener" target="_blank">
                             <svg aria-hidden="true" fill="none" height="18" viewbox="0 0 24 24" width="18">
@@ -187,7 +202,7 @@
                                 src="img/505675340-c40b22c9-33da-47b7-bc4c-ce69bb5cc174.png" />
                         </div>
                         <div>
-                            <h2 id="fb-title" style="margin:0 0 6px">📁 FileBrowser Quantum</h2>
+                            <h2 id="fb-title">FileBrowser Quantum</h2>
                             <p class="tag" id="fb-sub" style="margin:0">Your file manager</p>
                             <div class="service-meta" style="margin-top:8px">
                                 <span class="pill service-status status-checking" id="fb-pill" aria-label="FileBrowser Quantum: Checking…">
@@ -198,7 +213,7 @@
                             <p class="service-source" id="fb-source">Measured from this browser</p>
                         </div>
                     </div>
-                    <div>
+                    <div class="service-actions">
                         <a aria-label="Open FileBrowser Quantum" class="btn" href="https://files.adiker.eu" id="fb-btn"
                             rel="noopener" target="_blank">
                             <svg aria-hidden="true" fill="none" height="18" viewbox="0 0 24 24" width="18">
@@ -218,7 +233,7 @@
                                 src="https://github.com/autobrr/autobrr/blob/develop/.github/images/logo.png?raw=true" />
                         </div>
                         <div>
-                            <h2 id="ab-title" style="margin:0 0 6px">⚡ autobrr</h2>
+                            <h2 id="ab-title">autobrr</h2>
                             <p class="tag" id="ab-sub" style="margin:0">Automated torrent management</p>
                             <div class="service-meta" style="margin-top:8px">
                                 <span class="pill service-status status-checking" id="ab-pill" aria-label="autobrr: Checking…">
@@ -229,7 +244,7 @@
                             <p class="service-source" id="ab-source">Measured from this browser</p>
                         </div>
                     </div>
-                    <div>
+                    <div class="service-actions">
                         <a aria-label="Open autobrr" class="btn" href="https://autobrr.adiker.eu" id="ab-btn"
                             rel="noopener" target="_blank">
                             <svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24">
@@ -248,7 +263,7 @@
                             <img alt="OpenSpeedTest logo" src="https://avatars.githubusercontent.com/u/51720450?v=4" />
                         </div>
                         <div>
-                            <h2 id="st-title" style="margin:0 0 6px">🚀 OpenSpeedTest</h2>
+                            <h2 id="st-title">OpenSpeedTest</h2>
                             <p class="tag" id="st-sub" style="margin:0">Network speed test</p>
                             <div class="service-meta" style="margin-top:8px">
                                 <span class="pill service-status status-checking" id="st-pill" aria-label="OpenSpeedTest: Checking…">
@@ -259,7 +274,7 @@
                             <p class="service-source" id="st-source">Measured from this browser</p>
                         </div>
                     </div>
-                    <div>
+                    <div class="service-actions">
                         <a aria-label="Open OpenSpeedTest" class="btn" href="https://speedtest.adiker.eu" id="st-btn"
                             rel="noopener" target="_blank">
                             <svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24">
@@ -278,7 +293,7 @@
                             <img alt="Muse logo" src="img/muse-logo.png" />
                         </div>
                         <div>
-                            <h2 id="mu-title" style="margin:0 0 6px">🎧 Muse</h2>
+                            <h2 id="mu-title">Muse</h2>
                             <p class="tag" id="mu-sub" style="margin:0">Discord music bot</p>
                             <div class="service-meta" style="margin-top:8px">
                                 <span class="pill service-status status-checking" id="mu-pill" aria-label="Muse: Checking…">
@@ -292,10 +307,6 @@
                     </div>
                 </div>
             </section>
-            <details class="card client-info" id="client-info">
-                <summary id="client-title">Client information</summary>
-                <div class="pc-status" id="pc-status"></div>
-            </details>
         </main>
         <footer>
             <span class="brand-year">© <span id="year"></span> adiker.eu •</span>
@@ -313,8 +324,8 @@
             </a>
         </footer>
     </div>
-    <link href="css/styles.css?v=20260914-p0compact" rel="stylesheet" />
-    <script src="js/app.js?v=20260914-p0compact"></script>
+    <link href="css/styles.css?v=20260917-redesign" rel="stylesheet" />
+    <script src="js/app.js?v=20260917-redesign"></script>
 </body>
 
 </html>

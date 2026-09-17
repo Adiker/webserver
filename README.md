@@ -46,7 +46,7 @@ server.
 
 ### Features
 
-- Service tabs with a compact status overview and one focused detail card
+- Responsive service tabs with a compact status overview and one focused detail card
 - Live dashboard showing every service's status and latency as measured by this browser
 - Collapsed browser-local history of the last 24 measurements with mini timelines and averages
 - Health checks for all configured services
@@ -55,7 +55,7 @@ server.
 - Polling with warm-up measurement and failure backoff
 - EN/PL language switcher
 - Dark / Light / OLED themes
-- Collapsed client information with OS, browser, and device detection
+- Always-visible client context in the header with OS, browser, and device detection
 - Keyboard-accessible tabs and visible focus states
 
 ### Project Structure
@@ -211,7 +211,7 @@ albo dowolnym serwerze statycznym.
 
 ### Funkcje
 
-- Zakładki usług z kompaktowym podsumowaniem i jednym aktywnym panelem szczegółów
+- Responsywne zakładki usług z kompaktowym podsumowaniem i jednym aktywnym panelem szczegółów
 - Dashboard pokazujący status i opóźnienie każdej usługi, mierzone z tej przeglądarki
 - Zwijana lokalna historia ostatnich 24 pomiarów z mini-timeline i średnim opóźnieniem
 - Health checki dla wszystkich skonfigurowanych usług
@@ -220,7 +220,7 @@ albo dowolnym serwerze statycznym.
 - Odpytywanie z pomiarem rozgrzewkowym i backoffem przy błędach
 - Przełącznik języka EN/PL
 - Motywy Dark / Light / OLED
-- Zwijane informacje o kliencie: OS, przeglądarka i typ urządzenia
+- Zawsze widoczne w nagłówku informacje o kliencie: OS, przeglądarka i typ urządzenia
 - Zakładki dostępne z klawiatury i czytelne stany focus
 
 ### Struktura projektu
