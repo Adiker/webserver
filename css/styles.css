@@ -348,11 +348,11 @@ nav.tabs::-webkit-scrollbar {
 }
 
 .client-value {
-    overflow: hidden;
     color: var(--fg);
     font-size: .72rem;
     font-weight: 800;
-    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
+    white-space: normal;
 }
 
 .tab:focus-visible,
@@ -927,7 +927,7 @@ footer {
     transform: rotateY(180deg) scale(1.08);
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1120px) {
     .topbar-lower {
         align-items: stretch;
         flex-direction: column;
@@ -936,7 +936,9 @@ footer {
     .client-info {
         justify-content: space-between;
     }
+}
 
+@media (max-width: 980px) {
     .dashboard-services {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -999,7 +1001,24 @@ footer {
     }
 
     nav.tabs {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
         width: 100%;
+        overflow: visible;
+    }
+
+    .tab {
+        min-width: 0;
+        padding-inline: 8px;
+        text-align: center;
+    }
+
+    .tab:nth-child(-n + 3) {
+        grid-column: span 2;
+    }
+
+    .tab:nth-child(n + 4) {
+        grid-column: span 3;
     }
 
     .tab,
