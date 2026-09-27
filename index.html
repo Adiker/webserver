@@ -167,7 +167,7 @@
                 </details>
             </section>
 
-            <section class="card service-section" id="section-jf" role="tabpanel" aria-labelledby="tab-jellyfin">
+            <section class="card service-section service-section-link" id="section-jf" role="tabpanel" aria-labelledby="tab-jellyfin">
                 <div class="j-wrap">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
@@ -186,19 +186,11 @@
                             <p class="service-source" id="jf-source">Measured from this browser</p>
                         </div>
                     </div>
-                    <div class="service-actions">
-                        <a aria-label="Open Jellyfin" class="btn" href="https://jellyfin.adiker.eu" id="jf-btn"
-                            rel="noopener" target="_blank">
-                            <svg aria-hidden="true" fill="none" height="18" viewbox="0 0 24 24" width="18">
-                                <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2"></path>
-                            </svg>
-                            <span id="jf-btn-text">Open Jellyfin</span>
-                        </a>
-                    </div>
                 </div>
+                <a aria-label="Open Jellyfin in a new tab" aria-describedby="jf-sub jf-pill jf-latency"
+                    class="service-card-link" href="https://jellyfin.adiker.eu" id="jf-btn" rel="noopener" target="_blank"></a>
             </section>
-            <section class="card service-section" id="section-fb" role="tabpanel" aria-labelledby="tab-filebrowser"
+            <section class="card service-section service-section-link" id="section-fb" role="tabpanel" aria-labelledby="tab-filebrowser"
                 hidden>
                 <div class="j-wrap">
                     <div class="j-left">
@@ -218,19 +210,11 @@
                             <p class="service-source" id="fb-source">Measured from this browser</p>
                         </div>
                     </div>
-                    <div class="service-actions">
-                        <a aria-label="Open FileBrowser Quantum" class="btn" href="https://files.adiker.eu" id="fb-btn"
-                            rel="noopener" target="_blank">
-                            <svg aria-hidden="true" fill="none" height="18" viewbox="0 0 24 24" width="18">
-                                <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2"></path>
-                            </svg>
-                            <span id="fb-btn-text">Open FileBrowser Quantum</span>
-                        </a>
-                    </div>
                 </div>
+                <a aria-label="Open FileBrowser Quantum in a new tab" aria-describedby="fb-sub fb-pill fb-latency"
+                    class="service-card-link" href="https://files.adiker.eu" id="fb-btn" rel="noopener" target="_blank"></a>
             </section>
-            <section class="card service-section" id="section-ab" role="tabpanel" aria-labelledby="tab-autobrr" hidden>
+            <section class="card service-section service-section-link" id="section-ab" role="tabpanel" aria-labelledby="tab-autobrr" hidden>
                 <div class="j-wrap">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
@@ -249,19 +233,11 @@
                             <p class="service-source" id="ab-source">Measured from this browser</p>
                         </div>
                     </div>
-                    <div class="service-actions">
-                        <a aria-label="Open autobrr" class="btn" href="https://autobrr.adiker.eu" id="ab-btn"
-                            rel="noopener" target="_blank">
-                            <svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24">
-                                <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2"></path>
-                            </svg>
-                            <span id="ab-btn-text">Open autobrr</span>
-                        </a>
-                    </div>
                 </div>
+                <a aria-label="Open autobrr in a new tab" aria-describedby="ab-sub ab-pill ab-latency"
+                    class="service-card-link" href="https://autobrr.adiker.eu" id="ab-btn" rel="noopener" target="_blank"></a>
             </section>
-            <section class="card service-section" id="section-st" role="tabpanel" aria-labelledby="tab-speedtest" hidden>
+            <section class="card service-section service-section-link" id="section-st" role="tabpanel" aria-labelledby="tab-speedtest" hidden>
                 <div class="j-wrap">
                     <div class="j-left">
                         <div aria-hidden="true" class="j-icon">
@@ -279,17 +255,9 @@
                             <p class="service-source" id="st-source">Measured from this browser</p>
                         </div>
                     </div>
-                    <div class="service-actions">
-                        <a aria-label="Open OpenSpeedTest" class="btn" href="https://speedtest.adiker.eu" id="st-btn"
-                            rel="noopener" target="_blank">
-                            <svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24">
-                                <path d="M5 12h14M13 5l7 7-7 7" stroke="#7cc4ff" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2"></path>
-                            </svg>
-                            <span id="st-btn-text">Open OpenSpeedTest</span>
-                        </a>
-                    </div>
                 </div>
+                <a aria-label="Open OpenSpeedTest in a new tab" aria-describedby="st-sub st-pill st-latency"
+                    class="service-card-link" href="https://speedtest.adiker.eu" id="st-btn" rel="noopener" target="_blank"></a>
             </section>
             <section class="card service-section" id="section-muse" role="tabpanel" aria-labelledby="tab-muse" hidden>
                 <div class="j-wrap">
@@ -312,6 +280,59 @@
                     </div>
                 </div>
             </section>
+
+            <section class="card projects-section" id="projects" aria-labelledby="projects-title">
+                <div class="projects-heading">
+                    <div>
+                        <p class="projects-eyebrow" id="projects-eyebrow">OPEN SOURCE / GITHUB</p>
+                        <h2 id="projects-title">Selected projects</h2>
+                        <p class="tag" id="projects-sub">Things I build and share</p>
+                    </div>
+                    <a class="projects-profile" href="https://github.com/Adiker" target="_blank" rel="noopener" id="projects-profile">See all repositories <span aria-hidden="true">↗</span></a>
+                </div>
+                <div class="projects-grid">
+                    <a class="project-card" href="https://github.com/Adiker/keyboard-volume-app" target="_blank" rel="noopener" id="project-keyboard-volume-app" aria-describedby="project-keyboard-volume-app-description">
+                        <span class="project-icon project-icon-volume" aria-hidden="true">⌁</span>
+                        <span class="project-content">
+                            <span class="project-kind" id="project-keyboard-volume-app-kind">PINNED</span>
+                            <strong class="project-name">keyboard-volume-app</strong>
+                            <span class="project-description" id="project-keyboard-volume-app-description">Control the volume of individual Linux apps with keyboard shortcuts.</span>
+                        </span>
+                    </a>
+                    <a class="project-card" href="https://github.com/Adiker/MeteoLens" target="_blank" rel="noopener" id="project-meteolens" aria-describedby="project-meteolens-description">
+                        <span class="project-icon project-icon-weather" aria-hidden="true">☁</span>
+                        <span class="project-content">
+                            <span class="project-kind" id="project-meteolens-kind">PINNED</span>
+                            <strong class="project-name">MeteoLens</strong>
+                            <span class="project-description" id="project-meteolens-description">Explore Polish weather and hydrological data on interactive maps.</span>
+                        </span>
+                    </a>
+                    <a class="project-card" href="https://github.com/Adiker/IconPack-to-MTZ" target="_blank" rel="noopener" id="project-iconpack" aria-describedby="project-iconpack-description">
+                        <span class="project-icon project-icon-android" aria-hidden="true">▦</span>
+                        <span class="project-content">
+                            <span class="project-kind" id="project-iconpack-kind">PINNED</span>
+                            <strong class="project-name">IconPack-to-MTZ</strong>
+                            <span class="project-description" id="project-iconpack-description">Convert Android icon packs into MIUI and HyperOS MTZ themes locally.</span>
+                        </span>
+                    </a>
+                    <a class="project-card" href="https://github.com/Adiker/webserver" target="_blank" rel="noopener" id="project-webserver" aria-describedby="project-webserver-description">
+                        <span class="project-icon project-icon-web" aria-hidden="true">&lt;/&gt;</span>
+                        <span class="project-content">
+                            <span class="project-kind" id="project-webserver-kind">PINNED</span>
+                            <strong class="project-name">webserver</strong>
+                            <span class="project-description" id="project-webserver-description">The source for this service hub, with live status and theme controls.</span>
+                        </span>
+                    </a>
+                    <a class="project-card project-featured" href="https://github.com/Adiker/limusic" target="_blank" rel="noopener" id="project-limusic" aria-describedby="project-limusic-description">
+                        <span class="project-icon project-icon-music" aria-hidden="true">♫</span>
+                        <span class="project-content">
+                            <span class="project-kind" id="project-limusic-kind">FEATURED FORK</span>
+                            <strong class="project-name">LiMusic</strong>
+                            <span class="project-description" id="project-limusic-description">Native YouTube Music client with managed offline downloads.</span>
+                        </span>
+                    </a>
+                </div>
+            </section>
         </main>
         <footer>
             <span class="brand-year">© <span id="year"></span> adiker.eu •</span>
@@ -329,8 +350,8 @@
             </a>
         </footer>
     </div>
-    <link href="css/styles.css?v=20260917-compactnav" rel="stylesheet" />
-    <script src="js/app.js?v=20260917-compactnav"></script>
+    <link href="css/styles.css?v=20260928-servicecards" rel="stylesheet" />
+    <script src="js/app.js?v=20260928-servicecards"></script>
 </body>
 
 </html>

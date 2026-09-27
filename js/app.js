@@ -78,11 +78,27 @@ const STR = {
             recovering: 'Recovering',
             issues: 'Issues detected'
         },
-        jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin', short: 'Jellyfin' },
-        fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum', short: 'FileBrowser' },
-        ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr', short: 'autobrr' },
-        st: { title: 'OpenSpeedTest', sub: 'Network speed test', open: 'Open OpenSpeedTest', short: 'OpenSpeedTest' },
+        jf: { title: 'Jellyfin', sub: 'Your media server', open: 'Open Jellyfin in a new tab', short: 'Jellyfin' },
+        fb: { title: 'FileBrowser Quantum', sub: 'Your file manager', open: 'Open FileBrowser Quantum in a new tab', short: 'FileBrowser' },
+        ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr in a new tab', short: 'autobrr' },
+        st: { title: 'OpenSpeedTest', sub: 'Network speed test', open: 'Open OpenSpeedTest in a new tab', short: 'OpenSpeedTest' },
         mu: { title: 'Muse', sub: 'Discord music bot', note: 'Status only · no web interface', short: 'Muse' },
+        projects: {
+            eyebrow: 'OPEN SOURCE / GITHUB',
+            title: 'Selected projects',
+            sub: 'Things I build and share',
+            profile: 'See all repositories ↗',
+            pinned: 'PINNED',
+            fork: 'FEATURED FORK',
+            open: 'Open {name} on GitHub in a new tab',
+            descriptions: {
+                limusic: 'Native YouTube Music client with managed offline downloads.',
+                'keyboard-volume-app': 'Control the volume of individual Linux apps with keyboard shortcuts.',
+                meteolens: 'Explore Polish weather and hydrological data on interactive maps.',
+                iconpack: 'Convert Android icon packs into MIUI and HyperOS MTZ themes locally.',
+                webserver: 'The source for this service hub, with live status and theme controls.'
+            }
+        },
         status: { checking: 'Checking…', online: 'Online', unreachable: 'Unreachable', unknown: 'Unknown' },
         statusSource: 'Status measured from this browser',
         pc: {
@@ -169,11 +185,27 @@ const STR = {
             recovering: 'Wraca do normy',
             issues: 'Wykryto problemy'
         },
-        jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin', short: 'Jellyfin' },
-        fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum', short: 'FileBrowser' },
-        ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr', short: 'autobrr' },
-        st: { title: 'OpenSpeedTest', sub: 'Test prędkości sieci', open: 'Otwórz OpenSpeedTest', short: 'OpenSpeedTest' },
+        jf: { title: 'Jellyfin', sub: 'Twój serwer multimediów', open: 'Otwórz Jellyfin w nowej karcie', short: 'Jellyfin' },
+        fb: { title: 'FileBrowser Quantum', sub: 'Twój menedżer plików', open: 'Otwórz FileBrowsera Quantum w nowej karcie', short: 'FileBrowser' },
+        ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr w nowej karcie', short: 'autobrr' },
+        st: { title: 'OpenSpeedTest', sub: 'Test prędkości sieci', open: 'Otwórz OpenSpeedTest w nowej karcie', short: 'OpenSpeedTest' },
         mu: { title: 'Muse', sub: 'Bot muzyczny Discorda', note: 'Tylko status · brak interfejsu WWW', short: 'Muse' },
+        projects: {
+            eyebrow: 'OPEN SOURCE / GITHUB',
+            title: 'Wybrane projekty',
+            sub: 'Projekty, które tworzę i udostępniam',
+            profile: 'Zobacz wszystkie repozytoria ↗',
+            pinned: 'PRZYPIĘTY',
+            fork: 'WYRÓŻNIONY FORK',
+            open: 'Otwórz {name} na GitHubie w nowej karcie',
+            descriptions: {
+                limusic: 'Natywny klient YouTube Music z pobieraniem utworów do słuchania offline.',
+                'keyboard-volume-app': 'Steruj głośnością poszczególnych aplikacji w Linuksie skrótami klawiszowymi.',
+                meteolens: 'Przeglądaj dane pogodowe i hydrologiczne Polski na interaktywnych mapach.',
+                iconpack: 'Lokalnie konwertuj paczki ikon Androida na motywy MTZ dla MIUI i HyperOS.',
+                webserver: 'Kod tego huba usług, ze statusem na żywo i przełączaniem motywów.'
+            }
+        },
         status: { checking: 'Sprawdzanie…', online: 'Online', unreachable: 'Brak odpowiedzi', unknown: 'Nieznany' },
         statusSource: 'Status mierzony z tej przeglądarki',
         pc: {
@@ -557,19 +589,32 @@ function applyLang(lang) {
     setText('skip-link', L.ui.skipLink);
     setText('jf-title', L.jf.title);
     setText('jf-sub', L.jf.sub);
-    setText('jf-btn-text', L.jf.open);
     setText('fb-title', L.fb.title);
     setText('fb-sub', L.fb.sub);
-    setText('fb-btn-text', L.fb.open);
     setText('ab-title', L.ab.title);
     setText('ab-sub', L.ab.sub);
-    setText('ab-btn-text', L.ab.open);
     setText('st-title', L.st.title);
     setText('st-sub', L.st.sub);
-    setText('st-btn-text', L.st.open);
     setText('mu-title', L.mu.title);
     setText('mu-sub', L.mu.sub);
     setText('mu-note', L.mu.note);
+
+    setText('projects-eyebrow', L.projects.eyebrow);
+    setText('projects-title', L.projects.title);
+    setText('projects-sub', L.projects.sub);
+    setText('projects-profile', L.projects.profile);
+    const projectNames = {
+        limusic: 'LiMusic',
+        'keyboard-volume-app': 'keyboard-volume-app',
+        meteolens: 'MeteoLens',
+        iconpack: 'IconPack-to-MTZ',
+        webserver: 'webserver'
+    };
+    Object.entries(projectNames).forEach(([key, name]) => {
+        setText(`project-${key}-kind`, key === 'limusic' ? L.projects.fork : L.projects.pinned);
+        setText(`project-${key}-description`, L.projects.descriptions[key]);
+        document.getElementById(`project-${key}`).setAttribute('aria-label', L.projects.open.replace('{name}', name));
+    });
 
     setText('subtitle', L.subtitle);
     setText('availability', L.availability);
