@@ -46,7 +46,7 @@ server.
 
 ### Features
 
-- Responsive service tabs with a compact status overview and one focused detail card
+- Responsive service tabs with a compact status overview and one focused detail card; the entire card links to services with a web interface
 - Live dashboard showing every service's status and latency as measured by this browser
 - Collapsed browser-local history of the last 24 measurements with mini timelines and averages
 - Health checks for all configured services
@@ -57,6 +57,7 @@ server.
 - Dark / Light / OLED themes
 - Always-visible client context in the header with OS, browser, and device detection
 - Keyboard-accessible tabs and visible focus states
+- Responsive GitHub project cards for the four profile-pinned repositories and the LiMusic fork; each whole card is a link
 
 ### Project Structure
 
@@ -135,6 +136,12 @@ User preferences are stored in `localStorage`:
 - `adiker.lang`
 - `adiker.statusHistory.v1`
 
+The projects section is a static list in `index.html`, with EN/PL descriptions
+in `js/app.js`. It links to the four repositories pinned on the
+[Adiker GitHub profile](https://github.com/Adiker) and the
+[LiMusic fork](https://github.com/Adiker/limusic). Update the list manually when
+the profile pins change; the page makes no GitHub API requests.
+
 ### Accessibility
 
 - Skip link to main content
@@ -211,7 +218,7 @@ albo dowolnym serwerze statycznym.
 
 ### Funkcje
 
-- Responsywne zakładki usług z kompaktowym podsumowaniem i jednym aktywnym panelem szczegółów
+- Responsywne zakładki usług z kompaktowym podsumowaniem i jednym aktywnym panelem szczegółów; cała karta prowadzi do usług z interfejsem WWW
 - Dashboard pokazujący status i opóźnienie każdej usługi, mierzone z tej przeglądarki
 - Zwijana lokalna historia ostatnich 24 pomiarów z mini-timeline i średnim opóźnieniem
 - Health checki dla wszystkich skonfigurowanych usług
@@ -222,6 +229,7 @@ albo dowolnym serwerze statycznym.
 - Motywy Dark / Light / OLED
 - Zawsze widoczne w nagłówku informacje o kliencie: OS, przeglądarka i typ urządzenia
 - Zakładki dostępne z klawiatury i czytelne stany focus
+- Responsywne karty GitHub z czterema przypiętymi repozytoriami i forkiem LiMusic; cała karta jest linkiem
 
 ### Struktura projektu
 
@@ -298,6 +306,12 @@ Preferencje użytkownika zapisywane są w `localStorage`:
 - `adiker.theme`
 - `adiker.lang`
 - `adiker.statusHistory.v1`
+
+Sekcja projektów jest statyczną listą w `index.html`, a opisy EN/PL znajdują
+się w `js/app.js`. Prowadzi do czterech repozytoriów przypiętych na
+[profilu Adiker w GitHubie](https://github.com/Adiker) oraz do
+[forka LiMusic](https://github.com/Adiker/limusic). Po zmianie przypiętych
+repozytoriów należy ręcznie zaktualizować listę; strona nie odpytuje API GitHuba.
 
 ### Dostępność
 
