@@ -140,7 +140,8 @@ The projects section is a static list in `index.html`, with EN/PL descriptions
 in `js/app.js`. It links to the four repositories pinned on the
 [Adiker GitHub profile](https://github.com/Adiker) and the
 [LiMusic fork](https://github.com/Adiker/limusic). Update the list manually when
-the profile pins change; the page makes no GitHub API requests.
+the profile pins change; the page makes no GitHub API requests. The “See all
+repositories” link opens the [full repository list](https://github.com/Adiker?tab=repositories&q=&type=&language=&sort=).
 
 ### Accessibility
 
@@ -312,6 +313,7 @@ się w `js/app.js`. Prowadzi do czterech repozytoriów przypiętych na
 [profilu Adiker w GitHubie](https://github.com/Adiker) oraz do
 [forka LiMusic](https://github.com/Adiker/limusic). Po zmianie przypiętych
 repozytoriów należy ręcznie zaktualizować listę; strona nie odpytuje API GitHuba.
+Link „Zobacz wszystkie repozytoria” otwiera [pełną listę repozytoriów](https://github.com/Adiker?tab=repositories&q=&type=&language=&sort=).
 
 ### Dostępność
 
