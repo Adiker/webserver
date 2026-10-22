@@ -42,32 +42,6 @@
                     </div>
                 </div>
             </div>
-            <div class="topbar-lower">
-                <nav aria-label="Sections" class="tabs" role="tablist">
-                    <button aria-controls="section-jf" aria-selected="true" class="tab" id="tab-jellyfin" role="tab"
-                        type="button"><span class="tab-label-full">Jellyfin</span><span aria-hidden="true"
-                            class="tab-label-compact">Jellyfin</span></button>
-                    <button aria-controls="section-fb" aria-selected="false" class="tab" id="tab-filebrowser" role="tab"
-                        type="button"><span class="tab-label-full">Filebrowser</span><span aria-hidden="true"
-                            class="tab-label-compact">Files</span></button>
-                    <button aria-controls="section-ab" aria-selected="false" class="tab" id="tab-autobrr" role="tab"
-                        type="button"><span class="tab-label-full">Autobrr</span><span aria-hidden="true"
-                            class="tab-label-compact">autobrr</span></button>
-                    <button aria-controls="section-st" aria-selected="false" class="tab" id="tab-speedtest" role="tab"
-                        type="button"><span class="tab-label-full">OpenSpeedTest</span><span aria-hidden="true"
-                            class="tab-label-compact">Speed</span></button>
-                    <button aria-controls="section-muse" aria-selected="false" class="tab" id="tab-muse" role="tab"
-                        type="button"><span class="tab-label-full">Muse</span><span aria-hidden="true"
-                            class="tab-label-compact">Muse</span></button>
-                </nav>
-                <div class="client-info" id="client-info" role="group" aria-labelledby="client-title">
-                    <div class="client-heading">
-                        <span class="client-indicator" aria-hidden="true"></span>
-                        <span id="client-title">This device</span>
-                    </div>
-                    <div class="pc-status" id="pc-status">Detecting client…</div>
-                </div>
-            </div>
         </div>
     </div>
     <div class="wrap">
@@ -80,38 +54,48 @@
                     </div>
                     <div class="dashboard-grid">
                         <span class="pill" id="dash-overall" aria-live="polite">0/5 online</span>
-                        <span class="pill" id="dash-lastcheck" aria-live="polite">Last update: --</span>
+                        <span class="dashboard-lastcheck" id="dash-lastcheck" aria-live="polite">Last update: --</span>
                     </div>
                 </div>
                 <div class="dashboard-services" id="dashboard-services" aria-label="Service details">
                     <div class="dashboard-service" id="dash-jf-status">
-                        <span class="dot" aria-hidden="true"></span>
                         <span class="dashboard-service-name" id="dash-jf-name">Jellyfin</span>
-                        <span class="dashboard-service-state" id="dash-jf-text">Checking…</span>
+                        <span class="dashboard-service-status">
+                            <span class="dot" aria-hidden="true"></span>
+                            <span class="dashboard-service-state" id="dash-jf-text">Checking…</span>
+                        </span>
                         <span class="dashboard-service-latency" id="dash-jf-latency">-- ms</span>
                     </div>
                     <div class="dashboard-service" id="dash-fb-status">
-                        <span class="dot" aria-hidden="true"></span>
                         <span class="dashboard-service-name" id="dash-fb-name">FileBrowser</span>
-                        <span class="dashboard-service-state" id="dash-fb-text">Checking…</span>
+                        <span class="dashboard-service-status">
+                            <span class="dot" aria-hidden="true"></span>
+                            <span class="dashboard-service-state" id="dash-fb-text">Checking…</span>
+                        </span>
                         <span class="dashboard-service-latency" id="dash-fb-latency">-- ms</span>
                     </div>
                     <div class="dashboard-service" id="dash-ab-status">
-                        <span class="dot" aria-hidden="true"></span>
                         <span class="dashboard-service-name" id="dash-ab-name">autobrr</span>
-                        <span class="dashboard-service-state" id="dash-ab-text">Checking…</span>
+                        <span class="dashboard-service-status">
+                            <span class="dot" aria-hidden="true"></span>
+                            <span class="dashboard-service-state" id="dash-ab-text">Checking…</span>
+                        </span>
                         <span class="dashboard-service-latency" id="dash-ab-latency">-- ms</span>
                     </div>
                     <div class="dashboard-service" id="dash-st-status">
-                        <span class="dot" aria-hidden="true"></span>
                         <span class="dashboard-service-name" id="dash-st-name">OpenSpeedTest</span>
-                        <span class="dashboard-service-state" id="dash-st-text">Checking…</span>
+                        <span class="dashboard-service-status">
+                            <span class="dot" aria-hidden="true"></span>
+                            <span class="dashboard-service-state" id="dash-st-text">Checking…</span>
+                        </span>
                         <span class="dashboard-service-latency" id="dash-st-latency">-- ms</span>
                     </div>
                     <div class="dashboard-service" id="dash-mu-status">
-                        <span class="dot" aria-hidden="true"></span>
                         <span class="dashboard-service-name" id="dash-mu-name">Muse</span>
-                        <span class="dashboard-service-state" id="dash-mu-text">Checking…</span>
+                        <span class="dashboard-service-status">
+                            <span class="dot" aria-hidden="true"></span>
+                            <span class="dashboard-service-state" id="dash-mu-text">Checking…</span>
+                        </span>
                         <span class="dashboard-service-latency" id="dash-mu-latency">-- ms</span>
                     </div>
                 </div>
@@ -167,6 +151,24 @@
                 </details>
             </section>
 
+            <nav aria-label="Sections" class="tabs" role="tablist">
+                <button aria-controls="section-jf" aria-selected="true" class="tab" id="tab-jellyfin" role="tab"
+                    type="button"><span class="tab-label-full">Jellyfin</span><span aria-hidden="true"
+                        class="tab-label-compact">Jellyfin</span></button>
+                <button aria-controls="section-fb" aria-selected="false" class="tab" id="tab-filebrowser" role="tab"
+                    type="button"><span class="tab-label-full">Filebrowser</span><span aria-hidden="true"
+                        class="tab-label-compact">Files</span></button>
+                <button aria-controls="section-ab" aria-selected="false" class="tab" id="tab-autobrr" role="tab"
+                    type="button"><span class="tab-label-full">Autobrr</span><span aria-hidden="true"
+                        class="tab-label-compact">autobrr</span></button>
+                <button aria-controls="section-st" aria-selected="false" class="tab" id="tab-speedtest" role="tab"
+                    type="button"><span class="tab-label-full">OpenSpeedTest</span><span aria-hidden="true"
+                        class="tab-label-compact">Speed</span></button>
+                <button aria-controls="section-muse" aria-selected="false" class="tab" id="tab-muse" role="tab"
+                    type="button"><span class="tab-label-full">Muse</span><span aria-hidden="true"
+                        class="tab-label-compact">Muse</span></button>
+            </nav>
+
             <section class="card service-section service-section-link" id="section-jf" role="tabpanel" aria-labelledby="tab-jellyfin">
                 <div class="j-wrap">
                     <div class="j-left">
@@ -188,7 +190,7 @@
                     </div>
                 </div>
                 <a aria-label="Open Jellyfin in a new tab" aria-describedby="jf-sub jf-pill jf-latency"
-                    class="service-card-link" href="https://jellyfin.adiker.eu" id="jf-btn" rel="noopener" target="_blank"></a>
+                    class="service-card-link" href="https://jellyfin.adiker.eu" id="jf-btn" rel="noopener" target="_blank"><span class="service-open" id="jf-open">Open Jellyfin ↗</span></a>
             </section>
             <section class="card service-section service-section-link" id="section-fb" role="tabpanel" aria-labelledby="tab-filebrowser"
                 hidden>
@@ -212,7 +214,7 @@
                     </div>
                 </div>
                 <a aria-label="Open FileBrowser Quantum in a new tab" aria-describedby="fb-sub fb-pill fb-latency"
-                    class="service-card-link" href="https://files.adiker.eu" id="fb-btn" rel="noopener" target="_blank"></a>
+                    class="service-card-link" href="https://files.adiker.eu" id="fb-btn" rel="noopener" target="_blank"><span class="service-open" id="fb-open">Open FileBrowser ↗</span></a>
             </section>
             <section class="card service-section service-section-link" id="section-ab" role="tabpanel" aria-labelledby="tab-autobrr" hidden>
                 <div class="j-wrap">
@@ -235,7 +237,7 @@
                     </div>
                 </div>
                 <a aria-label="Open autobrr in a new tab" aria-describedby="ab-sub ab-pill ab-latency"
-                    class="service-card-link" href="https://autobrr.adiker.eu" id="ab-btn" rel="noopener" target="_blank"></a>
+                    class="service-card-link" href="https://autobrr.adiker.eu" id="ab-btn" rel="noopener" target="_blank"><span class="service-open" id="ab-open">Open autobrr ↗</span></a>
             </section>
             <section class="card service-section service-section-link" id="section-st" role="tabpanel" aria-labelledby="tab-speedtest" hidden>
                 <div class="j-wrap">
@@ -257,7 +259,7 @@
                     </div>
                 </div>
                 <a aria-label="Open OpenSpeedTest in a new tab" aria-describedby="st-sub st-pill st-latency"
-                    class="service-card-link" href="https://speedtest.adiker.eu" id="st-btn" rel="noopener" target="_blank"></a>
+                    class="service-card-link" href="https://speedtest.adiker.eu" id="st-btn" rel="noopener" target="_blank"><span class="service-open" id="st-open">Open OpenSpeedTest ↗</span></a>
             </section>
             <section class="card service-section" id="section-muse" role="tabpanel" aria-labelledby="tab-muse" hidden>
                 <div class="j-wrap">
@@ -284,7 +286,7 @@
             <section class="card projects-section" id="projects" aria-labelledby="projects-title">
                 <div class="projects-heading">
                     <div>
-                        <p class="projects-eyebrow" id="projects-eyebrow">OPEN SOURCE / GITHUB</p>
+                        <p class="projects-eyebrow" id="projects-eyebrow">Open source / GitHub</p>
                         <h2 id="projects-title">Selected projects</h2>
                         <p class="tag" id="projects-sub">Things I build and share</p>
                     </div>
@@ -294,7 +296,7 @@
                     <a class="project-card" href="https://github.com/Adiker/keyboard-volume-app" target="_blank" rel="noopener" id="project-keyboard-volume-app" aria-describedby="project-keyboard-volume-app-description">
                         <span class="project-icon project-icon-volume" aria-hidden="true">⌁</span>
                         <span class="project-content">
-                            <span class="project-kind" id="project-keyboard-volume-app-kind">PINNED</span>
+                            <span class="project-kind" id="project-keyboard-volume-app-kind">Pinned</span>
                             <strong class="project-name">keyboard-volume-app</strong>
                             <span class="project-description" id="project-keyboard-volume-app-description">Control the volume of individual Linux apps with keyboard shortcuts.</span>
                         </span>
@@ -302,7 +304,7 @@
                     <a class="project-card" href="https://github.com/Adiker/MeteoLens" target="_blank" rel="noopener" id="project-meteolens" aria-describedby="project-meteolens-description">
                         <span class="project-icon project-icon-weather" aria-hidden="true">☁</span>
                         <span class="project-content">
-                            <span class="project-kind" id="project-meteolens-kind">PINNED</span>
+                            <span class="project-kind" id="project-meteolens-kind">Pinned</span>
                             <strong class="project-name">MeteoLens</strong>
                             <span class="project-description" id="project-meteolens-description">Explore Polish weather and hydrological data on interactive maps.</span>
                         </span>
@@ -310,7 +312,7 @@
                     <a class="project-card" href="https://github.com/Adiker/IconPack-to-MTZ" target="_blank" rel="noopener" id="project-iconpack" aria-describedby="project-iconpack-description">
                         <span class="project-icon project-icon-android" aria-hidden="true">▦</span>
                         <span class="project-content">
-                            <span class="project-kind" id="project-iconpack-kind">PINNED</span>
+                            <span class="project-kind" id="project-iconpack-kind">Pinned</span>
                             <strong class="project-name">IconPack-to-MTZ</strong>
                             <span class="project-description" id="project-iconpack-description">Convert Android icon packs into MIUI and HyperOS MTZ themes locally.</span>
                         </span>
@@ -318,7 +320,7 @@
                     <a class="project-card" href="https://github.com/Adiker/webserver" target="_blank" rel="noopener" id="project-webserver" aria-describedby="project-webserver-description">
                         <span class="project-icon project-icon-web" aria-hidden="true">&lt;/&gt;</span>
                         <span class="project-content">
-                            <span class="project-kind" id="project-webserver-kind">PINNED</span>
+                            <span class="project-kind" id="project-webserver-kind">Pinned</span>
                             <strong class="project-name">webserver</strong>
                             <span class="project-description" id="project-webserver-description">The source for this service hub, with live status and theme controls.</span>
                         </span>
@@ -326,13 +328,23 @@
                     <a class="project-card project-featured" href="https://github.com/Adiker/limusic" target="_blank" rel="noopener" id="project-limusic" aria-describedby="project-limusic-description">
                         <span class="project-icon project-icon-music" aria-hidden="true">♫</span>
                         <span class="project-content">
-                            <span class="project-kind" id="project-limusic-kind">FEATURED FORK</span>
+                            <span class="project-kind" id="project-limusic-kind">Featured fork</span>
                             <strong class="project-name">LiMusic</strong>
                             <span class="project-description" id="project-limusic-description">Native YouTube Music client with managed offline downloads.</span>
                         </span>
                     </a>
                 </div>
             </section>
+            <details class="technical-details">
+                <summary id="technical-title">Technical information</summary>
+                <div class="client-info" id="client-info" role="group" aria-labelledby="client-title">
+                    <div class="client-heading">
+                        <span class="client-indicator" aria-hidden="true"></span>
+                        <span id="client-title">This device</span>
+                    </div>
+                    <div class="pc-status" id="pc-status">Detecting client…</div>
+                </div>
+            </details>
         </main>
         <footer>
             <span class="brand-year">© <span id="year"></span> adiker.eu •</span>
@@ -350,8 +362,8 @@
             </a>
         </footer>
     </div>
-    <link href="css/styles.css?v=20260928-servicecards" rel="stylesheet" />
-    <script src="js/app.js?v=20260928-servicecards"></script>
+    <link href="css/styles.css?v=20261022-service-hierarchy" rel="stylesheet" />
+    <script src="js/app.js?v=20261022-service-hierarchy"></script>
 </body>
 
 </html>

@@ -46,8 +46,9 @@ server.
 
 ### Features
 
-- Responsive service tabs with a compact status overview and one focused detail card; the entire card links to services with a web interface
-- Live dashboard showing every service's status and latency as measured by this browser
+- Service tabs directly above the active detail card, with a visible open-service label and a whole-card link for services with a web interface
+- Live browser-measured status overview: five aligned desktop columns, three tablet columns, and compact mobile rows with status text and latency
+- Consistent readable typography, quieter decoration, and a single horizontally scrollable row of mobile tabs
 - Collapsed browser-local history of the last 24 measurements with mini timelines and averages
 - Health checks for all configured services
 - Explicit `Checking`, `Online`, `Unreachable`, and `Unknown` service states
@@ -55,7 +56,7 @@ server.
 - Polling with warm-up measurement and failure backoff
 - EN/PL language switcher
 - Dark / Light / OLED themes
-- Always-visible client context in the header with OS, browser, and device detection
+- Collapsed technical information at the bottom of the page with OS, browser, and device detection
 - Keyboard-accessible tabs and visible focus states
 - Responsive GitHub project cards for the four profile-pinned repositories and the LiMusic fork; each whole card is a link
 
@@ -219,8 +220,9 @@ albo dowolnym serwerze statycznym.
 
 ### Funkcje
 
-- Responsywne zakładki usług z kompaktowym podsumowaniem i jednym aktywnym panelem szczegółów; cała karta prowadzi do usług z interfejsem WWW
-- Dashboard pokazujący status i opóźnienie każdej usługi, mierzone z tej przeglądarki
+- Zakładki bezpośrednio nad aktywnym panelem usługi, z widocznym tekstem otwarcia i klikalną całą kartą usług z interfejsem WWW
+- Statusy mierzone z przeglądarki: pięć wyrównanych kolumn na komputerze, trzy na tablecie i zwarte wiersze z tekstem statusu i opóźnieniem na telefonie
+- Spójna, czytelna typografia, spokojniejsze ozdobniki i jeden przewijany poziomo rząd zakładek na telefonie
 - Zwijana lokalna historia ostatnich 24 pomiarów z mini-timeline i średnim opóźnieniem
 - Health checki dla wszystkich skonfigurowanych usług
 - Jawne stany usług: `Checking`, `Online`, `Unreachable` i `Unknown`
@@ -228,7 +230,7 @@ albo dowolnym serwerze statycznym.
 - Odpytywanie z pomiarem rozgrzewkowym i backoffem przy błędach
 - Przełącznik języka EN/PL
 - Motywy Dark / Light / OLED
-- Zawsze widoczne w nagłówku informacje o kliencie: OS, przeglądarka i typ urządzenia
+- Zwijane informacje techniczne na dole strony: OS, przeglądarka i typ urządzenia
 - Zakładki dostępne z klawiatury i czytelne stany focus
 - Responsywne karty GitHub z czterema przypiętymi repozytoriami i forkiem LiMusic; cała karta jest linkiem
 

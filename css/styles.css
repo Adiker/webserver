@@ -56,7 +56,7 @@ summary {
     color: var(--fg);
     background: var(--surface-strong);
     box-shadow: var(--shadow);
-    font-weight: 750;
+    font-weight: 600;
     transform: translateY(-180%);
     transition: transform .18s ease;
 }
@@ -71,7 +71,7 @@ summary {
 }
 
 .topbar-inner {
-    width: min(100%, 1200px);
+    width: min(100%, 1080px);
     margin-inline: auto;
 }
 
@@ -94,8 +94,7 @@ summary {
     padding: 14px 28px;
 }
 
-.topbar-primary,
-.topbar-lower {
+.topbar-primary {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -145,7 +144,7 @@ p {
 h1 {
     margin-bottom: 0;
     font-size: 1.35rem;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -.025em;
 }
 
@@ -170,23 +169,15 @@ h2 {
     align-items: center;
     gap: 7px;
     margin-top: 2px;
-    font-size: .76rem;
-}
-
-#availability::before {
-    content: "";
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--good);
-    box-shadow: 0 0 0 4px rgba(49, 212, 119, .1);
+    font-size: .875rem;
 }
 
 .controls {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex: 0 0 auto;
+    flex: 0 1 auto;
+    min-width: 0;
 }
 
 .chip,
@@ -258,22 +249,21 @@ nav.tabs {
     display: flex;
     gap: 3px;
     min-width: 0;
-    padding: 4px;
+    padding: 5px;
+    margin-bottom: 8px;
     overflow-x: auto;
     border: 1px solid var(--line);
     border-radius: 14px;
     background: rgba(9, 15, 23, .62);
-    scrollbar-width: none;
-}
-
-nav.tabs::-webkit-scrollbar {
-    display: none;
+    scrollbar-width: thin;
+    overscroll-behavior-x: contain;
 }
 
 .tab {
     flex: 0 0 auto;
-    min-height: 36px;
+    min-height: 44px;
     padding: 7px 12px;
+    font-size: .875rem;
     border-color: transparent;
     border-radius: 10px;
     color: var(--mut);
@@ -314,8 +304,8 @@ nav.tabs::-webkit-scrollbar {
     gap: 7px;
     padding: 0 7px;
     color: var(--mut);
-    font-size: .72rem;
-    font-weight: 800;
+    font-size: .875rem;
+    font-weight: 700;
     letter-spacing: .02em;
     white-space: nowrap;
 }
@@ -349,16 +339,14 @@ nav.tabs::-webkit-scrollbar {
 
 .client-key {
     color: var(--mut);
-    font-size: .64rem;
-    font-weight: 750;
-    letter-spacing: .04em;
-    text-transform: uppercase;
+    font-size: .875rem;
+    font-weight: 400;
 }
 
 .client-value {
     color: var(--fg);
-    font-size: .72rem;
-    font-weight: 800;
+    font-size: .875rem;
+    font-weight: 700;
     white-space: nowrap;
 }
 
@@ -397,7 +385,7 @@ main {
 
 .dashboard-copy .tag {
     margin: 0;
-    font-size: .86rem;
+    font-size: .875rem;
 }
 
 .dashboard-grid {
@@ -418,13 +406,13 @@ main {
     border-radius: 10px;
     color: var(--fg);
     background: rgba(18, 28, 40, .78);
-    font-size: .86rem;
+    font-size: .875rem;
     font-weight: 700;
 }
 
 .dashboard-grid .pill {
     color: var(--mut);
-    font-size: .78rem;
+    font-size: .875rem;
 }
 
 .dashboard-grid #dash-overall {
@@ -442,60 +430,71 @@ main {
 .dashboard-services {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 18px;
+    gap: 0;
+    margin-top: 16px;
 }
 
+/* One quiet overview: aligned columns on desktop, compact rows on mobile. */
 .dashboard-service {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-areas:
-        "dot name name"
-        "state state latency";
-    align-items: center;
-    gap: 8px 7px;
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    gap: 3px;
     min-width: 0;
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    background: linear-gradient(145deg, rgba(23, 36, 52, .72), rgba(13, 22, 33, .76));
-    transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    padding: 0 14px;
+    border-left: 1px solid var(--line);
 }
 
-.dashboard-service:hover {
-    transform: translateY(-1px);
-    border-color: rgba(103, 189, 255, .26);
-}
-
-.dashboard-service > .dot {
-    grid-area: dot;
+.dashboard-service:first-child {
+    border-left: 0;
+    padding-left: 0;
 }
 
 .dashboard-service-name {
-    grid-area: name;
     min-width: 0;
-    overflow: hidden;
-    font-size: .86rem;
-    font-weight: 800;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
 
-.dashboard-service-state {
-    grid-area: state;
+.dashboard-service-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    min-height: 2.8em;
 }
 
-.dashboard-service-latency {
-    grid-area: latency;
-    justify-self: end;
+.dashboard-service-status .dot {
+    flex: 0 0 auto;
 }
 
 .dashboard-service-state,
 .dashboard-service-latency {
+    min-width: 0;
     color: var(--mut);
-    font-size: .72rem;
-    font-weight: 750;
-    white-space: nowrap;
+    font-size: .875rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.dashboard-service-latency,
+.dashboard-lastcheck,
+.service-latency {
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard-lastcheck {
+    color: var(--mut);
+    font-size: .875rem;
+}
+
+.dashboard-grid #dash-overall {
+    font-size: 1rem;
+    background: transparent;
+    border: 0;
+    padding: 0;
 }
 
 .dot {
@@ -533,8 +532,8 @@ main {
 }
 
 .status-history {
-    margin-top: 18px;
-    padding-top: 14px;
+    margin-top: 12px;
+    padding-top: 10px;
     border-top: 1px solid var(--line);
 }
 
@@ -542,8 +541,8 @@ main {
     width: fit-content;
     color: var(--mut);
     cursor: pointer;
-    font-size: .8rem;
-    font-weight: 750;
+    font-size: .875rem;
+    font-weight: 600;
 }
 
 .status-history > summary:hover {
@@ -580,8 +579,8 @@ main {
 .history-name {
     overflow: hidden;
     color: var(--fg);
-    font-size: .82rem;
-    font-weight: 800;
+    font-size: .875rem;
+    font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -589,7 +588,7 @@ main {
 .history-summary,
 .history-avg {
     color: var(--mut);
-    font-size: .7rem;
+    font-size: .875rem;
     font-weight: 700;
 }
 
@@ -643,7 +642,7 @@ main {
     position: relative;
     isolation: isolate;
     min-height: 176px;
-    padding: 28px;
+    padding: 22px;
     --service-accent: var(--acc-strong);
 }
 
@@ -731,12 +730,13 @@ main {
 }
 
 .service-section h2 {
+    overflow-wrap: anywhere;
     margin-bottom: 5px;
-    font-size: 1.55rem;
+    font-size: 1.5rem;
 }
 
 .service-section .tag {
-    font-size: .92rem;
+    font-size: 1rem;
 }
 
 .service-meta {
@@ -766,11 +766,11 @@ main {
 .service-note {
     margin: 8px 0 0;
     color: var(--mut);
-    font-size: .72rem;
+    font-size: .875rem;
 }
 
 .service-note {
-    color: color-mix(in srgb, var(--service-accent) 55%, var(--mut));
+    color: var(--mut);
     font-weight: 700;
 }
 
@@ -792,28 +792,43 @@ a:hover {
     transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
 }
 
+.service-section-link:not([hidden]) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 20px;
+}
+
 .service-section-link .j-wrap {
-    padding-right: 24px;
+    padding-right: 0;
 }
 
 .service-card-link {
+    display: block;
+    width: fit-content;
+    margin: 0;
+    max-width: 210px;
+    overflow-wrap: anywhere;
+    color: var(--acc);
+    font-size: 1rem;
+}
+
+/* Stretch the link hit area while keeping its visible label in document flow. */
+.service-card-link::after {
+    content: "";
     position: absolute;
     z-index: 1;
     inset: 0;
-    border-radius: inherit;
+    border-radius: var(--br);
 }
 
-.service-card-link::after {
-    content: "↗";
-    position: absolute;
-    top: 24px;
-    right: 26px;
-    color: var(--service-accent);
-    font-size: 1.15rem;
-    font-weight: 800;
-    line-height: 1;
-    opacity: .8;
-    transition: opacity .18s ease, transform .18s ease;
+.service-card-link:focus-visible {
+    outline: none;
+}
+
+.service-card-link:focus-visible::after {
+    outline: 2px solid var(--acc);
+    outline-offset: -3px;
 }
 
 .service-section-link:hover,
@@ -824,17 +839,6 @@ a:hover {
 
 .service-section-link:hover {
     transform: translateY(-2px);
-}
-
-.service-card-link:hover::after,
-.service-card-link:focus-visible::after {
-    opacity: 1;
-    transform: translate(2px, -2px);
-}
-
-.service-card-link:focus-visible {
-    outline: 2px solid var(--service-accent);
-    outline-offset: -3px;
 }
 
 .projects-section {
@@ -862,9 +866,8 @@ a:hover {
 .projects-eyebrow,
 .project-kind {
     color: var(--acc);
-    font-size: .68rem;
-    font-weight: 800;
-    letter-spacing: .12em;
+    font-size: .875rem;
+    font-weight: 500;
 }
 
 .projects-eyebrow {
@@ -874,8 +877,8 @@ a:hover {
 .projects-profile {
     flex: 0 0 auto;
     padding: 8px 0;
-    font-size: .85rem;
-    font-weight: 750;
+    font-size: .875rem;
+    font-weight: 600;
 }
 
 .projects-grid {
@@ -904,7 +907,7 @@ a:hover {
     margin-left: auto;
     color: var(--acc);
     font-size: 1rem;
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1;
     opacity: .75;
     transition: opacity .18s ease, transform .18s ease;
@@ -967,7 +970,7 @@ a:hover {
 
 .project-name {
     font-size: 1.08rem;
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.3;
     overflow-wrap: anywhere;
 }
@@ -978,8 +981,10 @@ a:hover {
 
 .project-description {
     color: var(--mut);
-    font-size: .88rem;
+    font-size: 1rem;
+    font-weight: 400;
     line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
 footer {
@@ -989,7 +994,7 @@ footer {
     gap: 8px;
     margin: 26px 0;
     color: var(--mut);
-    font-size: .82rem;
+    font-size: .875rem;
 }
 
 .github-link {
@@ -1004,15 +1009,16 @@ footer {
     color-scheme: light;
     --bg: #f3f7fb;
     --fg: #132033;
-    --mut: #5c6f84;
+    --mut: #526477;
     --line: rgba(77, 106, 133, .18);
     --card: #fff;
     --surface: #f6f9fc;
     --surface-strong: #eef4f9;
-    --acc: #087ec5;
+    --acc: #0874b5;
     --acc-strong: #087ec5;
-    --good: #158f4b;
-    --bad: #d33c48;
+    --good: #08783d;
+    --warn: #8a5700;
+    --bad: #b42c3b;
     --shadow: 0 18px 48px rgba(49, 73, 97, .12);
 }
 
@@ -1047,7 +1053,6 @@ footer {
     background: linear-gradient(135deg, rgba(14, 165, 233, .18), rgba(59, 130, 246, .1));
 }
 
-.theme-light .dashboard-service,
 .theme-light .history-row {
     background: rgba(246, 249, 252, .88);
 }
@@ -1107,20 +1112,53 @@ footer {
     transform: rotateY(180deg) scale(1.08);
 }
 
-@media (max-width: 1120px) {
-    .topbar-lower {
-        align-items: stretch;
-        flex-direction: column;
-    }
+/* Secondary diagnostics stay available without competing with services. */
+.technical-details {
+    margin: 4px 0 20px;
+    color: var(--mut);
+    font-size: .875rem;
+}
 
-    .client-info {
-        justify-content: space-between;
+.technical-details > summary {
+    width: fit-content;
+    padding-block: 8px;
+    cursor: pointer;
+}
+
+.technical-details .client-info {
+    margin-top: 8px;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+.technical-details .pc-status {
+    flex-wrap: wrap;
+}
+
+.client-metric {
+    white-space: normal;
+    flex-wrap: wrap;
+}
+
+.client-value {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+@media (min-width: 981px) {
+    .dashboard-service-status {
+        min-height: 1.4em;
     }
 }
 
-@media (max-width: 980px) {
+@media (min-width: 721px) and (max-width: 980px) {
     .dashboard-services {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        row-gap: 16px;
+    }
+    .dashboard-service:nth-child(4) {
+        border-left: 0;
+        padding-left: 0;
     }
 }
 
@@ -1139,59 +1177,47 @@ footer {
     }
 
     .topbar-primary {
-        align-items: flex-start;
-        flex-direction: column;
+        flex-wrap: wrap;
         gap: 12px;
     }
 
+    .brand {
+        flex: 1 1 180px;
+    }
+
     .controls {
-        width: 100%;
+        max-width: 100%;
+        flex-wrap: wrap;
+        gap: 6px;
     }
 
-    #theme-toggle {
-        flex: 1 1 auto;
+    .chip {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        font-size: .875rem;
     }
 
-    .client-info {
-        display: grid;
-        justify-content: stretch;
-        gap: 7px;
-        width: 100%;
-        padding: 8px;
+    .logo {
+        width: 40px;
+        height: 40px;
     }
 
-    .client-heading {
-        padding: 0 3px;
-    }
-
+    .client-info,
     .pc-status {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        width: 100%;
-    }
-
-    .client-metric {
-        display: grid;
-        gap: 1px;
-        padding: 7px 8px;
-    }
-
-    .client-value {
-        font-size: .76rem;
+        align-items: flex-start;
+        flex-direction: column;
     }
 
     nav.tabs {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        display: flex;
         width: 100%;
-        overflow: visible;
+        overflow-x: auto;
     }
 
     .tab {
-        min-width: 0;
-        padding-inline: 3px;
-        font-size: .69rem;
-        text-align: center;
+        flex: 1 0 auto;
+        padding-inline: 10px;
+        font-size: .875rem;
     }
 
     .tab-label-full {
@@ -1218,11 +1244,41 @@ footer {
     }
 
     .dashboard-services {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1fr);
+        margin-top: 12px;
     }
 
-    .dashboard-service {
-        padding: 11px;
+    .dashboard-service,
+    .dashboard-service:first-child {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        align-items: center;
+        column-gap: 12px;
+        row-gap: 0;
+        min-height: 64px;
+        padding: 8px 0;
+        border-left: 0;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .dashboard-service:last-child {
+        border-bottom: 0;
+    }
+
+    .dashboard-service-name {
+        grid-row: 1 / 3;
+    }
+
+    .dashboard-service-status {
+        justify-content: flex-end;
+        min-height: 2.8em;
+        font-size: .875rem;
+        text-align: right;
+    }
+
+    .dashboard-service-latency {
+        grid-column: 2;
+        text-align: right;
     }
 
     .history-grid {
@@ -1297,9 +1353,13 @@ footer {
         font-size: 1.3rem;
     }
 
-    .service-card-link::after {
-        top: 18px;
-        right: 18px;
+    .service-section-link:not([hidden]) {
+        display: block;
+    }
+
+    .service-card-link {
+        margin: 12px 0 0;
+        max-width: 100%;
     }
 
     footer {
@@ -1309,19 +1369,74 @@ footer {
     }
 }
 
-@media (max-width: 390px) {
-    .client-key {
-        font-size: .54rem;
-        letter-spacing: .02em;
+/* Reflow at high zoom without forcing the page wider than the viewport. */
+@media (max-width: 360px) {
+    .topbar-inner,
+    .wrap {
+        padding-inline: 12px;
     }
-
-    .client-value {
-        font-size: .7rem;
+    .card,
+    .dashboard-card,
+    .service-section {
+        padding: 14px;
     }
+    .j-left {
+        flex-wrap: wrap;
+    }
+    .projects-profile {
+        overflow-wrap: anywhere;
+    }
+}
 
-    .tab {
-        font-size: .64rem;
-        letter-spacing: -.01em;
+@media (min-width: 360px) and (max-width: 720px) {
+    .dashboard-service-status {
+        min-height: 1.4em;
+    }
+    .dashboard-service,
+    .dashboard-service:first-child {
+        min-height: 60px;
+    }
+}
+
+@media (max-width: 240px) {
+    .dashboard-service,
+    .dashboard-service:first-child {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .dashboard-service-name,
+    .dashboard-service-latency {
+        grid-column: 1;
+        grid-row: auto;
+        text-align: left;
+    }
+    .dashboard-service-status {
+        justify-content: flex-start;
+        text-align: left;
+    }
+    .project-card {
+        flex-wrap: wrap;
+    }
+    .project-card::after {
+        display: none;
+    }
+    .brand {
+        flex-wrap: wrap;
+    }
+    .brand > div:last-child {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+    .pill {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+    .client-heading {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+    .client-indicator,
+    .pill .dot {
+        flex: 0 0 auto;
     }
 }
 
