@@ -397,7 +397,7 @@ main {
 
 .dashboard-copy .tag {
     margin: 0;
-    font-size: .86rem;
+    font-size: .875rem;
 }
 
 .dashboard-grid {
@@ -422,13 +422,20 @@ main {
     font-weight: 700;
 }
 
-.dashboard-grid .pill {
-    color: var(--mut);
-    font-size: .78rem;
+.dashboard-grid #dash-overall {
+    max-width: 100%;
+    color: var(--fg);
+    font-size: 1rem;
+    line-height: 1.4;
+    font-weight: 800;
+    overflow-wrap: anywhere;
 }
 
-.dashboard-grid #dash-overall {
-    color: var(--fg);
+.dashboard-lastcheck {
+    color: var(--mut);
+    font-size: .875rem;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
 }
 
 .dashboard-grid #dash-overall.is-checking {
@@ -448,12 +455,9 @@ main {
 
 .dashboard-service {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-areas:
-        "dot name name"
-        "state state latency";
-    align-items: center;
-    gap: 8px 7px;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 8px;
     min-width: 0;
     padding: 12px;
     border: 1px solid var(--line);
@@ -467,35 +471,40 @@ main {
     border-color: rgba(103, 189, 255, .26);
 }
 
-.dashboard-service > .dot {
-    grid-area: dot;
-}
-
 .dashboard-service-name {
-    grid-area: name;
     min-width: 0;
-    overflow: hidden;
-    font-size: .86rem;
+    min-height: 1.4em;
+    font-size: 1rem;
+    line-height: 1.4;
     font-weight: 800;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
 }
 
-.dashboard-service-state {
-    grid-area: state;
+.dashboard-service-status {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
 }
 
-.dashboard-service-latency {
-    grid-area: latency;
-    justify-self: end;
+.dashboard-service-status > .dot {
+    flex: 0 0 auto;
 }
 
 .dashboard-service-state,
 .dashboard-service-latency {
+    min-width: 0;
+    /* Reserve two lines so status and measurement updates do not move the tiles. */
+    min-height: 2.8em;
     color: var(--mut);
-    font-size: .72rem;
+    font-size: .875rem;
+    line-height: 1.4;
     font-weight: 750;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
+}
+
+.dashboard-service-latency {
+    font-variant-numeric: tabular-nums;
 }
 
 .dot {
@@ -1062,6 +1071,13 @@ footer {
         linear-gradient(145deg, #fff, var(--surface));
 }
 
+/* Keep dashboard status text readable on the light surfaces. */
+.theme-light .dashboard-card {
+    --good: #08783d;
+    --bad: #b42c3b;
+    --warn: #8a5700;
+}
+
 /* OLED theme */
 .theme-oled {
     --bg: #000;
@@ -1218,7 +1234,7 @@ footer {
     }
 
     .dashboard-services {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .dashboard-service {
@@ -1306,6 +1322,14 @@ footer {
         flex-wrap: wrap;
         row-gap: 4px;
         text-align: center;
+    }
+}
+
+/* Allow the dashboard to reflow at 200% zoom on narrow screens. */
+@media (max-width: 240px) {
+    .dashboard-service-state,
+    .dashboard-service-latency {
+        min-height: 4.2em;
     }
 }
 

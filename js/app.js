@@ -541,7 +541,7 @@ function renderDashboardService(key, lang, L) {
     row.classList.add(`status-${state.status}`);
     setText(`dash-${key}-name`, getServiceLabel(key, lang));
     setText(`dash-${key}-text`, statusLabel);
-    setText(`dash-${key}-latency`, `${state.latency ?? '--'} ms`);
+    setText(`dash-${key}-latency`, `${L.ui.latency}: ${state.latency ?? '--'} ms`);
     row.setAttribute('aria-label', `${getServiceLabel(key, lang)}: ${statusLabel}. ${L.statusSource}`);
 }
 
