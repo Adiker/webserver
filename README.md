@@ -48,6 +48,7 @@ server.
 
 - Responsive service tabs with a compact status overview and one focused detail card; the entire card links to services with a web interface
 - Readable dashboard tiles with separate name, status, and labeled latency rows; five columns on desktop, three on tablet, and one on mobile
+- Compact desktop dashboard spacing preserves the original page height while keeping larger text
 - Live browser measurements with tabular latency digits, reserved space for updates, and accessible status text contrast in Dark / Light / OLED
 - Collapsed browser-local history of the last 24 measurements with mini timelines and averages
 - Health checks for all configured services
@@ -222,6 +223,7 @@ albo dowolnym serwerze statycznym.
 
 - Responsywne zakładki usług z kompaktowym podsumowaniem i jednym aktywnym panelem szczegółów; cała karta prowadzi do usług z interfejsem WWW
 - Czytelne kafelki dashboardu z osobnymi wierszami nazwy, statusu i opisanego opóźnienia; pięć kolumn na desktopie, trzy na tablecie i jedna na telefonie
+- Zwarte odstępy dashboardu na komputerze zachowują pierwotną wysokość strony przy większym tekście
 - Pomiary z przeglądarki z cyframi o stałej szerokości, miejscem zarezerwowanym na aktualizacje i czytelnym kontrastem tekstu statusów w motywach Dark / Light / OLED
 - Zwijana lokalna historia ostatnich 24 pomiarów z mini-timeline i średnim opóźnieniem
 - Health checki dla wszystkich skonfigurowanych usług
