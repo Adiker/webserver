@@ -101,6 +101,13 @@ Service endpoints are defined in `js/app.js`:
 - `https://speedtest.adiker.eu/health`
 - `https://muse.adiker.eu/health`
 
+Service responses, including errors, advertise `Alt-Svc: h3=":8443"; ma=2592000`
+for HTTP/3.
+If that path becomes unavailable, use `Alt-Svc: clear` on all five service
+domains, including error responses, and verify HTTPS over TCP. A browser that
+cached the old alternative but cannot connect to receive an updated header may
+need its network/alternative-service cache cleared or a fresh browser profile.
+
 The Muse endpoint returns `200 {"status":"online"}` only when the local
 container is running, has logged `Ready!` after its current start, and has an
 established TCP connection to `gateway.discord.gg`. Otherwise it returns
@@ -273,6 +280,13 @@ Endpointy usług są zdefiniowane w `js/app.js`:
 - `https://autobrr.adiker.eu/api/healthz/liveness`
 - `https://speedtest.adiker.eu/health`
 - `https://muse.adiker.eu/health`
+
+Odpowiedzi usług, także błędy, ogłaszają dla HTTP/3
+`Alt-Svc: h3=":8443"; ma=2592000`. Jeśli ta ścieżka przestanie działać, ustaw
+`Alt-Svc: clear` dla wszystkich pięciu domen usług, również w odpowiedziach
+błędów, i sprawdź HTTPS przez TCP. Jeśli przeglądarka zapamiętała poprzedni
+adres i nie może połączyć się z usługą, aby odebrać nowy nagłówek, wyczyść jej
+pamięć sieciową/alternatywnych usług albo użyj nowego profilu przeglądarki.
 
 Endpoint Muse zwraca `200 {"status":"online"}` tylko wtedy, gdy lokalny
 kontener działa, po bieżącym uruchomieniu zalogował `Ready!` i ma aktywne
