@@ -1,4 +1,5 @@
 muse.adiker.eu {
+	header >Alt-Svc "h3=\":8443\"; ma=2592000"
 	@health-options {
 		path /health
 		method OPTIONS
@@ -28,6 +29,7 @@ muse.adiker.eu {
 	respond 404
 
 	handle_errors {
+		header >Alt-Svc "h3=\":8443\"; ma=2592000"
 		header {
 			Access-Control-Allow-Origin "*"
 			Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
