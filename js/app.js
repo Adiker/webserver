@@ -56,6 +56,8 @@ const STR = {
             services: 'Service details',
             skipLink: 'Skip to main content',
             clientInfo: 'This device',
+            technicalInfo: 'Technical information',
+            openService: 'Open {name} ↗',
             latency: 'Latency',
             source: 'Measured from this browser',
             dark: 'Dark',
@@ -84,12 +86,12 @@ const STR = {
         st: { title: 'OpenSpeedTest', sub: 'Network speed test', open: 'Open OpenSpeedTest in a new tab', short: 'OpenSpeedTest' },
         mu: { title: 'Muse', sub: 'Discord music bot', note: 'Status only · no web interface', short: 'Muse' },
         projects: {
-            eyebrow: 'OPEN SOURCE / GITHUB',
+            eyebrow: 'Open source / GitHub',
             title: 'Selected projects',
             sub: 'Things I build and share',
             profile: 'See all repositories ↗',
-            pinned: 'PINNED',
-            fork: 'FEATURED FORK',
+            pinned: 'Pinned',
+            fork: 'Featured fork',
             open: 'Open {name} on GitHub in a new tab',
             descriptions: {
                 limusic: 'Native YouTube Music client with managed offline downloads.',
@@ -163,6 +165,8 @@ const STR = {
             services: 'Szczegóły usług',
             skipLink: 'Przejdź do treści głównej',
             clientInfo: 'To urządzenie',
+            technicalInfo: 'Informacje techniczne',
+            openService: 'Otwórz {name} ↗',
             latency: 'Opóźnienie',
             source: 'Pomiar z tej przeglądarki',
             dark: 'Ciemny',
@@ -191,12 +195,12 @@ const STR = {
         st: { title: 'OpenSpeedTest', sub: 'Test prędkości sieci', open: 'Otwórz OpenSpeedTest w nowej karcie', short: 'OpenSpeedTest' },
         mu: { title: 'Muse', sub: 'Bot muzyczny Discorda', note: 'Tylko status · brak interfejsu WWW', short: 'Muse' },
         projects: {
-            eyebrow: 'OPEN SOURCE / GITHUB',
+            eyebrow: 'Open source / GitHub',
             title: 'Wybrane projekty',
             sub: 'Projekty, które tworzę i udostępniam',
             profile: 'Zobacz wszystkie repozytoria ↗',
-            pinned: 'PRZYPIĘTY',
-            fork: 'WYRÓŻNIONY FORK',
+            pinned: 'Przypięty',
+            fork: 'Wyróżniony fork',
             open: 'Otwórz {name} na GitHubie w nowej karcie',
             descriptions: {
                 limusic: 'Natywny klient YouTube Music z pobieraniem utworów do słuchania offline.',
@@ -542,7 +546,7 @@ function renderDashboardService(key, lang, L) {
     setText(`dash-${key}-name`, getServiceLabel(key, lang));
     setText(`dash-${key}-text`, statusLabel);
     setText(`dash-${key}-latency`, `${state.latency ?? '--'} ms`);
-    row.setAttribute('aria-label', `${getServiceLabel(key, lang)}: ${statusLabel}. ${L.statusSource}`);
+    row.setAttribute('aria-label', `${getServiceLabel(key, lang)}: ${statusLabel}. ${L.ui.latency}: ${state.latency ?? '--'} ms. ${L.statusSource}`);
 }
 
 function renderDashboard(lang = getLang()) {
@@ -616,6 +620,10 @@ function applyLang(lang) {
         document.getElementById(`project-${key}`).setAttribute('aria-label', L.projects.open.replace('{name}', name));
     });
 
+    setText('technical-title', L.ui.technicalInfo);
+    ['jf', 'fb', 'ab', 'st'].forEach((key) => {
+        setText(`${key}-open`, L.ui.openService.replace('{name}', L[key].short));
+    });
     setText('subtitle', L.subtitle);
     setText('availability', L.availability);
     setText('served', L.footer.served);
