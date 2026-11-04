@@ -1,0 +1,37 @@
+# Import inside the existing automorph.adiker.eu site block, before other handles.
+@automorph_health {
+    path /health
+    method GET HEAD
+}
+handle @automorph_health {
+    header Access-Control-Allow-Origin "https://adiker.eu"
+    header Cache-Control "no-store"
+    header Content-Type "application/json; charset=utf-8"
+    reverse_proxy 127.0.0.1:8081 {
+        method GET
+        rewrite /index-v2.json
+        @healthy status 200
+        handle_response @healthy {
+            respond `{"status":"online"}` 200
+        }
+        handle_response {
+            respond `{"status":"offline"}` 503
+        }
+    }
+}
+handle_errors {
+    @automorph_health_error {
+        path /health
+        method GET HEAD
+        expression {http.error.status_code} == 502
+    }
+    handle @automorph_health_error {
+        header Access-Control-Allow-Origin "https://adiker.eu"
+        header Cache-Control "no-store"
+        header Content-Type "application/json; charset=utf-8"
+        respond `{"status":"offline"}` 503
+    }
+    handle {
+        respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
+    }
+}

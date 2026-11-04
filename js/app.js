@@ -18,7 +18,8 @@ const SERVICE_STATE = {
     fb: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
     ab: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
     st: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
-    mu: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] }
+    mu: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] },
+    am: { status: 'checking', online: false, latency: null, failCount: 0, nextDelay: 5000, warmedUp: false, latencySamples: [], history: [] }
 };
 
 const SERVICES = [
@@ -26,7 +27,8 @@ const SERVICES = [
     { key: 'fb', url: 'https://files.adiker.eu/health' },
     { key: 'ab', url: 'https://autobrr.adiker.eu/api/healthz/liveness' },
     { key: 'st', url: 'https://speedtest.adiker.eu/health' },
-    { key: 'mu', url: 'https://muse.adiker.eu/health' }
+    { key: 'mu', url: 'https://muse.adiker.eu/health' },
+    { key: 'am', url: 'https://automorph.adiker.eu/health' }
 ];
 
 const STR = {
@@ -37,14 +39,16 @@ const STR = {
             filebrowser: 'Filebrowser',
             autobrr: 'Autobrr',
             openspeedtest: 'OpenSpeedTest',
-            muse: 'Muse'
+            muse: 'Muse',
+            automorph: 'AutoMorph'
         },
         navCompact: {
             jellyfin: 'Jellyfin',
             filebrowser: 'Files',
             autobrr: 'autobrr',
             openspeedtest: 'Speed',
-            muse: 'Muse'
+            muse: 'Muse',
+            automorph: 'AutoMorph'
         },
         subtitle: 'My Playground',
         availability: 'Usually available: 9:00 AM – 1:00 AM CEST',
@@ -83,6 +87,7 @@ const STR = {
         ab: { title: 'autobrr', sub: 'Automated torrent management', open: 'Open autobrr in a new tab', short: 'autobrr' },
         st: { title: 'OpenSpeedTest', sub: 'Network speed test', open: 'Open OpenSpeedTest in a new tab', short: 'OpenSpeedTest' },
         mu: { title: 'Muse', sub: 'Discord music bot', note: 'Status only · no web interface', short: 'Muse' },
+        am: { title: 'AutoMorph', sub: 'Android app patching', open: 'Open AutoMorph in a new tab', short: 'AutoMorph' },
         projects: {
             eyebrow: 'OPEN SOURCE / GITHUB',
             title: 'Selected projects',
@@ -144,14 +149,16 @@ const STR = {
             filebrowser: 'Filebrowser',
             autobrr: 'Autobrr',
             openspeedtest: 'OpenSpeedTest',
-            muse: 'Muse'
+            muse: 'Muse',
+            automorph: 'AutoMorph'
         },
         navCompact: {
             jellyfin: 'Jellyfin',
             filebrowser: 'Pliki',
             autobrr: 'autobrr',
             openspeedtest: 'Speed',
-            muse: 'Muse'
+            muse: 'Muse',
+            automorph: 'AutoMorph'
         },
         subtitle: 'Mój plac zabaw',
         availability: 'Zwykle dostępny: 09:00 – 01:00 CEST',
@@ -190,6 +197,7 @@ const STR = {
         ab: { title: 'autobrr', sub: 'Automatyzacja torrentów', open: 'Otwórz autobrr w nowej karcie', short: 'autobrr' },
         st: { title: 'OpenSpeedTest', sub: 'Test prędkości sieci', open: 'Otwórz OpenSpeedTest w nowej karcie', short: 'OpenSpeedTest' },
         mu: { title: 'Muse', sub: 'Bot muzyczny Discorda', note: 'Tylko status · brak interfejsu WWW', short: 'Muse' },
+        am: { title: 'AutoMorph', sub: 'Modyfikowanie aplikacji Android', open: 'Otwórz AutoMorph w nowej karcie', short: 'AutoMorph' },
         projects: {
             eyebrow: 'OPEN SOURCE / GITHUB',
             title: 'Wybrane projekty',
@@ -598,6 +606,8 @@ function applyLang(lang) {
     setText('mu-title', L.mu.title);
     setText('mu-sub', L.mu.sub);
     setText('mu-note', L.mu.note);
+    setText('am-title', L.am.title);
+    setText('am-sub', L.am.sub);
 
     setText('projects-eyebrow', L.projects.eyebrow);
     setText('projects-title', L.projects.title);
@@ -625,16 +635,19 @@ function applyLang(lang) {
     const fbBtn = document.getElementById('fb-btn');
     const abBtn = document.getElementById('ab-btn');
     const stBtn = document.getElementById('st-btn');
+    const amBtn = document.getElementById('am-btn');
     if (jfBtn) jfBtn.setAttribute('aria-label', L.jf.open);
     if (fbBtn) fbBtn.setAttribute('aria-label', L.fb.open);
     if (abBtn) abBtn.setAttribute('aria-label', L.ab.open);
     if (stBtn) stBtn.setAttribute('aria-label', L.st.open);
+    if (amBtn) amBtn.setAttribute('aria-label', L.am.open);
 
     setTabLabel('tab-jellyfin', L.nav.jellyfin, L.navCompact.jellyfin);
     setTabLabel('tab-filebrowser', L.nav.filebrowser, L.navCompact.filebrowser);
     setTabLabel('tab-autobrr', L.nav.autobrr, L.navCompact.autobrr);
     setTabLabel('tab-speedtest', L.nav.openspeedtest, L.navCompact.openspeedtest);
     setTabLabel('tab-muse', L.nav.muse, L.navCompact.muse);
+    setTabLabel('tab-automorph', L.nav.automorph, L.navCompact.automorph);
 
     const tabsNav = document.querySelector('nav.tabs');
     if (tabsNav) tabsNav.setAttribute('aria-label', L.ui.sections);
@@ -791,13 +804,14 @@ async function refreshService(service) {
 }
 
 function initTabs() {
-    const tabIds = ['tab-jellyfin', 'tab-filebrowser', 'tab-autobrr', 'tab-speedtest', 'tab-muse'];
+    const tabIds = ['tab-jellyfin', 'tab-filebrowser', 'tab-autobrr', 'tab-speedtest', 'tab-muse', 'tab-automorph'];
     const map = {
         'tab-jellyfin': 'section-jf',
         'tab-filebrowser': 'section-fb',
         'tab-autobrr': 'section-ab',
         'tab-speedtest': 'section-st',
-        'tab-muse': 'section-muse'
+        'tab-muse': 'section-muse',
+        'tab-automorph': 'section-am'
     };
 
     const tabs = tabIds.map((id) => document.getElementById(id)).filter(Boolean);
