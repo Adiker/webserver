@@ -39,6 +39,7 @@ This repository contains a static single-page application used as a front page f
 - **autobrr**
 - **OpenSpeedTest**
 - **Muse** (Discord music bot)
+- **AutoMorph**
 
 The page is intentionally framework-free: plain HTML, CSS, and vanilla JavaScript.
 That keeps it fast, portable, and easy to host on GitHub Pages or any static
@@ -78,6 +79,7 @@ server.
 ├── js/
 │   └── app.js         # UI logic, i18n, status polling
 └── ops/
+    ├── automorph-status/ # Caddy health-check snippet
     └── muse-status/   # Host probe, systemd/Caddy templates, and tests
 ```
 
@@ -100,13 +102,24 @@ Service endpoints are defined in `js/app.js`:
 - `https://autobrr.adiker.eu/api/healthz/liveness`
 - `https://speedtest.adiker.eu/health`
 - `https://muse.adiker.eu/health`
+- `https://automorph.adiker.eu/health`
 
-Service responses, including errors, advertise `Alt-Svc: h3=":8443"; ma=2592000`
+The five existing service domains, including their error responses, advertise `Alt-Svc: h3=":8443"; ma=2592000`
 for HTTP/3.
 If that path becomes unavailable, use `Alt-Svc: clear` on all five service
 domains, including error responses, and verify HTTPS over TCP. A browser that
 cached the old alternative but cannot connect to receive an updated header may
 need its network/alternative-service cache cleared or a fresh browser profile.
+
+The AutoMorph health endpoint probes the local `/index-v2.json` and returns
+only `200 {"status":"online"}` or `503 {"status":"offline"}`. It checks index
+availability, not patching or scheduling. The panel remains behind Basic Auth;
+the existing public index and APK paths remain available. Install the snippet as
+`/etc/caddy/snippets/automorph-health.caddy` and import that absolute path inside
+the AutoMorph site block before its other handlers. Validate the full Caddy
+configuration and reload Caddy.
+The snippet has its own error handler; merge it with an existing site error
+handler if one is added later.
 
 The Muse endpoint returns `200 {"status":"online"}` only when the local
 container is running, has logged `Ready!` after its current start, and has an
@@ -219,6 +232,7 @@ główna dla:
 - **autobrr**
 - **OpenSpeedTest**
 - **Muse** (bot muzyczny Discorda)
+- **AutoMorph**
 
 Strona celowo nie używa frameworków: to czysty HTML, CSS i vanilla JavaScript.
 Dzięki temu pozostaje szybka, przenośna i łatwa w hostowaniu na GitHub Pages
@@ -258,6 +272,7 @@ albo dowolnym serwerze statycznym.
 ├── js/
 │   └── app.js         # Logika UI, i18n, odpytywanie statusów
 └── ops/
+    ├── automorph-status/ # Fragment Caddy dla statusu
     └── muse-status/   # Sonda hosta, szablony systemd/Caddy i testy
 ```
 
@@ -280,13 +295,24 @@ Endpointy usług są zdefiniowane w `js/app.js`:
 - `https://autobrr.adiker.eu/api/healthz/liveness`
 - `https://speedtest.adiker.eu/health`
 - `https://muse.adiker.eu/health`
+- `https://automorph.adiker.eu/health`
 
-Odpowiedzi usług, także błędy, ogłaszają dla HTTP/3
+Odpowiedzi pięciu wcześniejszych usług, także błędy, ogłaszają dla HTTP/3
 `Alt-Svc: h3=":8443"; ma=2592000`. Jeśli ta ścieżka przestanie działać, ustaw
 `Alt-Svc: clear` dla wszystkich pięciu domen usług, również w odpowiedziach
 błędów, i sprawdź HTTPS przez TCP. Jeśli przeglądarka zapamiętała poprzedni
 adres i nie może połączyć się z usługą, aby odebrać nowy nagłówek, wyczyść jej
 pamięć sieciową/alternatywnych usług albo użyj nowego profilu przeglądarki.
+
+Endpoint AutoMorph sprawdza lokalny `/index-v2.json` i zwraca wyłącznie
+`200 {"status":"online"}` albo `503 {"status":"offline"}`. Sprawdza dostępność
+indeksu, a nie działanie patchowania lub harmonogramu. Panel nadal jest chroniony
+Basic Auth; istniejące publiczne ścieżki indeksu i APK pozostają dostępne.
+Zainstaluj fragment jako `/etc/caddy/snippets/automorph-health.caddy` i zaimportuj
+tę ścieżkę wewnątrz bloku AutoMorph przed pozostałymi handlerami. Sprawdź całą
+konfigurację i przeładuj Caddy.
+Fragment zawiera obsługę błędów; jeśli później powstanie inna obsługa błędów
+tej strony, połącz je.
 
 Endpoint Muse zwraca `200 {"status":"online"}` tylko wtedy, gdy lokalny
 kontener działa, po bieżącym uruchomieniu zalogował `Ready!` i ma aktywne

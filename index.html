@@ -59,6 +59,9 @@
                     <button aria-controls="section-muse" aria-selected="false" class="tab" id="tab-muse" role="tab"
                         type="button"><span class="tab-label-full">Muse</span><span aria-hidden="true"
                             class="tab-label-compact">Muse</span></button>
+                    <button aria-controls="section-am" aria-selected="false" class="tab" id="tab-automorph" role="tab"
+                        type="button"><span class="tab-label-full">AutoMorph</span><span aria-hidden="true"
+                            class="tab-label-compact">AutoMorph</span></button>
                 </nav>
                 <div class="client-info" id="client-info" role="group" aria-labelledby="client-title">
                     <div class="client-heading">
@@ -79,7 +82,7 @@
                         <p class="tag" id="dash-sub">Live measurements from this browser</p>
                     </div>
                     <div class="dashboard-grid">
-                        <span class="pill" id="dash-overall" aria-live="polite">0/5 online</span>
+                        <span class="pill" id="dash-overall" aria-live="polite">0/6 online</span>
                         <span class="pill" id="dash-lastcheck" aria-live="polite">Last update: --</span>
                     </div>
                 </div>
@@ -113,6 +116,12 @@
                         <span class="dashboard-service-name" id="dash-mu-name">Muse</span>
                         <span class="dashboard-service-state" id="dash-mu-text">Checking…</span>
                         <span class="dashboard-service-latency" id="dash-mu-latency">-- ms</span>
+                    </div>
+                    <div class="dashboard-service" id="dash-am-status">
+                        <span class="dot" aria-hidden="true"></span>
+                        <span class="dashboard-service-name" id="dash-am-name">AutoMorph</span>
+                        <span class="dashboard-service-state" id="dash-am-text">Checking…</span>
+                        <span class="dashboard-service-latency" id="dash-am-latency">-- ms</span>
                     </div>
                 </div>
                 <details class="status-history" id="status-history">
@@ -162,6 +171,14 @@
                             <div class="history-line" id="history-mu-line" role="img" aria-label="Muse: no data yet">
                             </div>
                             <span class="history-avg" id="history-mu-avg">Avg: -- ms</span>
+                        </div>
+                        <div class="history-row">
+                            <div class="history-meta">
+                                <span class="history-name" id="history-am-name">AutoMorph</span>
+                                <span class="history-summary" id="history-am-summary">No data yet</span>
+                            </div>
+                            <div class="history-line" id="history-am-line" role="img" aria-label="AutoMorph: no data yet"></div>
+                            <span class="history-avg" id="history-am-avg">Avg: -- ms</span>
                         </div>
                     </div>
                 </details>
@@ -279,6 +296,29 @@
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <section class="card service-section service-section-link" id="section-am" role="tabpanel" aria-labelledby="tab-automorph" hidden>
+                <div class="j-wrap">
+                    <div class="j-left">
+                        <div aria-hidden="true" class="j-icon">
+                            <svg viewBox="0 0 64 64" fill="none"><rect x="6" y="6" width="52" height="52" rx="14" stroke="currentColor" stroke-width="4"/><path d="M18 43 32 19l14 24M23 35h18" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div>
+                            <h2 id="am-title">AutoMorph</h2>
+                            <p class="tag" id="am-sub" style="margin:0">Android app patching</p>
+                            <div class="service-meta" style="margin-top:8px">
+                                <span class="pill service-status status-checking" id="am-pill" aria-label="AutoMorph: Checking…">
+                                    <span class="dot" id="am-dot"></span><span id="am-text">Checking…</span>
+                                </span>
+                                <span class="pill service-latency" id="am-latency">Latency: -- ms</span>
+                            </div>
+                            <p class="service-source" id="am-source">Measured from this browser</p>
+                        </div>
+                    </div>
+                </div>
+                <a aria-label="Open AutoMorph in a new tab" aria-describedby="am-sub am-pill am-latency"
+                    class="service-card-link" href="https://automorph.adiker.eu" id="am-btn" rel="noopener" target="_blank"></a>
             </section>
 
             <section class="card projects-section" id="projects" aria-labelledby="projects-title">
